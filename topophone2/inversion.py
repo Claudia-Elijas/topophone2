@@ -22,6 +22,10 @@ from scipy.linalg import cho_factor, cho_solve
 import torch
 torch.set_default_dtype(torch.float64)
 
+#__ Statistics __
+import harmonic as hm
+from scipy.stats import gaussian_kde, hmean
+
 #__ Inversion __
 from geopvi.nfvi.models import FlowsBasedDistribution, VariationalInversion
 from geopvi.nfvi.flows import Real2Constr, Constr2Real, Linear
@@ -438,7 +442,7 @@ class LinearFlowsModel():
 #________ INVERSION CLASS ________#
 
 #__ Inversion __
-class VI(): 
+class Inference(): 
 
     '''
 
@@ -602,3 +606,255 @@ class VI():
         The unpacked model.
         '''
         return self._unpack(m)
+
+#________ POST-PROCESSING ________#
+
+#__ Class for marginal statistics __
+class MarginalStats():
+    ''''''
+
+    #__ Initialise class __
+    def __init__(self, m, posterior=None, prior_bounds=None):
+        self.m   = m
+        if (posterior is not None):
+            self.lnL, _ = posterior.log_likelihood(m, grad=False)
+        if (prior_bounds is not None):
+            self.Vi = prior_bounds[1] - prior_bounds[0]
+
+    #__ Calculate evidence __
+    def calc_evidence(self, nchains=10, temperature=0.8):
+        '''
+        Function to calculate evidence using the learnt harmonic mean estimator [McEwan et al., 2021, ArXiv].
+        
+        Input
+        -----
+        nchains : ``int`` (default ``10``)
+            Number of data sets to split model chain into.
+
+        temperature : ``float`` (default ``0.8``)
+            Temperature of learnt model.
+
+        Output
+        ------
+        lnZ : ``float``
+            Evidence.
+
+        lnZ_std : ``float``
+            Standard deviation of estimate.
+        '''
+
+        #__ Reshape model vector __
+        n = self.m.shape[-1]                # Number of parameters
+        m = self.m.reshape(nchains, -1, n)  # (chain, sample, parameter)
+
+        #__ Calculate log-posterior __
+        lnV = np.sum(np.log(self.Vi))                # Log-hypervolume
+        lnP = (self.lnL - lnV).reshape(nchains, -1)  # (chain, sample)
+
+        #__ Instantiate Chains class __
+        chains = hm.Chains(n)
+        chains.add_chains_3d(m, lnP)
+
+        #__ Split into training and inference chains __
+        chains_train, chains_infer = hm.utils.split_data(chains, training_proportion=0.5)
+
+        #__ Train ML model __
+        model = hm.model.RQSplineModel(n, standardize=True, temperature=temperature)
+        model.fit(chains_train.samples)
+
+        #__ Instantiate Evidence class __
+        ev = hm.Evidence(chains_infer.nchains, model)
+        ev.add_chains(chains_infer)
+        
+        #__ Compute evidence __
+        lnZ, lnZ_std = ev.compute_ln_evidence()
+
+        #__ Return output __
+        return lnZ, lnZ_std
+
+    #__ Fit Gaussian KDE __
+    def _gaussian_kde(self, idx, thin=None):
+        '''
+        Fit a Gaussian KDE to a subset of the model parameters.
+
+        Input
+        -----
+        idx : ``list``
+            List of indices in subset.
+
+        thin : ``int`` (optional)
+            Thin model samples for KDE estimation.
+
+        Output
+        ------
+        ???
+        '''
+
+        #__ Thin model selection __
+        m_s   = self.m[:,idx].T
+        m_fit = m_s[:,::thin]
+
+        #__ Fit KDE __
+        kde = gaussian_kde(m_fit)
+
+        #__ Return output __
+        return kde, m_s
+
+    #__ Calculate information gain __
+    def calc_information(self, idx=None, thin=2):
+        '''
+        Calculate the information gain relative to a bounded uniform prior.
+
+        Input
+        -----
+        idx : ``list`` (optional)
+            List of indices in subset.
+
+        thin : ``int`` (default ``2``)
+            Thin model samples for KDE estimation.
+
+        Output
+        ------
+        lnD : ``float``
+            Information gain [nats]
+        '''
+
+        #__ Full model parameter set __
+        if (idx is None):
+
+            #__ Calculate evidence __
+            lnZ, _ = self.calc_evidence()
+
+            #__ Calculate information gain __
+            lnD = np.mean(self.lnL) - lnZ
+
+        #__ Partial model parameter set __
+        else:
+
+            #__ Calculate sub-hypervolume __
+            lnVs = np.sum(np.log(self.Vi[idx]))
+
+            #__ Fit KDE __
+            kde, m_s = self._gaussian_kde(idx, thin)
+
+            #__ Calculate information gain __
+            lnD = lnVs + np.mean(kde.logpdf(m_s[:,1::thin]))
+
+        #__ Return output __
+        return lnD
+
+    #__ Calculate mean __
+    def marginal_mean(self, idx, harmonic=False):
+        '''
+        Calculate the marginal means.
+
+        Input
+        -----
+        idx : ``list``
+            List of indices in subset.
+
+        harmonic : ``bool`` (default ``False``)
+            Perform harmonic averaging, rather than arithmetic.
+
+        Output
+        ------
+        mean : ``np.ndarray``
+            Marginal mean
+            (parameter,)
+        '''
+
+        #__ Subset models __
+        m_s = self.m[:,idx].T
+
+        #__ Calculate mean __
+        if harmonic: mean = hmean(m_s,   axis=1)
+        else:        mean = np.mean(m_s, axis=1)
+
+        #__ Return output __
+        return mean
+
+    #__ Calculate credible intervals __
+    def credible_interval(self, inner_pc=95., idx=None):
+        '''
+        Calculate the credible interval.
+
+        Input
+        -----
+        inner_pc : ``float`` (default ``95.0``)
+            Interval percentage [%].
+
+        idx : ``list`` (optional)
+            List of indices in subset.
+
+        Output
+        ------
+        ci_lo : ``np.ndarray``
+            Lower bound of credible interval.
+            (parameter,)
+
+        ci_hi : ``np.ndarray``
+            Upper bound of credible interval.
+            (parameter,)
+        '''
+
+        #__ Subset models __
+        m_s = self.m[:,idx].T if idx is not None else self.m.T
+
+        #__ Calculate percentile bounds __
+        lo, hi = 0.5*(100-inner_pc), 0.5*(100+inner_pc)
+
+        #__ Compute percentiles __
+        ci = np.percentile(m_s, [lo,hi], axis=1)
+        ci_lo, ci_hi = ci[0], ci[1]
+
+        #__ Return output __
+        return ci_lo, ci_hi
+
+    #__ Estimate probability density function __
+    def probability_density(self, i, npts=500, bounds=None, thin=None, cumulative=None):
+        '''
+        Calculate marginal [(reverse) cumulative] probability density estimate.
+
+        Input
+        -----
+        i : ``int``
+            Model parameter index.
+
+        npts : ``int`` (default ``500``)
+            Number of points in KDE vector.
+
+        bounds : ``Tuple[float,float]`` (optional)
+            Bounds of KDE vector.
+
+        thin : ``int`` (optional)
+            Thin model samples for KDE estimation.
+
+        cumulative : ``str`` (optional)
+            If specified, calculate cumulative distribution in ``'forward'`` or ``'reverse'`` direction.
+        
+        Output
+        ------
+        density : ``np.ndarray``
+            Density function.
+
+        vec : ``np.ndarray``
+            Density function vector.
+        '''
+
+        #__ Fit KDE __
+        kde, m_s = self._gaussian_kde(np.atleast_1d(i), thin)
+
+        #__ Calculate vector __
+        lo, hi = bounds if bounds is not None else (m_s.min(), m_s.max())
+        vec    = np.linspace(lo, hi, npts)
+
+        #__ Calculate density function __
+        if (cumulative is None):
+            density = kde(vec)
+        elif (cumulative == 'forward'):
+            density = np.array([kde.integrate_box_1d(-np.inf, vec_i) for vec_i in vec])
+        elif (cumulative == 'reverse'):
+            density = np.array([kde.integrate_box_1d(vec_i, np.inf)  for vec_i in vec])
+
+        #__ Return output __
+        return density, vec
