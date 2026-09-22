@@ -1,0 +1,16 @@
+# GeoPVI is cloned fresh by setup.sh, not vendored in the repo
+external/
+
+# Python build artifacts
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+
+# Sphinx docs build
+source/_build/
+
+# editors / OS
+.vscode/
+.DS_Store

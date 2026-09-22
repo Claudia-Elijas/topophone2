@@ -1,0 +1,46 @@
+# Spec (not a freeze) for topophone2 + GeoPVI, with versions pinned to the
+# combination known to work (taken from ../env_topophone2.yml). Built by ./setup.sh.
+#
+# Not included here (installed/built separately by setup.sh):
+#   - GeoPVI itself (cloned from GitHub, pinned to a commit)
+#   - GeoPVI's compiled 2D FMM solver (geopvi/forward/tomo2d) — required:
+#     geopvi.forward.swi.posterior imports it at module load time, and
+#     topophone2.inversion imports that module directly.
+name: topophone2
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11.16
+  - pip
+
+  # --- topophone2 ---
+  - numpy=2.2.*
+  - scipy=1.15.*
+  - pandas=2.2.*
+  - matplotlib=3.10.*
+  - obspy=1.4.*
+
+  # --- GeoPVI (geopvi/requirements.txt) ---
+  - cython=3.1.*
+  - dask=2025.4.1
+  # seaborn: listed in GeoPVI's requirements.txt but not imported by anything
+  # topophone2 or GeoPVI's nfvi/swi/tomo2d modules use, and not present in the
+  # working frozen env either. Left unpinned; drop it if unused.
+  # - seaborn
+
+  # build tools for GeoPVI's tomo2d Fortran/Cython extension (see setup.sh)
+  - make
+  - gfortran
+  - c-compiler
+  - cxx-compiler
+
+  - pip:
+      - harmonic==1.3.1
+      - torch==2.7.0
+      - cmcrameri==1.9
+      - ipykernel==7.3.*
+      - h5py==3.16.*
+      # pysurf96: fork required by geopvi.forward.swi.posterior; version below
+      # is what the frozen env reports, but the fork is installed from git,
+      # not PyPI, so this is really tracking the commit at time of freeze.
+      - git+https://github.com/XuebinZhaoZXB/pysurf96
