@@ -9,7 +9,7 @@ build/
 dist/
 
 # Sphinx docs build
-source/_build/
+docs/_build/
 
 # editors / OS
 .vscode/
