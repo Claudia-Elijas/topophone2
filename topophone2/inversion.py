@@ -135,12 +135,12 @@ class Posterior():
     -----
     Gamma_obs : ``numpy.ndarray``
         Observed array-covariance matrix
-        (frequency, sensor, sensor)
+        (frequency, receiver, receiver)
     
     N_obs : ``int``
         Number of independent samples used to estimate observed expectation
 
-    arraycovariance_model : ``Callable``
+    array_covariance_model : ``Callable``
         Array covariance model (:class:`ArrayCovarianceModel`)
 
     prior : ``Callable``
@@ -148,7 +148,7 @@ class Posterior():
 
     Gamma_obs_noise : ``numpy.ndarray`` (optional)
         Observed noise-only array-covariance matrix
-        (frequency, sensor, sensor)
+        (frequency, receiver, receiver)
 
     N_obs_noise : ``int`` (optional)
         Number of independent samples used to estimate observed noise-only expectation
@@ -171,7 +171,7 @@ class Posterior():
         self,
         Gamma_obs : np.ndarray,
         N_obs     : int,
-        arraycovariance_model : Callable,
+        array_covariance_model : Callable,
         prior     : Callable,
         Gamma_obs_noise : Optional[np.ndarray] = None,
         N_obs_noise     : Optional[int]        = None
@@ -179,7 +179,9 @@ class Posterior():
         
 
         #__ Throw error if noise-only not calculated but noise ACM specified here, or warning if specified but not provided __
-        self._invert_noise_only = (Gamma_obs_noise is not None)  # Invert an additional noise-only data set
+        self._invert_noise_only = (Gamma_obs_noise is not None)
+        if self._invert_noise_only and not array_covariance_model._calc_noise_only:
+            raise ValueError('Noise data provided, must specify `calc_noise_only` in ArrayCovarianceModel.')
 
         #__ Store arguments as attributes __
         self.N_obs       = float(N_obs)            # Number of independent samples used to estimate observed expectation
@@ -188,17 +190,17 @@ class Posterior():
         self.prior       = prior                   # Prior distribution
 
         #__ Store required attributes from model __
-        self.forward  = arraycovariance_model.forward   # Function to predict array covariance from model vector
-        self._iu0_sta = arraycovariance_model._iu0_sta  # Upper-triangle index set for unique station pairs (including diagonal)
-        self._iu1_sta = arraycovariance_model._iu1_sta  # ^
-        self._N_sta   = arraycovariance_model.N_sta     # Number of sensors
-        self._N_freq  = arraycovariance_model.N_freq    # Number of frequency bins
-        self._calc_noise_only = arraycovariance_model._calc_noise_only  # Include an additional noise-only calculation
-        self._unpack  = arraycovariance_model._unpack   # Unpack model vector
-        self._expand  = arraycovariance_model.expand    # Unflatten array-covariance
+        self.forward  = array_covariance_model.forward   # Function to predict array covariance from model vector
+        self._iu0_rec = array_covariance_model._iu0_rec  # Upper-triangle index set for unique receiver pairs (including diagonal)
+        self._iu1_rec = array_covariance_model._iu1_rec  # ^
+        self._N_rec   = array_covariance_model.N_rec     # Number of receivers
+        self._N_freq  = array_covariance_model.N_freq    # Number of frequency bins
+        self._calc_noise_only = array_covariance_model._calc_noise_only  # Include an additional noise-only calculation
+        self._unpack  = array_covariance_model._unpack   # Unpack model vector
+        self._expand  = array_covariance_model.expand    # Unflatten array-covariance
 
-        #__ Lower-tirangle index set for unique station pairs (excluding diagonal) __
-        self._il0_sta, self._il1_sta = np.tril_indices(self._N_sta, k=-1)
+        #__ Lower-triangle index set for unique receiver pairs (excluding diagonal) __
+        self._il0_rec, self._il1_rec = np.tril_indices(self._N_rec, k=-1)
 
         #__ Check Hermitian symmetry of observation __
         def check_hermitian(Gamma_obs, var_name):
@@ -209,7 +211,7 @@ class Posterior():
         if self._invert_noise_only: check_hermitian(Gamma_obs_noise, 'Gamma_obs_noise')
 
         #__ Scaled Gamma_obs (A in Goodman [1963]) __
-        self._A = self.N_obs * Gamma_obs  # (frequency, sensor, sensor)
+        self._A = self.N_obs * Gamma_obs  # (frequency, receiver, receiver)
         if self._invert_noise_only: self._A_noise = self.N_obs_noise * Gamma_obs_noise
 
         #__ Cholesky factorisation of A __
@@ -225,32 +227,32 @@ class Posterior():
         return L_A
 
     #__ Calculate log-likelihood helper __
-    def _lnL_and_grad(self, Gamma, dGamma_dm, A, N_obs, grad, Gamma_name):
+    def _lnp_dm_and_grad(self, Gamma, dGamma, A, N_obs, grad, var_name):
 
         #__ Cholesky decomposition of predicted array-covariance matrix __
-        L = self._safe_cholesky(Gamma, Gamma_name)  # (model, freq, s, s)
+        L = self._safe_cholesky(Gamma, var_name)  # (model, freq, s)
 
         #__ Log-determinant of Gamma __
-        diag   = np.real(np.diagonal(L, axis1=-2, axis2=-1))  # (model, freq, sensor)
+        diag   = np.real(np.diagonal(L, axis1=-2, axis2=-1))  # (model, freq, receiver)
         logdet = 2.0 * np.sum(np.log(diag), axis=-1)          # (model, freq)
 
         #__ Inverse of Gamma __
-        Ginv = np.linalg.inv(Gamma)  # (model, freq, sensor, sensor)
+        Gamma_inv = np.linalg.inv(Gamma)  # (model, freq, receiver, receiver)
 
-        #__ tr(G^-1 A) __
-        tr = np.real(np.sum(Ginv * np.conj(A)[None,...], axis=(-2, -1)))  # (model, freq)
+        #__ tr(Gamma^-1 A) __
+        tr = np.real(np.sum(Gamma_inv * np.conj(A)[None,...], axis=(-2, -1)))  # (model, freq)
 
         #__ Sum over independent frequency bins __
-        lnp_d_m = np.sum(-N_obs * logdet - tr, axis=-1)   # (model)
-        if not grad: return lnp_d_m, None
+        lnp_dm = np.sum(-N_obs * logdet - tr, axis=-1)   # (model)
+        if not grad: return lnp_dm, None
 
         #__ Calculate gradient (model, parameter) __
         B            = A[None, ...] - N_obs * Gamma
-        G            = Ginv @ B @ Ginv
-        grad_lnp_d_m = np.real(np.einsum('mfij,mfjik->mk', G, dGamma_dm, optimize=True))
+        G            = Gamma_inv @ B @ Gamma_inv
+        dlnp_dm = np.real(np.einsum('mfij,mfjik->mk', G, dGamma, optimize=True))
 
         #__ Return output __
-        return lnp_d_m, grad_lnp_d_m
+        return lnp_dm, dlnp_dm
 
     #__ Calculate log-likelihood __
     def log_likelihood(self, m, grad=True):
@@ -269,11 +271,11 @@ class Posterior():
 
         Output
         ------
-        lnp_d_m : ``numpy.ndarray``
+        lnp_dm : ``numpy.ndarray``
             Log-likelihood of observed array-covariance matrix given model vector
             (model,)
 
-        grad_lnp_d_m : ``numpy.ndarray``
+        dlnp_dm : ``numpy.ndarray``
             Gradient of log-likelihood wrt. model parameters
             (model, parameter)
 
@@ -286,20 +288,20 @@ class Posterior():
         N_model, N_param = m.shape
 
         #__ Synthesise array-covariance matrix __
-        if self._calc_noise_only: cov, dcov_dm, cov_noise, dcov_dm_noise = self.forward(m, grad=grad)  # (model, frequency, sensor pair, [parameter])
-        else: cov, dcov_dm = self.forward(m, grad=grad)  # (model, frequency, sensor pair, [parameter])
-        Gamma, dGamma_dm = self._expand(cov, dcov_dm if grad else None)
-        if self._invert_noise_only: Gamma_noise, dGamma_dm_noise = self._expand(cov_noise, dcov_dm_noise if grad else None)
+        if self._calc_noise_only: cov, dcov, cov_noise, dcov_noise = self.forward(m, grad=grad)  # (model, frequency, receiver pair, [parameter])
+        else: cov, dcov = self.forward(m, grad=grad)  # (model, frequency, receiver pair, [parameter])
+        Gamma, dGamma = self._expand(cov, dcov if grad else None)
+        if self._invert_noise_only: Gamma_noise, dGamma_noise = self._expand(cov_noise, dcov_noise if grad else None)
 
         #__ Calculate likelihood __
-        lnp_d_m, grad_lnp_d_m = self._lnL_and_grad(Gamma, dGamma_dm, self._A, self.N_obs, grad, 'Gamma')
+        lnp_dm, dlnp_dm = self._lnp_dm_and_grad(Gamma, dGamma, self._A, self.N_obs, grad, 'Gamma')
         if self._invert_noise_only:
-            lnp_d_m_noise, grad_lnp_d_m_noise = self._lnL_and_grad(Gamma_noise, dGamma_dm_noise, self._A_noise, self.N_obs_noise, grad, 'Gamma_noise')
-            lnp_d_m += lnp_d_m_noise
-            if (grad_lnp_d_m is not None): grad_lnp_d_m += grad_lnp_d_m_noise
+            lnp_dm_noise, dlnp_dm_noise = self._lnp_dm_and_grad(Gamma_noise, dGamma_noise, self._A_noise, self.N_obs_noise, grad, 'Gamma_noise')
+            lnp_dm += lnp_dm_noise
+            if (dlnp_dm is not None): dlnp_dm += dlnp_dm_noise
 
         #__ Return output __
-        return lnp_d_m, grad_lnp_d_m
+        return lnp_dm, dlnp_dm
 
     #__ Calculate log-posterior __
     def log_posterior(
@@ -319,7 +321,7 @@ class Posterior():
 
         Output
         ------
-        lnp_m_d : ``torch.Tensor``
+        lnp_md : ``torch.Tensor``
             Log-posterior for model vector given observed array-covariance matrix and prior distribution
             (model,)
         
@@ -327,16 +329,16 @@ class Posterior():
         '''
 
         #__ Calculate log-likelihood __
-        lnp_d_m = ForwardModel.apply(m, self.log_likelihood)
+        lnp_dm = ForwardModel.apply(m, self.log_likelihood)
 
         #__ Calculate log-prior __
         lnp_m = self.prior.log_prior(m)
 
         #__ Calculate log-posterior __
-        lnp_m_d = lnp_m + lnp_d_m
+        lnp_md = lnp_m + lnp_dm
 
         #__ Return output __
-        return lnp_m_d
+        return lnp_md
 
 #________ NORMALISING FLOWS MODEL ________#
 
@@ -473,7 +475,7 @@ class Inference():
         The normalising flows model to use for variational inference (e.g., ``LinearFlowsModel``).
     inversion : ``Callable``
         The variational inference object that performs the inversion.
-    optimizer : ``torch.optim.Optimizer``
+    optimiser : ``torch.optim.Optimizer``
         The optimiser used for variational inference.
     learning_rate : ``float``
         The learning rate for the optimiser.
@@ -489,25 +491,25 @@ class Inference():
     def __init__(self, flow_model, posterior, learning_rate, outpath):
         self.flow_model = flow_model.def_flow_model()
         self.inversion = VariationalInversion(variationalDistribution=self.flow_model.variational, log_posterior=posterior.log_posterior)
-        self.optimizer = torch.optim.Adam(self.flow_model.variational.parameters(), lr=learning_rate)
+        self.optimiser = torch.optim.Adam(self.flow_model.variational.parameters(), lr=learning_rate)
         self.learning_rate, self.loss_his, self.outpath = learning_rate, [], outpath
         self._unpack = posterior._unpack
 
         ## WARN IF ONLY USING SINGLE POINT SOURCE AS LIKELIHOOD ILL-DEFINED
 
     #__ Perform inversion __
-    def invert(self, iterations, nsample, nout=0, save_intermediate_result=False, verbose=False):
+    def invert(self, N_iterations, N_montecarlo, N_out=0, save_intermediate_result=False, verbose=False):
 
         '''
         Function to perform variational inference to invert observed array covariance for model parameters.
 
         Input
         -----
-        iterations : ``int``
+        N_iterations : ``int``
             Number of iterations to run the inversion.
-        nsample : ``int``
-            Number of samples to estimate evidence.
-        nout : ``int`` (default: ``0``)
+        N_montecarlo : ``int``
+            Number of samples to estimate ELBO and gradient estimate.
+        N_out : ``int`` (default: ``0``)
             Number of samples to output for intermediate results.
 
         save_intermediate_result : ``bool`` (default: ``False``)
@@ -516,15 +518,15 @@ class Inference():
         verbose : ``bool`` (default: ``False``)
             If ``True``, print progress during the inversion.
         '''
-        if (nout == 0):
-            nout = 1
+        if (N_out == 0):
+            N_out = 1
             save_intermediate_result = False
         self.loss_his.extend(self.inversion.update(
             optimizer = 'torch.optim.Adam',
             lr        = self.learning_rate,
-            n_iter    = iterations,
-            nsample   = nsample,
-            n_out     = nout,
+            n_iter    = N_iterations,
+            nsample   = N_montecarlo,
+            n_out     = N_out,
             verbose   = verbose,
             save_intermediate_result = save_intermediate_result,
             outpath   = self.outpath
@@ -617,7 +619,7 @@ class MarginalStats():
     def __init__(self, m, posterior=None, prior_bounds=None):
         self.m   = m
         if (posterior is not None):
-            self.lnL, _ = posterior.log_likelihood(m, grad=False)
+            self.lnp_dm, _ = posterior.log_likelihood(m, grad=False)
         if (prior_bounds is not None):
             self.Vi = prior_bounds[1] - prior_bounds[0]
 
@@ -636,10 +638,10 @@ class MarginalStats():
 
         Output
         ------
-        lnZ : ``float``
-            Evidence.
+        lnp_d : ``float``
+            Log-evidence.
 
-        lnZ_std : ``float``
+        lnp_d_std : ``float``
             Standard deviation of estimate.
         '''
 
@@ -649,11 +651,11 @@ class MarginalStats():
 
         #__ Calculate log-posterior __
         lnV = np.sum(np.log(self.Vi))                # Log-hypervolume
-        lnP = (self.lnL - lnV).reshape(nchains, -1)  # (chain, sample)
+        lnp_md = (self.lnp_dm - lnV).reshape(nchains, -1)  # (chain, sample)
 
         #__ Instantiate Chains class __
         chains = hm.Chains(n)
-        chains.add_chains_3d(m, lnP)
+        chains.add_chains_3d(m, lnp_md)
 
         #__ Split into training and inference chains __
         chains_train, chains_infer = hm.utils.split_data(chains, training_proportion=0.5)
@@ -667,10 +669,10 @@ class MarginalStats():
         ev.add_chains(chains_infer)
         
         #__ Compute evidence __
-        lnZ, lnZ_std = ev.compute_ln_evidence()
+        lnp_d, lnp_d_std = ev.compute_ln_evidence()
 
         #__ Return output __
-        return lnZ, lnZ_std
+        return lnp_d, lnp_d_std
 
     #__ Fit Gaussian KDE __
     def _gaussian_kde(self, idx, thin=None):
@@ -723,10 +725,10 @@ class MarginalStats():
         if (idx is None):
 
             #__ Calculate evidence __
-            lnZ, _ = self.calc_evidence()
+            lnp_d, _ = self.calc_evidence()
 
             #__ Calculate information gain __
-            lnD = np.mean(self.lnL) - lnZ
+            lnD = np.mean(self.lnp_dm) - lnp_d
 
         #__ Partial model parameter set __
         else:

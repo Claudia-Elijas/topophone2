@@ -1,18 +1,22 @@
 """
-    The ``topophone2.topophone`` module provides the ``decompose`` function, which performs the decomposition of an observed array-covariance matrix into its constituent signal components using a variational inference approach. The function takes in various parameters related to the observed data, sensor positions, signal types, and model configurations, and returns the estimated model parameters and loss history.
+    The ``topophone2.topophone`` module provides the ``decompose`` function,
+    which performs the decomposition of an observed array-covariance matrix
+    into its constituent signal components
+    using a variational inference approach.
+    The function takes in various parameters related to the observed data, receiver positions, signal types, and model configurations,
+    and saves the estimated model parameters and loss history.
 
 """
 
 
 from topophone2 import inversion, modelling
-from typing import int 
 import numpy as np
 
 def decompose(
-    Gamma         : np.ndarray,
-    Gamma_n       : np.ndarray,
-    Nobs          : int,
-    Nobs_n        : int,
+    Gamma_obs         : np.ndarray,
+    Gamma_obs_noise       : np.ndarray,
+    N_obs          : int,
+    N_obs_noise        : int,
     x             : np.ndarray,
     freq          : np.ndarray,
     sigs          : list,
@@ -24,15 +28,15 @@ def decompose(
     ini_dist      : str,
     learning_rate : float,
     outpath       : str ,
-    iterations    : int,
-    nsample       : int,
-    nout          : int,
+    N_iterations    : int,
+    N_montecarlo       : int,
+    N_out          : int,
     save_intermediate_result : bool,
     verbose       : bool,
     N_samples     : int,
     model_outpath : str,
     loss_outpath  : str,
-) -> np.ndarray:
+):
     r'''
     
     Function to perform the decomposition of an observed array-covariance matrix into its constituent signal components using a variational inference approach.
@@ -40,23 +44,23 @@ def decompose(
     Inputs
     ------
 
-    Gamma : ``numpy.ndarray``
+    Gamma_obs : ``numpy.ndarray``
         Observed array-covariance matrix
-        (frequency, sensor, sensor)
+        (frequency, receiver, receiver)
 
-    Gamma_n : ``numpy.ndarray``
+    Gamma_obs_noise : ``numpy.ndarray``
         Observed noise-only array-covariance matrix
-        (frequency, sensor, sensor)
+        (frequency, receiver, receiver)
 
-    Nobs: ``int``
+    N_obs: ``int``
         Degrees of freedom
 
-    Nobs_n : ``int``
+    N_obs_noise : ``int``
         Degrees of freedom (noise)
 
     x : ``numpy.ndarray``
-        Sensor position [m]
-        (sensor, direction)
+        Receiver position [m]
+        (receiver, direction)
 
     freq : ``numpy.ndarray``
         Angular frequency vector [rad.s-1]
@@ -94,12 +98,12 @@ def decompose(
     '''
 
     #__ Set up array-covariance model __
-    if Gamma_n : calc_noise_only = True
+    if (Gamma_obs_noise is not None) : calc_noise_only = True
     else:        calc_noise_only = False
-    model = modelling.ArrayCovarianceModel(
+    array_covariance_model = modelling.ArrayCovarianceModel(
         x               = x,
         freq            = freq,
-        signal_types    = sigs,
+        sigs    = sigs,
         weight_units    = weight_units,
         calc_noise_only = calc_noise_only,
         custom_cf       = custom_cf
@@ -110,12 +114,12 @@ def decompose(
 
     #__ Set up posterior pdf __
     posterior = inversion.Posterior(
-        Gamma_obs             = Gamma,
-        N_obs                 = Nobs,
-        arraycovariance_model = model,
+        Gamma_obs             = Gamma_obs,
+        N_obs                 = N_obs,
+        array_covariance_model = array_covariance_model,
         prior                 = prior,
-        Gamma_obs_noise       = Gamma_n,
-        N_obs_noise           = Nobs_n
+        Gamma_obs_noise       = Gamma_obs_noise,
+        N_obs_noise           = N_obs_noise
     )
 
     #__ Set up normalising flow model __
@@ -128,7 +132,7 @@ def decompose(
     )
 
     #__ Set up inverse problem __
-    inverse = inversion.VI(
+    inverse = inversion.Inference(
         flow_model    = flow,
         posterior     = posterior,
         learning_rate = learning_rate,
@@ -137,9 +141,9 @@ def decompose(
 
     #__ Perform inversion __
     inverse.invert(
-        iterations = iterations,
-        nsample    = nsample,
-        nout       = nout,
+        N_iterations = N_iterations,
+        N_montecarlo    = N_montecarlo,
+        N_out       = N_out,
         save_intermediate_result = save_intermediate_result,
         verbose    = verbose
     )

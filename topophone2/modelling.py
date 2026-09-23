@@ -51,19 +51,19 @@ class ArrayCovarianceModel():
         Input
         -----
         x : ``numpy.ndarray``
-            Sensor location vectors 
-            (sensor, direction)
+            Receiver location vectors 
+            (receiver, direction)
     
         freq : ``numpy.ndarray``
             Angular frequency vector
             (frequency)
     
-        signal_types : ``list`` of ``str`` or ``dict``
+        sigs : ``list`` of ``str`` or ``dict``
             Signal components to superpose. 
             
             a)  ``str``: density functions ('point', 'normal', 'skewnormal')
             
-            b) ``dict``: harmonic functions for noise field ('noise2D', 'noise3D') with optional parameters.
+            b) ``dict``: harmonic functions for noise field ('isonoise', 'noise2D', 'noise3D') with optional parameters.
                     
                     **sig** : ``str`` (required) - signal type ('isonoise', 'noise2D', 'noise3D')
                     
@@ -74,6 +74,8 @@ class ArrayCovarianceModel():
                     **b** : ``numpy.ndarray`` (optional) - sine coefficients
                     
                     **max_order** : ``int`` (optional) - maximum order of harmonic basis (if **a**/**b** not specified)
+
+                    **dim** : ``int`` (required for 'isonoise', default ``2``) - cylindrical (``2``) or spherical (``3``) isotropy
                     
         weight_units : ``str`` (default 'dB')
             Units of the signal weights in the model vector
@@ -86,15 +88,15 @@ class ArrayCovarianceModel():
             Custom characteristic functions keyed by signal name,
             containing tuple of number of parameters and function with arguments:
 
-                **t**   ``numpy.ndarray`` : Characteristic function argument (frequency, sensor pair, direction)
+                **t**   ``numpy.ndarray`` : Characteristic function argument (frequency, receiver pair, direction)
                 
-                **m_i** ``numpy.ndarray`` : Model vector (model, parameter)
+                **m_s** ``numpy.ndarray`` : Model vector (model, parameter)
             
             and returns:
                
-                **cf**     ``numpy.ndarray`` : Characteristic function (model, frequency, sensor pair)
+                **cf**     ``numpy.ndarray`` : Characteristic function (model, frequency, receiver pair)
                 
-                **dcf_dm** ``numpy.ndarray``) : Characteristic function gradient wrt. model parameters (model, frequency, sensor pair, parameter)    
+                **dcf** ``numpy.ndarray``) : Characteristic function gradient wrt. model parameters (model, frequency, receiver pair, parameter)    
 
         Note
         ----
@@ -104,28 +106,28 @@ class ArrayCovarianceModel():
         Attributes
         ----------
         dist : ``numpy.ndarray``
-            Inter-sensor distances (sensor pair)
+            Inter-receiver distances (receiver pair)
     
         az : ``numpy.ndarray``
-            Inter-sensor azimuths (sensor pair)
+            Inter-receiver azimuths (receiver pair)
     
         pol : ``numpy.ndarray``
-            Inter-sensor polar angles (sensor pair)
+            Inter-receiver polar angles (receiver pair)
     
         t : ``numpy.ndarray``
-            Characteristic function argument (frequency, sensor pair, direction)
+            Characteristic function argument (frequency, receiver pair, direction)
     
         weight_units : ``str``
             Units of the signal weights in the model vector
     
-        signal_types : ``list``
+        sigs : ``list``
             Signal components to superpose
     
         freq : ``numpy.ndarray``
             Angular frequency vector
     
         N_pair : ``int``
-            Number of sensor pairs
+            Number of receiver pairs
     
         N_dir : ``int``
             Number of directional components
@@ -136,35 +138,29 @@ class ArrayCovarianceModel():
         N_corr : ``int``
             Number of correlation coefficients (upper triangle of Omega_z)
     
-        max_order_2D : ``int``
-            Maximum order of 2D harmonic basis
-    
-        max_order_3D : ``int``
-            Maximum order of 3D harmonic basis
-    
-        order2D : ``numpy.ndarray``
+        order_2D : ``numpy.ndarray``
             2D harmonic orders
     
-        order3D : ``numpy.ndarray``
+        order_3D : ``numpy.ndarray``
             3D harmonic orders
     
-        degree3D : ``numpy.ndarray``
+        degree_3D : ``numpy.ndarray``
             3D harmonic degrees
     
         cos_2D : ``numpy.ndarray``
-            2D harmonic cosine basis (sensor pair, order)
+            2D harmonic cosine basis (receiver pair, order)
     
         sin_2D : ``numpy.ndarray``
-            2D harmonic sine basis (sensor pair, order)
+            2D harmonic sine basis (receiver pair, order)
     
         cos_3D : ``numpy.ndarray``
-            3D harmonic cosine basis (sensor pair, order)
+            3D harmonic cosine basis (receiver pair, order)
     
         sin_3D : ``numpy.ndarray``
-            3D harmonic sine basis (sensor pair, order)
+            3D harmonic sine basis (receiver pair, order)
     
         e_m : ``numpy.ndarray``
-            2D harmonic cosine/sine normalization factors (order)
+            2D harmonic cosine/sine normalisation factors (order)
     
         i_m : ``numpy.ndarray``
             2D harmonic imaginary unit powers (order)
@@ -173,7 +169,7 @@ class ArrayCovarianceModel():
             3D harmonic imaginary unit powers (degree)
     
         P_nm : ``numpy.ndarray``
-            3D harmonic Legendre polynomials (sensor pair, order, degree)
+            3D harmonic Legendre polynomials (receiver pair, order, degree)
     
         N_tri : ``int``
             Number of triangular (m <= n) index pairs
@@ -185,43 +181,43 @@ class ArrayCovarianceModel():
         self,
         x            : np.ndarray,
         freq         : np.ndarray,
-        signal_types : list, 
+        sigs : list, 
         weight_units : str = 'dB',
         calc_noise_only : bool = False,
         custom_cf    : Dict[str,Tuple[int,Callable]] = {}
     ):
         
         #__ Store arguments as attributes __
-        self.x               = x             # Sensor location [m] (sensor, direction)
-        self.signal_types    = signal_types  # Signal components to superimpose
+        self.x               = x             # Receiver location [m] (receiver, direction)
+        self.sigs    = sigs  # Signal components to superimpose
         self.weight_units    = weight_units  # Units of signal weights in the model vector
-        self.freq            = freq          # Angular-frequency vector [rad] (frequency)
+        self.freq            = freq          # Angular-frequency vector [rad.s-1] (frequency)
         self.N_freq          = len(freq)     # Number of frequency bins
         self._calc_noise_only = calc_noise_only  # Include an additional noise-only calculation
         self.custom_cf       = custom_cf
 
         #__ Array geometry __
-        self.N_sta  = x.shape[0]                      # Number of sensors
+        self.N_rec  = x.shape[0]                      # Number of receivers
         self.N_dir  = x.shape[1]                      # Number of directional components
-        self._iu0_sta, self._iu1_sta = np.triu_indices(self.N_sta, k=0)   # Upper-triangle index set for unique station pairs (including diagonal)
-        self._il0_sta, self._il1_sta = np.tril_indices(self.N_sta, k=-1)  # Lower-triangle index set for unique station pairs (excluding diagonal)
-        self.N_pair = len(self._iu0_sta)              # Number of sensor pairs
-        self.r = (x[None,:,:] - x[:,None,:])[self._iu0_sta, self._iu1_sta, :]  # Inter-sensor separation [m] (sensor pair, direction)
-        self.dist = np.linalg.norm(self.r, axis=1)         # Inter-sensor distance [m] (sensor pair)
-        self.az   = np.arctan2(self.r[:,1], self.r[:,0])   # Inter-sensor azimuth [rad, anticlockwise from +X] (sensor pair)
+        self._iu0_rec, self._iu1_rec = np.triu_indices(self.N_rec, k=0)   # Upper-triangle index set for unique receiver pairs (including diagonal)
+        self._il0_rec, self._il1_rec = np.tril_indices(self.N_rec, k=-1)  # Lower-triangle index set for unique receiver pairs (excluding diagonal)
+        self.N_pair = len(self._iu0_rec)              # Number of receiver pairs
+        self.r = (x[None,:,:] - x[:,None,:])[self._iu0_rec, self._iu1_rec, :]  # Inter-receiver separation [m] (receiver pair, direction)
+        self.dist = np.linalg.norm(self.r, axis=1)         # Inter-receiver distance [m] (receiver pair)
+        self.az   = np.arctan2(self.r[:,1], self.r[:,0])   # Inter-receiver azimuth [rad, anticlockwise from +X] (receiver pair)
         if (self.N_dir == 3):
             with np.errstate(invalid='ignore', divide='ignore'):
-                self.pol = np.arccos(self.r[:,2] / self.dist)  # Inter-sensor polar angle [rad, from +Z] (sensor pair)
+                self.pol = np.arccos(self.r[:,2] / self.dist)  # Inter-receiver polar angle [rad, from +Z] (receiver pair)
             self.pol[self.dist == 0.0] = 0.0                   # Undefined at zero separation
         else: self.pol = None
 
         #__ Self noise __
-        if ('isoselfnoise' in self.signal_types):
-            self._cf_isoselfnoise = np.eye(self.N_sta)[None,None,self._iu0_sta, self._iu1_sta]  # Isotropic self-noise characteristic function (model, frequency, sensor pair)
+        if ('isoselfnoise' in self.sigs):
+            self._cf_isoselfnoise = np.eye(self.N_rec)[None,None,self._iu0_rec, self._iu1_rec]  # Isotropic self-noise characteristic function (model, frequency, receiver pair)
         self._NOISE_SIGS = ['isonoise', 'noise2D', 'noise3D', 'isoselfnoise']                   # Possible noise signals
 
         #__ Characteristic-function argument __
-        self.t = self.freq[:,None,None] * self.r[None,:,:]  # Characteristic-function argument [rad.s-1.m] (frequency, sensor pair, direction)
+        self.t = self.freq[:,None,None] * self.r[None,:,:]  # Characteristic-function argument [rad.s-1.m] (frequency, receiver pair, direction)
 
         #__ Weight units __
         if (self.weight_units == 'dB'):        # Weights in dB scale
@@ -236,7 +232,7 @@ class ArrayCovarianceModel():
         #__ Initialise harmonic bases (for noise modelling) __
         self._init_harmonic_bases() 
         # self._max_order_2D, self._max_order_3D, 
-        # self.order2D, self.order3D, self.degree3D, 
+        # self.order_2D, self.order_3D, self.degree_3D, 
         # self.cos_2D, self.sin_2D, self.cos_3D, self.sin_3D,
         # self.i_m, self.i_n, self.e_m, self.P_nm, self.N_tri
 
@@ -244,62 +240,62 @@ class ArrayCovarianceModel():
         self._bessel_cache = {}
 
     #__ Harmonic bases evaluation 
-    def _init_harmonic_bases(self) -> dict:
-        r"""Return a dictionary of harmonic bases for the current geometry."""
+    def _init_harmonic_bases(self):
+        r"""Compute harmonic bases for the current geometry."""
        
         #__ Geometry-dependent harmonic quantities __
         self._max_order_2D = None
         self._max_order_3D = None
-        for signal_type in self.signal_types:
-            if isinstance(signal_type, dict):
-                if (signal_type.get('sig') == 'noise2D'):
-                    self._max_order_2D = self._infer_max_order(signal_type)  # Maximum order of cylindrical basis
-                elif (signal_type.get('sig') == 'noise3D'):
-                    self._max_order_3D = self._infer_max_order(signal_type)  # Maximum order of spherical basis
-        self._base = self.freq[None,:,None] * self.dist[None,None,:]  # Geometry-independent part of Bessel function argument
+        for sig in self.sigs:
+            if isinstance(sig, dict):
+                if (sig.get('sig') == 'noise2D'):
+                    self._max_order_2D = self._infer_max_order(sig)  # Maximum order of cylindrical basis
+                elif (sig.get('sig') == 'noise3D'):
+                    self._max_order_3D = self._infer_max_order(sig)  # Maximum order of spherical basis
+        self._base = self.freq[None,:,None] * self.dist[None,None,:]  # Slowness-independent part of Bessel function argument
 
         #__ 2D harmonic basis __
         if self._max_order_2D is not None:
-            self.order2D = np.arange(self._max_order_2D + 1)                 # Cylindrical-harmonic order vector (order)
-            self.cos_2D    = np.cos(self.order2D[None,:] * self.az[:,None])  # Cylindrical-harmonic cosine basis (sensor pair, order)
-            self.sin_2D    = np.sin(self.order2D[None,:] * self.az[:,None])  # Cylindrical-harmonic sine basis (sensor pair, order)
-            self.i_m       = 1j ** self.order2D                              # Cylindrical-harmonic imaginary unit powers (order)
-            self.e_m       = np.ones(len(self.order2D), dtype=float) ; self.e_m[1:] = 2.0  # Cylindrical-harmonic cosine/sine normalization factors (order)
+            self.order_2D = np.arange(self._max_order_2D + 1)                 # Cylindrical-harmonic order vector (order)
+            self.cos_2D    = np.cos(self.order_2D[None,:] * self.az[:,None])  # Cylindrical-harmonic cosine basis (receiver pair, order)
+            self.sin_2D    = np.sin(self.order_2D[None,:] * self.az[:,None])  # Cylindrical-harmonic sine basis (receiver pair, order)
+            self.i_m       = 1j ** self.order_2D                              # Cylindrical-harmonic imaginary unit powers (order)
+            self.e_m       = np.ones(len(self.order_2D), dtype=float) ; self.e_m[1:] = 2.0  # Cylindrical-harmonic cosine/sine normalisation factors (order)
         else:
-            self.order2D = self.cos_2D = self.sin_2D = self.i_m = self.e_m = None
+            self.order_2D = self.cos_2D = self.sin_2D = self.i_m = self.e_m = None
 
         #__ 3D harmonic basis __
         if self._max_order_3D is not None:
             if self.pol is None:
                 raise ValueError("noise3D requires 3-component separation vectors.")
-            self.order3D  = np.arange(self._max_order_3D + 1)             # Spherical-harmonic order vector (order)
-            self.degree3D = np.arange(self._max_order_3D + 1)             # Spherical-harmonic degree vector (degree)
-            self.cos_3D = np.cos(self.order3D[None,:] * self.az[:,None])  # Spherical-harmonic cosine basis (sensor pair, order)
-            self.sin_3D = np.sin(self.order3D[None,:] * self.az[:,None])  # Spherical-harmonic sine basis (sensor pair, order)
-            self.i_n    = 1j ** self.degree3D                             # Spherical-harmonic imaginary unit powers (degree)
+            self.order_3D  = np.arange(self._max_order_3D + 1)             # Spherical-harmonic order vector (order)
+            self.degree_3D = np.arange(self._max_order_3D + 1)             # Spherical-harmonic degree vector (degree)
+            self.cos_3D = np.cos(self.order_3D[None,:] * self.az[:,None])  # Spherical-harmonic cosine basis (receiver pair, order)
+            self.sin_3D = np.sin(self.order_3D[None,:] * self.az[:,None])  # Spherical-harmonic sine basis (receiver pair, order)
+            self.i_n    = 1j ** self.degree_3D                             # Spherical-harmonic imaginary unit powers (degree)
 
             #__ Legendre polynomials __
             polynomial_argument = np.cos(self.pol)
-            self.P_nm = np.empty((self.N_pair, len(self.order3D), len(self.degree3D)), dtype=float)  # Spherical-harmonic Legendre polynomials (sensor pair, order, degree)
-            for (l, m_l), (p, n_p) in itertools.product(enumerate(self.order3D),
-                                                        enumerate(self.degree3D)):
+            self.P_nm = np.empty((self.N_pair, len(self.order_3D), len(self.degree_3D)), dtype=float)  # Spherical-harmonic Legendre polynomials (receiver pair, order, degree)
+            for (l, m_l), (p, n_p) in itertools.product(enumerate(self.order_3D),
+                                                        enumerate(self.degree_3D)):
                 self.P_nm[:,l,p] = legendre_polynomial(polynomial_argument, n_p, m_l)  # Populate P_nm
 
             #__ Triangular (m <= n) index set __
-            self._tri_ord, self._tri_deg = np.tril_indices(self._max_order_3D + 1)  # Degree/order index set for lower triangle of degree-order pair matrix
+            self._tri_deg, self._tri_ord = np.tril_indices(self._max_order_3D + 1)  # rows = degree n, cols = order m, so m <= n
             self.N_tri   = len(self._tri_ord)                              # Number of spherical-harmonic order-degree pairs
             self._a_free = ~((self._tri_ord == 0) & (self._tri_deg == 0))  # Free spherical-harmonic cosine-basis coefficients
             self._b_free =   (self._tri_ord != 0)                          # Free spherical-harmonic sine-basis coefficients
-            self._n_a3D  = int(self._a_free.sum())                         # Number of free spherical-harmonic cosine-basis coefficients
-            self._n_b3D  = int(self._b_free.sum())                         # Number of free spherical-harmonic sine-basis coefficients
+            self._n_a_3D  = int(self._a_free.sum())                         # Number of free spherical-harmonic cosine-basis coefficients
+            self._n_b_3D  = int(self._b_free.sum())                         # Number of free spherical-harmonic sine-basis coefficients
         else:
             self.P_nm, self.N_tri = None, 0
 
     #__ Helper: read the truncation order out of a signal spec __
     @staticmethod
-    def _infer_max_order(signal_type: dict) -> int:
-        if ('max_order' in signal_type): return int(signal_type['max_order'])
-        if ('a' in signal_type):         return int(np.shape(signal_type['a'])[-1]) - 1
+    def _infer_max_order(sig: dict) -> int:
+        if ('max_order' in sig): return int(sig['max_order'])
+        if ('a' in sig):         return int(np.shape(sig['a'])[-1]) - 1
         raise ValueError("Harmonic signal needs 'max_order' or explicit 'a'/'b'.")
 
     #__ Cached Bessel evaluation, value and derivative together __
@@ -355,7 +351,7 @@ class ArrayCovarianceModel():
     ) -> Tuple[np.ndarray, Dict[str, np.ndarray]]:
         r"""
 
-        Function that retuns the characteristic function for a point (plane wave) distribution.
+        Function that returns the characteristic function for a point (plane wave) distribution.
 
         Input
         -----
@@ -370,12 +366,12 @@ class ArrayCovarianceModel():
         ------
         cf : ``numpy.ndarray``
             Characteristic function
-            (model, frequency, sensor pair)
+            (model, frequency, receiver pair)
 
         grad_cf : ``dict``
             Gradient of the characteristic function, keyed by parameter name. 
 
-            - **xi** : (``numpy.ndarray``) -- (model, frequency, sensor pair, direction)
+            - **xi** : (``numpy.ndarray``) -- (model, frequency, receiver pair, direction)
 
         
         The characteristic function for a point (plane wave) distribution is given by
@@ -384,7 +380,7 @@ class ArrayCovarianceModel():
                 
                     \varphi_\mathbf{s} \left(\mathbf{t} ; \mathbf{\xi}\right) = \exp \left[i \mathbf{t}^T \mathbf{\xi}\right]
 
-        where :math:`\mathbf{t}` is the characteristic function argument (frequency, sensor pair, direction) and :math:`\mathbf{\xi}` is the location vector (slowness).
+        where :math:`\mathbf{t}` is the characteristic function argument (frequency, receiver pair, direction) and :math:`\mathbf{\xi}` is the location vector (slowness).
                 
         The gradients of the characteristic function are given by the following expression:
 
@@ -398,10 +394,10 @@ class ArrayCovarianceModel():
         #__ np.einsum subscripts:  
         #__ [i] model 
         #__ [j] frequency
-        #__ [k] sensor pair
+        #__ [k] receiver pair
         #__ [l] direction
 
-        #__ Calculate characteristic function (model, frequency, sensor pair) __
+        #__ Calculate characteristic function (model, frequency, receiver pair) __
         L  = 1j * np.einsum('jkl,il->ijk', self.t, xi, optimize=True)
         cf = np.exp(L)
 
@@ -423,7 +419,7 @@ class ArrayCovarianceModel():
     ) -> Tuple[np.ndarray, Dict[str, np.ndarray]]:
         r"""
 
-        Function that retuns the characteristic function for a normal distribution.
+        Function that returns the characteristic function for a normal distribution.
         
         Input
         -----
@@ -446,16 +442,16 @@ class ArrayCovarianceModel():
         ------
         cf : ``numpy.ndarray``
             Characteristic function
-            (model, frequency, sensor pair)
+            (model, frequency, receiver pair)
 
         grad_cf : ``dict``
             Gradient of the characteristic function, keyed by parameter name:
 
-            - **xi** : (``numpy.ndarray``) -- (model, frequency, sensor pair, direction)
+            - **xi** : (``numpy.ndarray``) -- (model, frequency, receiver pair, direction)
 
-            - **sigma** : (``numpy.ndarray``) -- (model, frequency, sensor pair, direction)
+            - **sigma** : (``numpy.ndarray``) -- (model, frequency, receiver pair, direction)
 
-            - **corr** : (``numpy.ndarray``) -- (model, frequency, sensor pair, direction pair)
+            - **corr** : (``numpy.ndarray``) -- (model, frequency, receiver pair, direction pair)
                     
         Note
         ----
@@ -474,7 +470,7 @@ class ArrayCovarianceModel():
 
                 \Omega_z = \left\|\rho_{ij}\right\|
 
-        where :math:`\mathbf{t}` is the characteristic function argument (frequency, sensor pair, direction), :math:`\mathbf{\xi}` is the location vector (slowness), :math:`\Omega` is the covariance matrix, :math:`W` is the diagonal scale matrix, and :math:`\Omega_z` is the correlation matrix.
+        where :math:`\mathbf{t}` is the characteristic function argument (frequency, receiver pair, direction), :math:`\mathbf{\xi}` is the location vector (slowness), :math:`\Omega` is the covariance matrix, :math:`W` is the diagonal scale matrix, and :math:`\Omega_z` is the correlation matrix.
         The gradients of the characteristic function are given by the following expressions:
 
         .. math::
@@ -492,14 +488,14 @@ class ArrayCovarianceModel():
         #__ np.einsum subscripts:
         #__ [i] model
         #__ [j] frequency
-        #__ [k] sensor pair
+        #__ [k] receiver pair
         #__ [l],[p] direction
 
         #__ Intermediates (model, frequency, pair, direction) __
         w   = sigma[:,None,None,:] * self.t[None,...]
         Ozw = np.einsum('ilp,ijkp->ijkl', Omega_z, w, optimize=True)
 
-        #__ Calculate characteristic function (model, frequency, sensor pair) __
+        #__ Calculate characteristic function (model, frequency, receiver pair) __
         Q  = 0.5 * np.einsum('ijkl,ijkl->ijk', w, Ozw, optimize=True)
         L  = 1j * np.einsum('jkl,il->ijk', self.t, xi, optimize=True) - Q
         cf = np.exp(L)
@@ -508,13 +504,13 @@ class ArrayCovarianceModel():
         grad_cf = {}
         if grad:
 
-            #__ Location (model, frequency, sensor pair, direction) __
+            #__ Location (model, frequency, receiver pair, direction) __
             grad_cf['xi'] = 1j * self.t[None,...] * cf[...,None]
 
-            #__ Scale (model, frequency, sensor pair, direction) __
+            #__ Scale (model, frequency, receiver pair, direction) __
             grad_cf['sigma'] = -cf[...,None] * self.t[None,...] * Ozw
 
-            #__ Correlation (model, frequency, sensor pair, direction pair) __
+            #__ Correlation (model, frequency, receiver pair, direction pair) __
             grad_cf['corr'] = -cf[...,None] * w[...,self._iu0_dir] * w[...,self._iu1_dir]
 
         #__ Return output __
@@ -531,7 +527,7 @@ class ArrayCovarianceModel():
     ) -> Tuple[np.ndarray, Dict[str, np.ndarray]]:
         r"""
         
-        Function that retuns the characteristic function for a skew-normal distribution.
+        Function that returns the characteristic function for a skew-normal distribution.
 
         Input
         -----
@@ -558,18 +554,18 @@ class ArrayCovarianceModel():
         ------
         cf : ``numpy.ndarray``
             Characteristic function
-            (model, frequency, sensor pair)
+            (model, frequency, receiver pair)
 
         grad_cf : ``dict``
             Gradient of the characteristic function, keyed by parameter name:
 
-            - **xi** : (``numpy.ndarray``) -- (model, frequency, sensor pair, direction)
+            - **xi** : (``numpy.ndarray``) -- (model, frequency, receiver pair, direction)
 
-            - **sigma** : (``numpy.ndarray``) -- (model, frequency, sensor pair, direction)
+            - **sigma** : (``numpy.ndarray``) -- (model, frequency, receiver pair, direction)
 
-            - **corr** : (``numpy.ndarray``) -- (model, frequency, sensor pair, direction pair)
+            - **corr** : (``numpy.ndarray``) -- (model, frequency, receiver pair, direction pair)
 
-            - **alpha** : (``numpy.ndarray``) -- (model, frequency, sensor pair, direction pair)
+            - **alpha** : (``numpy.ndarray``) -- (model, frequency, receiver pair, direction pair)
 
 
         Note
@@ -592,7 +588,7 @@ class ArrayCovarianceModel():
             \mathbf{\delta} = \frac{\Omega_z \mathbf{\alpha}}{\sqrt{1 + \mathbf{\alpha}^T \Omega_z \mathbf{\alpha}}}
 
 
-        where :math:`\mathbf{t}` is the characteristic function argument (frequency, sensor pair, direction), :math:`\mathbf{\xi}` is the location vector (slowness), :math:`\Omega` is the covariance matrix, :math:`W` is the diagonal scale matrix, :math:`\Omega_z` is the correlation matrix, and :math:`\mathbf{\delta}` is the skewness-direction vector.
+        where :math:`\mathbf{t}` is the characteristic function argument (frequency, receiver pair, direction), :math:`\mathbf{\xi}` is the location vector (slowness), :math:`\Omega` is the covariance matrix, :math:`W` is the diagonal scale matrix, :math:`\Omega_z` is the correlation matrix, and :math:`\mathbf{\delta}` is the skewness-direction vector.
         The gradients of the characteristic function are given by the following expressions:
 
         .. math::
@@ -607,7 +603,7 @@ class ArrayCovarianceModel():
             
             \frac{\partial \varphi_\mathbf{s}}{\partial \rho_{ij}} = - \sigma_i \sigma_j t_i t_j \varphi_\mathbf{s} + \sqrt{\frac{2}{\pi}} i N \exp \left[u^2 + L\right] \left(\sigma_i t_i \alpha_j + \sigma_j t_j \alpha_i - N^2 \alpha_i \alpha_j \sum_{k, l} \sigma_k t_k \rho_{kl} \alpha_l\right)
             
-            N = \sqrt{1 + \mathbf{\alpha}^T \Omega_z \mathbf{\alpha}}
+            N = \left(1 + \mathbf{\alpha}^T \Omega_z \mathbf{\alpha}\right)^\tfrac{-1}{2}
 
             \frac{\partial \varphi_\mathbf{s}}{\partial \alpha_i} = \sqrt{\frac{2}{\pi}} i \exp \left[u^2 + L\right] \sum_{j, k, l} \sigma_j t_j \left(\rho_{ji} N - \rho_{il} \alpha_l \rho_{jk} \alpha_k N^3\right)
             
@@ -617,7 +613,7 @@ class ArrayCovarianceModel():
         #__ np.einsum subscripts:
         #__ [i] model
         #__ [j] frequency
-        #__ [k] sensor pair
+        #__ [k] receiver pair
         #__ [l],[p] direction
 
         #__ Intermediates (model, frequency, pair, direction) __
@@ -629,7 +625,7 @@ class ArrayCovarianceModel():
         N     = 1.0 / np.sqrt(1.0 + np.einsum('il,il->i', alpha, Oza, optimize=True))
         delta = N[:,None] * Oza
 
-        #__ Calculate characteristic function (model, frequency, sensor pair) __
+        #__ Calculate characteristic function (model, frequency, receiver pair) __
         Q  = 0.5 * np.einsum('ijkl,ijkl->ijk', w, Ozw, optimize=True)
         L  = 1j * np.einsum('jkl,il->ijk', self.t, xi, optimize=True) - Q
         u  = np.einsum('il,ijkl->ijk', delta, w, optimize=True) / np.sqrt(2.0)
@@ -644,14 +640,14 @@ class ArrayCovarianceModel():
             #__ Shared prefactor __
             #K = np.sqrt(2.0/np.pi) * 1j * np.exp(u**2 + L)
 
-            #__ Location (model, frequency, sensor pair, direction) __
+            #__ Location (model, frequency, receiver pair, direction) __
             grad_cf['xi'] = 1j * self.t[None,...] * cf[...,None]
 
-            #__ Scale (model, frequency, sensor pair, direction) __
+            #__ Scale (model, frequency, receiver pair, direction) __
             grad_cf['sigma'] = (-cf[...,None] * self.t[None,...] * Ozw
                                 + K[...,None] * delta[:,None,None,:] * self.t[None,...])
 
-            #__ Correlation (model, frequency, sensor pair, direction pair) __
+            #__ Correlation (model, frequency, receiver pair, direction pair) __
             w0, w1 = w[...,self._iu0_dir], w[...,self._iu1_dir]
             a0     = alpha[:,None,None,self._iu0_dir]
             a1     = alpha[:,None,None,self._iu1_dir]
@@ -660,7 +656,7 @@ class ArrayCovarianceModel():
                                + K[...,None] * (Nb * (w0*a1 + a0*w1)
                                                 - np.sqrt(2.0) * Nb**2 * u[...,None] * a0 * a1))
 
-            #__ Shape (model, frequency, sensor pair, direction) __
+            #__ Shape (model, frequency, receiver pair, direction) __
             grad_cf['alpha'] = (K[...,None] * N[:,None,None,None]
                                 * (Ozw - np.sqrt(2.0) * u[...,None] * delta[:,None,None,:]))
 
@@ -677,7 +673,7 @@ class ArrayCovarianceModel():
     ) -> Tuple[np.ndarray, Dict[str, np.ndarray]]:
         r""" 
         
-        Function that retuns the characteristic function for an isotropic noise field.
+        Function that returns the characteristic function for an isotropic noise field.
 
         Input
         -----
@@ -698,12 +694,12 @@ class ArrayCovarianceModel():
         ------
         cf : ``numpy.ndarray``
             Characteristic function
-            (model, frequency, sensor pair)
+            (model, frequency, receiver pair)
 
         grad_cf : ``dict``
             Gradient of the characteristic function, keyed by parameter name:
 
-            - **s** : (``numpy.ndarray``) -- (model, frequency, sensor pair)
+            - **s** : (``numpy.ndarray``) -- (model, frequency, receiver pair)
             
 
         The characteristic function for an isotropic noise field is given by
@@ -737,14 +733,14 @@ class ArrayCovarianceModel():
         elif (dim == 3): shape = 'spherical'
         else: raise ValueError("`dim` should be 2 or 3.")
 
-        #__ Bessel argument (model, frequency, sensor pair) __
+        #__ Bessel argument (model, frequency, receiver pair) __
         argument = self._base * s[:,None,None]
 
         #__ Calculate characteristic function __
         J_0, dJ = self._bessel(argument[...,None], 0, shape, grad_s, fixed_key)
         cf = J_0[...,0]
 
-        #__ Calculate gradient (model, frequency, sensor pair) __
+        #__ Calculate gradient (model, frequency, receiver pair) __
         grad_cf = {}
         if grad_s:
             grad_cf['s'] = self._base * dJ[...,0]
@@ -765,7 +761,7 @@ class ArrayCovarianceModel():
 
         r"""
 
-        Function that retuns the characteristic function for a 2D isotropic noise field.
+        Function that returns the characteristic function for a 2D isotropic noise field.
 
         Input
         -----
@@ -784,16 +780,16 @@ class ArrayCovarianceModel():
         ------
         cf : ``numpy.ndarray``
             Characteristic function
-            (model, frequency, sensor pair)
+            (model, frequency, receiver pair)
 
         grad_cf : ``dict``
             Gradient of the characteristic function, keyed by parameter name:
 
-            - **a** : (``numpy.ndarray``) -- (model, frequency, sensor pair, order)
+            - **a** : (``numpy.ndarray``) -- (model, frequency, receiver pair, order)
 
-            - **b** : (``numpy.ndarray``) -- (model, frequency, sensor pair, order)
+            - **b** : (``numpy.ndarray``) -- (model, frequency, receiver pair, order)
 
-            - **s** : (``numpy.ndarray``) -- (model, frequency, sensor pair)
+            - **s** : (``numpy.ndarray``) -- (model, frequency, receiver pair)
 
         
         The characteristic function for a 2D isotropic noise field is given by
@@ -834,25 +830,25 @@ class ArrayCovarianceModel():
         #__ np.einsum subscripts:
         #__ [i] model
         #__ [j] frequency
-        #__ [k] sensor pair
+        #__ [k] receiver pair
         #__ [l] order
 
         #__ Sort inputs __
         s = np.atleast_1d(np.asarray(s, dtype=float))
         a = np.atleast_2d(a) ; b = np.atleast_2d(b)
 
-        #__ Calculate coefficient (model, sensor pair, order) __
+        #__ Calculate coefficient (model, receiver pair, order) __
         C_m = (np.einsum('il,kl->ikl', a, self.cos_2D, optimize=True)
                + np.einsum('il,kl->ikl', b, self.sin_2D, optimize=True))
 
-        #__ Bessel argument (model, frequency, sensor pair) __
+        #__ Bessel argument (model, frequency, receiver pair) __
         argument = self._base * s[:,None,None]
 
-        #__ Bessel functions (model, frequency, sensor pair, order) __
-        J_m, dJ = self._bessel(argument[...,None], self.order2D[-1],
+        #__ Bessel functions (model, frequency, receiver pair, order) __
+        J_m, dJ = self._bessel(argument[...,None], self.order_2D[-1],
                                   'cylindrical', grad_s, fixed_key)
 
-        #__ Calculate characteristic function (model, frequency, sensor pair) __
+        #__ Calculate characteristic function (model, frequency, receiver pair) __
         cf = np.einsum('l,l,ikl,ijkl->ijk', self.i_m, self.e_m, C_m, J_m, optimize=True)
 
         #__ Gradients __
@@ -881,7 +877,7 @@ class ArrayCovarianceModel():
 
         r"""
         
-        Function that retuns the characteristic function for a 3D isotropic noise field.
+        Function that returns the characteristic function for a 3D isotropic noise field.
 
         Input
         -----
@@ -897,16 +893,16 @@ class ArrayCovarianceModel():
         ------
         cf : ``numpy.ndarray``
             Characteristic function
-            (model, frequency, sensor pair)
+            (model, frequency, receiver pair)
         
         grad_cf : ``dict``
             Gradient of the characteristic function, keyed by parameter name.
 
-            - **a** : (``numpy.ndarray``) -- (model, frequency, sensor pair, triangle)
+            - **a** : (``numpy.ndarray``) -- (model, frequency, receiver pair, triangle)
 
-            - **b** : (``numpy.ndarray``) -- (model, frequency, sensor pair, triangle)
+            - **b** : (``numpy.ndarray``) -- (model, frequency, receiver pair, triangle)
 
-            - **s** : (``numpy.ndarray``) -- (model, frequency, sensor pair)
+            - **s** : (``numpy.ndarray``) -- (model, frequency, receiver pair)
 
         Note
         ----
@@ -956,7 +952,7 @@ class ArrayCovarianceModel():
         #__ np.einsum subscripts:
         #__ [i] model
         #__ [j] frequency
-        #__ [k] sensor pair
+        #__ [k] receiver pair
         #__ [l] order  
         #__ [p] degree
 
@@ -965,23 +961,23 @@ class ArrayCovarianceModel():
         if (a.ndim == 2): a = a[None,:,:]
         if (b.ndim == 2): b = b[None,:,:]
 
-        #__ Calculate coefficient (model, sensor pair, order, degree) __
+        #__ Calculate coefficient (model, receiver pair, order, degree) __
         C_nm = (np.einsum('ilp,kl->iklp', a, self.cos_3D, optimize=True)
                 + np.einsum('ilp,kl->iklp', b, self.sin_3D, optimize=True))
 
-        #__ Bessel argument (model, frequency, sensor pair) __
+        #__ Bessel argument (model, frequency, receiver pair) __
         argument = self._base * s[:,None,None]
 
-        #__ Spherical Bessel functions (model, frequency, sensor pair, degree) __
-        j_n, djn = self._bessel(argument[...,None], self.degree3D[-1],
+        #__ Spherical Bessel functions (model, frequency, receiver pair, degree) __
+        j_n, djn = self._bessel(argument[...,None], self.degree_3D[-1],
                                    'spherical', grad_s, fixed_key)
 
-        #__ Calculate characteristic function (model, frequency, sensor pair) __
+        #__ Calculate characteristic function (model, frequency, receiver pair) __
         cf = np.einsum('p,iklp,klp,ijkp->ijk', self.i_n, C_nm, self.P_nm, j_n, optimize=True)
 
         #__ Gradients __
         grad_cf = {}
-        if grad_ab:  # (model, frequency, sensor pair, degree-order pair)
+        if grad_ab:  # (model, frequency, receiver pair, degree-order pair)
             P_tri = self.P_nm[:, self._tri_ord, self._tri_deg]
             i_tri = self.i_n[self._tri_deg]
             jn_tri = j_n[..., self._tri_deg]
@@ -989,7 +985,7 @@ class ArrayCovarianceModel():
                             * self.cos_3D[None,None,:,self._tri_ord] * jn_tri)
             grad_cf['b'] = (i_tri * P_tri[None,None,:,:]
                             * self.sin_3D[None,None,:,self._tri_ord] * jn_tri)
-        if grad_s:  # (model, frequency, sensor pair)
+        if grad_s:  # (model, frequency, receiver pair)
             grad_cf['s'] = self._base * np.einsum('p,iklp,klp,ijkp->ijk',
                                            self.i_n, C_nm, self.P_nm, djn, optimize=True)
 
@@ -999,19 +995,19 @@ class ArrayCovarianceModel():
     #________ FORWARD FUNCTION ________#
 
     #__ Number of parameters per signal __
-    def _n_params(self, signal_type : str|dict) -> int:
+    def _n_params(self, sig : str|dict) -> int:
         r"""Length of this signal's slice of the model vector (excluding weight)."""
-        if isinstance(signal_type, str):
-            if (signal_type == 'point'):      return self.N_dir
-            if (signal_type == 'normal'):     return 2*self.N_dir + self.N_corr
-            if (signal_type == 'skewnormal'): return 3*self.N_dir + self.N_corr
-            if (signal_type == 'isoselfnoise'):  return 0
-            raise ValueError(f"Unknown signal type '{signal_type}'.")
-        sig, n = signal_type['sig'], 0
-        if ('s' not in signal_type): n += 1
-        if not (('a' in signal_type) and ('b' in signal_type)):
+        if isinstance(sig, str):
+            if (sig == 'point'):      return self.N_dir
+            if (sig == 'normal'):     return 2*self.N_dir + self.N_corr
+            if (sig == 'skewnormal'): return 3*self.N_dir + self.N_corr
+            if (sig == 'isoselfnoise'):  return 0
+            raise ValueError(f"Unknown signal type '{sig}'.")
+        sig, n = sig['sig'], 0
+        if ('s' not in sig): n += 1
+        if not (('a' in sig) and ('b' in sig)):
             if   (sig == 'noise2D'): n += 2 * self._max_order_2D
-            elif (sig == 'noise3D'): n += self._n_a3D + self._n_b3D
+            elif (sig == 'noise3D'): n += self._n_a_3D + self._n_b_3D
         return n
 
     #__ Unpack model vector __
@@ -1036,22 +1032,21 @@ class ArrayCovarianceModel():
         """
 
         #__ Instantiate outputs __
-        sig_list, kwargs_list, idx_list, weights_list = [], [], [0], []
+        sig_list, kwargs_list, idx_list, weight_list = [], [], [0], []
 
         #__ Loop through signal types __
-        for signal_type in self.signal_types:
+        for sig in self.sigs:
             idx = idx_list[-1]
 
             #__ Weight __
             if (self.weight_units == 'dB'):
-                weights_list.append(10**(m[:,idx][:,None,None]/10))
+                weight_list.append(10**(m[:,idx][:,None,None]/10))
             elif (self.weight_units == 'linear'):
-                weights_list.append(m[:,idx][:,None,None])
+                weight_list.append(m[:,idx][:,None,None])
             idx += 1
 
             #__ Density functions __
-            if isinstance(signal_type, str):
-                sig = signal_type
+            if isinstance(sig, str):
                 sig_list.append(sig)
 
                 #__ Location __
@@ -1076,33 +1071,32 @@ class ArrayCovarianceModel():
                 #__ Custom function __
                 if (sig in self.custom_cf):
                     N_custom = self.custom_cf[sig][0]
-                    mi = m[:,idx:idx+N_custom] ; idx += N_custom
-                    kwargs = dict(t = self.t, mi = mi)
+                    m_s = m[:,idx:idx+N_custom] ; idx += N_custom
+                    kwargs = dict(t = self.t, m_s = m_s)
 
                 #__ Self noise __
                 if (sig == 'isoselfnoise'): kwargs = {}
 
             #__ Harmonic functions __
-            elif isinstance(signal_type, dict):
-                sig = signal_type['sig']
-                sig_list.append(sig)
+            elif isinstance(sig, dict):
+                sig_list.append(sig['sig'])
                 kwargs = {}
 
                 #__ Slowness __
-                if ('s' in signal_type):
-                    kwargs.update(s = signal_type['s'], grad_s = False,
-                                  fixed_key = (sig, float(np.ravel(signal_type['s'])[0])))
+                if ('s' in sig):
+                    kwargs.update(s = sig['s'], grad_s = False,
+                                  fixed_key = (sig, float(np.ravel(sig['s'])[0])))
                 else:
                     kwargs.update(s = m[:,idx], grad_s = grad) ; idx += 1
 
                 #__ Isotropic noise __
-                if (sig == 'isonoise'):
-                    kwargs['dim'] = signal_type.get('dim', 2)
+                if (sig['sig'] == 'isonoise'):
+                    kwargs['dim'] = sig.get('dim', 2)
 
                 #__ Noise (2D) __
-                elif (sig == 'noise2D'):
-                    if ('a' in signal_type) and ('b' in signal_type):
-                        kwargs.update(a=signal_type['a'], b=signal_type['b'],
+                elif (sig['sig'] == 'noise2D'):
+                    if ('a' in sig) and ('b' in sig):
+                        kwargs.update(a=sig['a'], b=sig['b'],
                                       grad_ab=False)
                     else:
                         n_rat = self._max_order_2D
@@ -1114,13 +1108,13 @@ class ArrayCovarianceModel():
                         idx += 2 * n_rat
 
                 #__ Noise (3D) __
-                elif (sig == 'noise3D'):
-                    if ('a' in signal_type) and ('b' in signal_type):
-                        kwargs.update(a=signal_type['a'], b=signal_type['b'],
+                elif (sig['sig'] == 'noise3D'):
+                    if ('a' in sig) and ('b' in sig):
+                        kwargs.update(a=sig['a'], b=sig['b'],
                                       grad_ab=False)
                     else:
                         n_ord, n_tri = self._max_order_3D + 1, self.N_tri
-                        na, nb = self._n_a3D, self._n_b3D
+                        na, nb = self._n_a_3D, self._n_b_3D
                         a_flat = np.zeros((m.shape[0], n_tri)) ; b_flat = np.zeros((m.shape[0], n_tri))
                         a_flat[:, ~self._a_free] = 1.0
                         a_flat[:,  self._a_free] = m[:, idx      : idx+na]
@@ -1136,18 +1130,18 @@ class ArrayCovarianceModel():
             idx_list.append(idx) ; kwargs_list.append(kwargs)
 
         #__ Return outputs __
-        return sig_list, kwargs_list, idx_list, weights_list
+        return sig_list, kwargs_list, idx_list, weight_list
 
     #__ Write gradient blocks straight into a preallocated view __
     def _write_grad(
         self,
-        signal_type : str|dict,
+        sig : str|dict,
         grad_cf     : dict,
         out         : np.ndarray,
         weight      : np.ndarray|float
     ) -> None:
         r"""
-        Fill `out` (a view on dcov_dm, shape (model, freq, pair, n_param)) with
+        Fill `out` (a view on dcov, shape (model, freq, pair, n_param)) with
         this signal's gradients, scaled by its mixture weight.
         """
 
@@ -1161,26 +1155,26 @@ class ArrayCovarianceModel():
             c += n
 
         #__ Density functions __
-        if isinstance(signal_type, str):
-            if (signal_type in ['point','normal','skewnormal']):
+        if isinstance(sig, str):
+            if (sig in ['point','normal','skewnormal']):
                 put(grad_cf['xi'])
-            if (signal_type in ['normal','skewnormal']):
+            if (sig in ['normal','skewnormal']):
                 put(grad_cf['sigma'])
                 put(grad_cf['corr'])
-            if (signal_type in ['skewnormal']):
+            if (sig in ['skewnormal']):
                 put(grad_cf['alpha'])
-            if (signal_type in self.custom_cf):
+            if (sig in self.custom_cf):
                 put(grad_cf)
 
         #__ Harmonic functions __
-        elif isinstance(signal_type, dict):
-            if ('s' not in signal_type):
+        elif isinstance(sig, dict):
+            if ('s' not in sig):
                 put(grad_cf['s'][...,None])
-            if not (('a' in signal_type) and ('b' in signal_type)):
-                if (signal_type['sig'] == 'noise2D'):
+            if not (('a' in sig) and ('b' in sig)):
+                if (sig['sig'] == 'noise2D'):
                     put(grad_cf['a'][...,1:])
                     put(grad_cf['b'][...,1:])
-                elif (signal_type['sig'] == 'noise3D'):
+                elif (sig['sig'] == 'noise3D'):
                     put(grad_cf['a'][..., self._a_free])
                     put(grad_cf['b'][..., self._b_free])
 
@@ -1233,44 +1227,44 @@ class ArrayCovarianceModel():
         ------
         cov : ``numpy.ndarray``
             Covariance
-            (model, frequency, sensor pair)
+            (model, frequency, receiver pair)
 
-        dcov_dm : ``numpy.ndarray`` or None
+        dcov : ``numpy.ndarray`` or None
             Gradient of covariance wrt. model parameters
-            (model, frequency, sensor pair, parameter)
+            (model, frequency, receiver pair, parameter)
 
         cov_noise : ``numpy.ndarray``
             Covariance (noise-only)
-            (model, frequency, sensor pair)
+            (model, frequency, receiver pair)
         
-        dcov_dm_noise : ``numpy.ndarray`` or None
+        dcov_noise : ``numpy.ndarray`` or None
             Gradient of covariance wrt. model parameters (noise-only)
-            (model, frequency, sensor pair, parameter)
+            (model, frequency, receiver pair, parameter)
 
         
         Note
         ----
         
-        If requested noise-only calculation (``calc_noise_only`` is ``True``), **cov_noise** and **dcov_dm_noise** will be returned in addition to **cov** and **dcov_dm**. 
+        If requested noise-only calculation (``calc_noise_only`` is ``True``), **cov_noise** and **dcov_noise** will be returned in addition to **cov** and **dcov**. 
 
         """
 
         #__ Instantiate covariance __
         N_model, N_param = m.shape
         cov = np.zeros((N_model, self.N_freq, self.N_pair), dtype='complex')
-        dcov_dm = (np.zeros((N_model, self.N_freq, self.N_pair, N_param),
+        dcov = (np.zeros((N_model, self.N_freq, self.N_pair, N_param),
                             dtype='complex') if grad else None)
         if self._calc_noise_only:
             cov_noise = np.zeros((N_model, self.N_freq, self.N_pair), dtype='complex')
-            dcov_dm_noise = (np.zeros((N_model, self.N_freq, self.N_pair, N_param),
+            dcov_noise = (np.zeros((N_model, self.N_freq, self.N_pair, N_param),
                                     dtype='complex') if grad else None)
 
         #__ Unpack model vector __
         sig_list, kwargs_list, idx_list, weight_list = self._unpack(m, grad=grad)
         
         #__ Loop through signals __
-        for signal_type, sig, kwargs, istart, iend, weight in zip(
-                self.signal_types, sig_list, kwargs_list,
+        for sig, sig, kwargs, istart, iend, weight in zip(
+                self.sigs, sig_list, kwargs_list,
                 idx_list[:-1], idx_list[1:], weight_list):
 
             #__ Calculate characteristic function __
@@ -1284,43 +1278,43 @@ class ArrayCovarianceModel():
             #__ Write gradients directly into the output view __
             if grad:
                 if (self.weight_units == 'dB'):
-                    dcov_dm[...,istart] = self._wscale * weight * cf
+                    dcov[...,istart] = self._wscale * weight * cf
                     if self._calc_noise_only and (sig in self._NOISE_SIGS):
-                        dcov_dm_noise[...,istart] = self._wscale * weight * cf
+                        dcov_noise[...,istart] = self._wscale * weight * cf
                 elif (self.weight_units == 'linear'):
-                    dcov_dm[...,istart] = cf
+                    dcov[...,istart] = cf
                     if self._calc_noise_only and (sig in self._NOISE_SIGS):
-                        dcov_dm_noise[...,istart] = cf
-                self._write_grad(signal_type, grad_cf,
-                dcov_dm[...,istart+1:iend], weight)
+                        dcov_noise[...,istart] = cf
+                self._write_grad(sig, grad_cf,
+                dcov[...,istart+1:iend], weight)
                 if self._calc_noise_only and (sig in self._NOISE_SIGS):
-                    self._write_grad(signal_type, grad_cf,
-                    dcov_dm_noise[...,istart+1:iend], weight)
+                    self._write_grad(sig, grad_cf,
+                    dcov_noise[...,istart+1:iend], weight)
 
         #__ Return output __
-        if self._calc_noise_only: return cov, dcov_dm, cov_noise, dcov_dm_noise
-        else: return cov, dcov_dm
+        if self._calc_noise_only: return cov, dcov, cov_noise, dcov_noise
+        else: return cov, dcov
 
-    #__ Expand sensor pair axis __
-    def expand(self, cov, dcov_dm):
-        r"""(sensor pair) -> (sensor, sensor)"""
+    #__ Expand receiver pair axis __
+    def expand(self, cov, dcov):
+        r"""(receiver pair) -> (receiver, receiver)"""
 
         #__ Shape of full matrix __
         N_model, _, _ = cov.shape
-        if (dcov_dm is not None): _, _, _, N_param = dcov_dm.shape
-        shp = (N_model, self.N_freq, self.N_sta, self.N_sta)
+        if (dcov is not None): _, _, _, N_param = dcov.shape
+        shp = (N_model, self.N_freq, self.N_rec, self.N_rec)
 
         #__ Array-covariance matrix __
         Gamma = np.zeros(shp, dtype=cov.dtype)
-        Gamma[..., self._iu0_sta, self._iu1_sta] = cov
-        Gamma[..., self._il0_sta, self._il1_sta] = Gamma[..., self._il1_sta, self._il0_sta].conj()
+        Gamma[..., self._iu0_rec, self._iu1_rec] = cov
+        Gamma[..., self._il0_rec, self._il1_rec] = Gamma[..., self._il1_rec, self._il0_rec].conj()
 
         #__ Gradient of array-covariance matrix __
-        dGamma_dm = None
-        if dcov_dm is not None:
-            dGamma_dm = np.zeros(shp + (N_param,), dtype=dcov_dm.dtype)
-            dGamma_dm[..., self._iu0_sta, self._iu1_sta, :] = dcov_dm
-            dGamma_dm[..., self._il0_sta, self._il1_sta, :] = dGamma_dm[..., self._il1_sta, self._il0_sta, :].conj()
+        dGamma = None
+        if dcov is not None:
+            dGamma = np.zeros(shp + (N_param,), dtype=dcov.dtype)
+            dGamma[..., self._iu0_rec, self._iu1_rec, :] = dcov
+            dGamma[..., self._il0_rec, self._il1_rec, :] = dGamma[..., self._il1_rec, self._il0_rec, :].conj()
         
         #__ Return output
-        return Gamma, dGamma_dm
+        return Gamma, dGamma
