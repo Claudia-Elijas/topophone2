@@ -925,6 +925,17 @@ div.admonition.tip {
     box-shadow: 3px 3px 0px var(--pst-color-seealso) !important;
 }
 
+/* Per-page banner: `.. admonition:: <title>` with `:class: banner` */
+div.admonition.banner {
+    background-color: #e066661f;
+    border-color: var(--pst-color-quaternary);
+    box-shadow: 3px 3px 0px var(--pst-color-quaternary) !important;
+}
+
+div.admonition.banner > .admonition-title::after {
+    color: var(--pst-color-quaternary);
+}
+
 div.nboutput.container div.output_area pre {
     color: var(--pst-color-tertiary) !important;
 }

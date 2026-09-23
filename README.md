@@ -1,38 +1,52 @@
 # Topophone2
 
-Acorn is a python package that ...
+**Topophone2** is a python package that ...
 
-## Documentation
+## Getting started 
 
-The documentation can be found ...
+To install **topophone2** follow the steps below: 
 
-## Instalation
+### 1. Clone the repository
 
-You can clone the `topophone2` repository from GitHub and install it locally. This method allows you to access the latest version of the code and contribute to its development if you wish.
-
-Clone the repository and navigate to the project directory:
+Create a copy of the source code on your local machine using ``git``.
 
 ```bash
 git clone https://github.com/Claudia-Elijas/topophone2.git
-cd panacousticon
 ```
 
-Create a conda environment from the `topophone2_env.yml` file:
+### 2. Run the setup.sh script
+
+This script creates the topophone2 conda environment, installs dependencies, and installs the package locally in your machine. 
 
 ```bash
-conda env create -f topophone2_env.yml
+cd topophone2
+bash setup.sh
 ```
 
-Activate the environment:
+### 3. Activate the topophone2 environment for use
+
+The script does not leave the environment active, so activate it before using
+**topophone2**:
+
+```bash 
+conda activate topophone2
+```
+
+To check that everything is installed, run:
 
 ```bash
-conda activate topophone2_env
+python -c "import topophone2.inversion; print('topophone2 is ready')"
 ```
 
-Install the package in editable mode:
 
-```bash
-pip install -e .
-```
+![Completed](https://img.shields.io/badge/completed-✓-brightgreen)
 
-> **Note:** The `-e` flag installs the package in editable mode, meaning any changes you make to the source code will be reflected immediately without needing to reinstall. You may omit `-e` if you are not developing the code.
+
+## Examples
+
+You can find several examples at https://claudia-elijas.github.io/topophone2/examples/ 
+
+
+## Documentation
+
+The API documentation can be found at https://claudia-elijas.github.io/topophone2/ 
