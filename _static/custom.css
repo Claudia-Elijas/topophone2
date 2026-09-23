@@ -995,3 +995,10 @@ dl.field-list dd ul > li > p > strong:first-child {
     box-shadow: none;
 }
 
+/* Page width. The theme defaults are 88rem for the whole page (sidebars
+   included) and 60em for the central article column. Raise both, since the
+   article can only grow as wide as the page around it. */
+.bd-page-width {max-width: 100rem;} 
+
+.bd-main .bd-content .bd-article-container { max-width: 75em;}
+

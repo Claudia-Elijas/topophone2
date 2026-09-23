@@ -31,7 +31,8 @@
 <link href="_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=03d56522" />
+    <link rel="stylesheet" type="text/css" href="_static/nbsphinx-gallery.css?v=26227f6e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=754b8856" />
   
   <!-- So that users can add custom icons -->
   <script defer src="_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
@@ -42,11 +43,12 @@
     <script src="_static/documentation_options.js?v=5929fcd5"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Hydroacustics: synthetic field modeling" href="example_1.html" />
+    <link rel="next" title="Example notebook" href="examples/first_run.html" />
     <link rel="prev" title="data reading utility functions" href="topophone2.utils.read.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -309,8 +311,10 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="example_1.html">Hydroacustics: synthetic field modeling</a></li>
-<li class="toctree-l1"><a class="reference internal" href="example_2.html">Controlled</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/first_run.html">Example notebook</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="examples/first_run_copy.html">Example notebook copy</a></li>
 </ul>
 </div>
 </nav></div>
@@ -371,12 +375,31 @@
   <section id="examples">
 <h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h1>
 <p>Here are some examples of how to use the topophone2 package:</p>
+<section id="converting-to-suitable-input-data-for-topophone2">
+<h2>1. Converting to suitable input data for topophone2<a class="headerlink" href="#converting-to-suitable-input-data-for-topophone2" title="Link to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="example_1.html">Hydroacustics: synthetic field modeling</a></li>
-<li class="toctree-l1"><a class="reference internal" href="example_2.html">Controlled</a></li>
-</ul>
+<div class="nbsphinx-gallery">
+<a class="reference internal" href="examples/first_run.html">
+  <div><img alt="" src="./_images/examples_first_run_6_0.png"></div>
+  <div>Example notebook</div>
+</a>
 </div>
+</div>
+</section>
+<section id="hydroacustics-controlled-planar-wave-modeling">
+<h2>1. Hydroacustics: controlled planar wave modeling<a class="headerlink" href="#hydroacustics-controlled-planar-wave-modeling" title="Link to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<div class="nbsphinx-gallery">
+<a class="reference internal" href="examples/first_run_copy.html">
+  <div><img alt="" src="./_images/examples_first_run_copy_6_0.png"></div>
+  <div>Example notebook copy</div>
+</a>
+</div>
+</div>
+</section>
+<section id="real-data-application">
+<h2>3. Real data application<a class="headerlink" href="#real-data-application" title="Link to this heading">#</a></h2>
+</section>
 </section>
 
 
@@ -399,11 +422,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="example_1.html"
+       href="examples/first_run.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Hydroacustics: synthetic field modeling</p>
+        <p class="prev-next-title">Example notebook</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -417,6 +440,20 @@
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#converting-to-suitable-input-data-for-topophone2">1. Converting to suitable input data for topophone2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hydroacustics-controlled-planar-wave-modeling">1. Hydroacustics: controlled planar wave modeling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#real-data-application">3. Real data application</a></li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
 
