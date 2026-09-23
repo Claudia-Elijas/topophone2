@@ -1,4 +1,4 @@
-Planar wave
+Controlled
 ===========
 
 This example demonstrates how to use the topophone2 package to model a planar wave.
