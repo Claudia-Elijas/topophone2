@@ -401,19 +401,19 @@
 <span class="sd">        Input</span>
 <span class="sd">        -----</span>
 <span class="sd">        x : ``numpy.ndarray``</span>
-<span class="sd">            Sensor location vectors </span>
-<span class="sd">            (sensor, direction)</span>
+<span class="sd">            Receiver location vectors </span>
+<span class="sd">            (receiver, direction)</span>
 <span class="sd">    </span>
 <span class="sd">        freq : ``numpy.ndarray``</span>
 <span class="sd">            Angular frequency vector</span>
 <span class="sd">            (frequency)</span>
 <span class="sd">    </span>
-<span class="sd">        signal_types : ``list`` of ``str`` or ``dict``</span>
+<span class="sd">        sigs : ``list`` of ``str`` or ``dict``</span>
 <span class="sd">            Signal components to superpose. </span>
 <span class="sd">            </span>
 <span class="sd">            a)  ``str``: density functions ('point', 'normal', 'skewnormal')</span>
 <span class="sd">            </span>
-<span class="sd">            b) ``dict``: harmonic functions for noise field ('noise2D', 'noise3D') with optional parameters.</span>
+<span class="sd">            b) ``dict``: harmonic functions for noise field ('isonoise', 'noise2D', 'noise3D') with optional parameters.</span>
 <span class="sd">                    </span>
 <span class="sd">                    **sig** : ``str`` (required) - signal type ('isonoise', 'noise2D', 'noise3D')</span>
 <span class="sd">                    </span>
@@ -424,6 +424,8 @@
 <span class="sd">                    **b** : ``numpy.ndarray`` (optional) - sine coefficients</span>
 <span class="sd">                    </span>
 <span class="sd">                    **max_order** : ``int`` (optional) - maximum order of harmonic basis (if **a**/**b** not specified)</span>
+
+<span class="sd">                    **dim** : ``int`` (required for 'isonoise', default ``2``) - cylindrical (``2``) or spherical (``3``) isotropy</span>
 <span class="sd">                    </span>
 <span class="sd">        weight_units : ``str`` (default 'dB')</span>
 <span class="sd">            Units of the signal weights in the model vector</span>
@@ -436,15 +438,15 @@
 <span class="sd">            Custom characteristic functions keyed by signal name,</span>
 <span class="sd">            containing tuple of number of parameters and function with arguments:</span>
 
-<span class="sd">                **t**   ``numpy.ndarray`` : Characteristic function argument (frequency, sensor pair, direction)</span>
+<span class="sd">                **t**   ``numpy.ndarray`` : Characteristic function argument (frequency, receiver pair, direction)</span>
 <span class="sd">                </span>
-<span class="sd">                **m_i** ``numpy.ndarray`` : Model vector (model, parameter)</span>
+<span class="sd">                **m_s** ``numpy.ndarray`` : Model vector (model, parameter)</span>
 <span class="sd">            </span>
 <span class="sd">            and returns:</span>
 <span class="sd">               </span>
-<span class="sd">                **cf**     ``numpy.ndarray`` : Characteristic function (model, frequency, sensor pair)</span>
+<span class="sd">                **cf**     ``numpy.ndarray`` : Characteristic function (model, frequency, receiver pair)</span>
 <span class="sd">                </span>
-<span class="sd">                **dcf_dm** ``numpy.ndarray``) : Characteristic function gradient wrt. model parameters (model, frequency, sensor pair, parameter)    </span>
+<span class="sd">                **dcf** ``numpy.ndarray``) : Characteristic function gradient wrt. model parameters (model, frequency, receiver pair, parameter)    </span>
 
 <span class="sd">        Note</span>
 <span class="sd">        ----</span>
@@ -454,28 +456,28 @@
 <span class="sd">        Attributes</span>
 <span class="sd">        ----------</span>
 <span class="sd">        dist : ``numpy.ndarray``</span>
-<span class="sd">            Inter-sensor distances (sensor pair)</span>
+<span class="sd">            Inter-receiver distances (receiver pair)</span>
 <span class="sd">    </span>
 <span class="sd">        az : ``numpy.ndarray``</span>
-<span class="sd">            Inter-sensor azimuths (sensor pair)</span>
+<span class="sd">            Inter-receiver azimuths (receiver pair)</span>
 <span class="sd">    </span>
 <span class="sd">        pol : ``numpy.ndarray``</span>
-<span class="sd">            Inter-sensor polar angles (sensor pair)</span>
+<span class="sd">            Inter-receiver polar angles (receiver pair)</span>
 <span class="sd">    </span>
 <span class="sd">        t : ``numpy.ndarray``</span>
-<span class="sd">            Characteristic function argument (frequency, sensor pair, direction)</span>
+<span class="sd">            Characteristic function argument (frequency, receiver pair, direction)</span>
 <span class="sd">    </span>
 <span class="sd">        weight_units : ``str``</span>
 <span class="sd">            Units of the signal weights in the model vector</span>
 <span class="sd">    </span>
-<span class="sd">        signal_types : ``list``</span>
+<span class="sd">        sigs : ``list``</span>
 <span class="sd">            Signal components to superpose</span>
 <span class="sd">    </span>
 <span class="sd">        freq : ``numpy.ndarray``</span>
 <span class="sd">            Angular frequency vector</span>
 <span class="sd">    </span>
 <span class="sd">        N_pair : ``int``</span>
-<span class="sd">            Number of sensor pairs</span>
+<span class="sd">            Number of receiver pairs</span>
 <span class="sd">    </span>
 <span class="sd">        N_dir : ``int``</span>
 <span class="sd">            Number of directional components</span>
@@ -486,35 +488,29 @@
 <span class="sd">        N_corr : ``int``</span>
 <span class="sd">            Number of correlation coefficients (upper triangle of Omega_z)</span>
 <span class="sd">    </span>
-<span class="sd">        max_order_2D : ``int``</span>
-<span class="sd">            Maximum order of 2D harmonic basis</span>
-<span class="sd">    </span>
-<span class="sd">        max_order_3D : ``int``</span>
-<span class="sd">            Maximum order of 3D harmonic basis</span>
-<span class="sd">    </span>
-<span class="sd">        order2D : ``numpy.ndarray``</span>
+<span class="sd">        order_2D : ``numpy.ndarray``</span>
 <span class="sd">            2D harmonic orders</span>
 <span class="sd">    </span>
-<span class="sd">        order3D : ``numpy.ndarray``</span>
+<span class="sd">        order_3D : ``numpy.ndarray``</span>
 <span class="sd">            3D harmonic orders</span>
 <span class="sd">    </span>
-<span class="sd">        degree3D : ``numpy.ndarray``</span>
+<span class="sd">        degree_3D : ``numpy.ndarray``</span>
 <span class="sd">            3D harmonic degrees</span>
 <span class="sd">    </span>
 <span class="sd">        cos_2D : ``numpy.ndarray``</span>
-<span class="sd">            2D harmonic cosine basis (sensor pair, order)</span>
+<span class="sd">            2D harmonic cosine basis (receiver pair, order)</span>
 <span class="sd">    </span>
 <span class="sd">        sin_2D : ``numpy.ndarray``</span>
-<span class="sd">            2D harmonic sine basis (sensor pair, order)</span>
+<span class="sd">            2D harmonic sine basis (receiver pair, order)</span>
 <span class="sd">    </span>
 <span class="sd">        cos_3D : ``numpy.ndarray``</span>
-<span class="sd">            3D harmonic cosine basis (sensor pair, order)</span>
+<span class="sd">            3D harmonic cosine basis (receiver pair, order)</span>
 <span class="sd">    </span>
 <span class="sd">        sin_3D : ``numpy.ndarray``</span>
-<span class="sd">            3D harmonic sine basis (sensor pair, order)</span>
+<span class="sd">            3D harmonic sine basis (receiver pair, order)</span>
 <span class="sd">    </span>
 <span class="sd">        e_m : ``numpy.ndarray``</span>
-<span class="sd">            2D harmonic cosine/sine normalization factors (order)</span>
+<span class="sd">            2D harmonic cosine/sine normalisation factors (order)</span>
 <span class="sd">    </span>
 <span class="sd">        i_m : ``numpy.ndarray``</span>
 <span class="sd">            2D harmonic imaginary unit powers (order)</span>
@@ -523,7 +519,7 @@
 <span class="sd">            3D harmonic imaginary unit powers (degree)</span>
 <span class="sd">    </span>
 <span class="sd">        P_nm : ``numpy.ndarray``</span>
-<span class="sd">            3D harmonic Legendre polynomials (sensor pair, order, degree)</span>
+<span class="sd">            3D harmonic Legendre polynomials (receiver pair, order, degree)</span>
 <span class="sd">    </span>
 <span class="sd">        N_tri : ``int``</span>
 <span class="sd">            Number of triangular (m &lt;= n) index pairs</span>
@@ -535,43 +531,43 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">x</span>            <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
         <span class="n">freq</span>         <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-        <span class="n">signal_types</span> <span class="p">:</span> <span class="nb">list</span><span class="p">,</span> 
+        <span class="n">sigs</span> <span class="p">:</span> <span class="nb">list</span><span class="p">,</span> 
         <span class="n">weight_units</span> <span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">'dB'</span><span class="p">,</span>
         <span class="n">calc_noise_only</span> <span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">custom_cf</span>    <span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span><span class="n">Callable</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="p">):</span>
         
         <span class="c1">#__ Store arguments as attributes __</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x</span>               <span class="o">=</span> <span class="n">x</span>             <span class="c1"># Sensor location [m] (sensor, direction)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">signal_types</span>    <span class="o">=</span> <span class="n">signal_types</span>  <span class="c1"># Signal components to superimpose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span>               <span class="o">=</span> <span class="n">x</span>             <span class="c1"># Receiver location [m] (receiver, direction)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigs</span>    <span class="o">=</span> <span class="n">sigs</span>  <span class="c1"># Signal components to superimpose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">weight_units</span>    <span class="o">=</span> <span class="n">weight_units</span>  <span class="c1"># Units of signal weights in the model vector</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">freq</span>            <span class="o">=</span> <span class="n">freq</span>          <span class="c1"># Angular-frequency vector [rad] (frequency)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">freq</span>            <span class="o">=</span> <span class="n">freq</span>          <span class="c1"># Angular-frequency vector [rad.s-1] (frequency)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">N_freq</span>          <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>     <span class="c1"># Number of frequency bins</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_calc_noise_only</span> <span class="o">=</span> <span class="n">calc_noise_only</span>  <span class="c1"># Include an additional noise-only calculation</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">custom_cf</span>       <span class="o">=</span> <span class="n">custom_cf</span>
 
         <span class="c1">#__ Array geometry __</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">N_sta</span>  <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>                      <span class="c1"># Number of sensors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N_rec</span>  <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>                      <span class="c1"># Number of receivers</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">N_dir</span>  <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>                      <span class="c1"># Number of directional components</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_iu0_sta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iu1_sta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu_indices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N_sta</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>   <span class="c1"># Upper-triangle index set for unique station pairs (including diagonal)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_il0_sta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_il1_sta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tril_indices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N_sta</span><span class="p">,</span> <span class="n">k</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Lower-triangle index set for unique station pairs (excluding diagonal)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">N_pair</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_iu0_sta</span><span class="p">)</span>              <span class="c1"># Number of sensor pairs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="kc">None</span><span class="p">,:,:]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[:,</span><span class="kc">None</span><span class="p">,:])[</span><span class="bp">self</span><span class="o">.</span><span class="n">_iu0_sta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iu1_sta</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Inter-sensor separation [m] (sensor pair, direction)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>         <span class="c1"># Inter-sensor distance [m] (sensor pair)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">az</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span>   <span class="c1"># Inter-sensor azimuth [rad, anticlockwise from +X] (sensor pair)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_iu0_rec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iu1_rec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu_indices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N_rec</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>   <span class="c1"># Upper-triangle index set for unique receiver pairs (including diagonal)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_il0_rec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_il1_rec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tril_indices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N_rec</span><span class="p">,</span> <span class="n">k</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Lower-triangle index set for unique receiver pairs (excluding diagonal)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N_pair</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_iu0_rec</span><span class="p">)</span>              <span class="c1"># Number of receiver pairs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="kc">None</span><span class="p">,:,:]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[:,</span><span class="kc">None</span><span class="p">,:])[</span><span class="bp">self</span><span class="o">.</span><span class="n">_iu0_rec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iu1_rec</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Inter-receiver separation [m] (receiver pair, direction)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>         <span class="c1"># Inter-receiver distance [m] (receiver pair)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">az</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span>   <span class="c1"># Inter-receiver azimuth [rad, anticlockwise from +X] (receiver pair)</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N_dir</span> <span class="o">==</span> <span class="mi">3</span><span class="p">):</span>
             <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">invalid</span><span class="o">=</span><span class="s1">'ignore'</span><span class="p">,</span> <span class="n">divide</span><span class="o">=</span><span class="s1">'ignore'</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">pol</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">dist</span><span class="p">)</span>  <span class="c1"># Inter-sensor polar angle [rad, from +Z] (sensor pair)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pol</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">dist</span><span class="p">)</span>  <span class="c1"># Inter-receiver polar angle [rad, from +Z] (receiver pair)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pol</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dist</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>                   <span class="c1"># Undefined at zero separation</span>
         <span class="k">else</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pol</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1">#__ Self noise __</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">'isoselfnoise'</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal_types</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_cf_isoselfnoise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N_sta</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_iu0_sta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iu1_sta</span><span class="p">]</span>  <span class="c1"># Isotropic self-noise characteristic function (model, frequency, sensor pair)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">'isoselfnoise'</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigs</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cf_isoselfnoise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N_rec</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_iu0_rec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iu1_rec</span><span class="p">]</span>  <span class="c1"># Isotropic self-noise characteristic function (model, frequency, receiver pair)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_NOISE_SIGS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'isonoise'</span><span class="p">,</span> <span class="s1">'noise2D'</span><span class="p">,</span> <span class="s1">'noise3D'</span><span class="p">,</span> <span class="s1">'isoselfnoise'</span><span class="p">]</span>                   <span class="c1"># Possible noise signals</span>
 
         <span class="c1">#__ Characteristic-function argument __</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">freq</span><span class="p">[:,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="kc">None</span><span class="p">,:,:]</span>  <span class="c1"># Characteristic-function argument [rad.s-1.m] (frequency, sensor pair, direction)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">freq</span><span class="p">[:,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="kc">None</span><span class="p">,:,:]</span>  <span class="c1"># Characteristic-function argument [rad.s-1.m] (frequency, receiver pair, direction)</span>
 
         <span class="c1">#__ Weight units __</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight_units</span> <span class="o">==</span> <span class="s1">'dB'</span><span class="p">):</span>        <span class="c1"># Weights in dB scale</span>
@@ -586,7 +582,7 @@
         <span class="c1">#__ Initialise harmonic bases (for noise modelling) __</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_harmonic_bases</span><span class="p">()</span> 
         <span class="c1"># self._max_order_2D, self._max_order_3D, </span>
-        <span class="c1"># self.order2D, self.order3D, self.degree3D, </span>
+        <span class="c1"># self.order_2D, self.order_3D, self.degree_3D, </span>
         <span class="c1"># self.cos_2D, self.sin_2D, self.cos_3D, self.sin_3D,</span>
         <span class="c1"># self.i_m, self.i_n, self.e_m, self.P_nm, self.N_tri</span>
 
@@ -594,62 +590,62 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_bessel_cache</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="c1">#__ Harmonic bases evaluation </span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_init_harmonic_bases</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""Return a dictionary of harmonic bases for the current geometry."""</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_init_harmonic_bases</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Compute harmonic bases for the current geometry."""</span>
        
         <span class="c1">#__ Geometry-dependent harmonic quantities __</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_max_order_2D</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_max_order_3D</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">for</span> <span class="n">signal_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal_types</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">signal_type</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">signal_type</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'sig'</span><span class="p">)</span> <span class="o">==</span> <span class="s1">'noise2D'</span><span class="p">):</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_max_order_2D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_infer_max_order</span><span class="p">(</span><span class="n">signal_type</span><span class="p">)</span>  <span class="c1"># Maximum order of cylindrical basis</span>
-                <span class="k">elif</span> <span class="p">(</span><span class="n">signal_type</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'sig'</span><span class="p">)</span> <span class="o">==</span> <span class="s1">'noise3D'</span><span class="p">):</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_max_order_3D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_infer_max_order</span><span class="p">(</span><span class="n">signal_type</span><span class="p">)</span>  <span class="c1"># Maximum order of spherical basis</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">freq</span><span class="p">[</span><span class="kc">None</span><span class="p">,:,</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dist</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">,:]</span>  <span class="c1"># Geometry-independent part of Bessel function argument</span>
+        <span class="k">for</span> <span class="n">sig</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'sig'</span><span class="p">)</span> <span class="o">==</span> <span class="s1">'noise2D'</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_max_order_2D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_infer_max_order</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>  <span class="c1"># Maximum order of cylindrical basis</span>
+                <span class="k">elif</span> <span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'sig'</span><span class="p">)</span> <span class="o">==</span> <span class="s1">'noise3D'</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_max_order_3D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_infer_max_order</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>  <span class="c1"># Maximum order of spherical basis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">freq</span><span class="p">[</span><span class="kc">None</span><span class="p">,:,</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dist</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">,:]</span>  <span class="c1"># Slowness-independent part of Bessel function argument</span>
 
         <span class="c1">#__ 2D harmonic basis __</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_order_2D</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">order2D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_order_2D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>                 <span class="c1"># Cylindrical-harmonic order vector (order)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cos_2D</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order2D</span><span class="p">[</span><span class="kc">None</span><span class="p">,:]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">az</span><span class="p">[:,</span><span class="kc">None</span><span class="p">])</span>  <span class="c1"># Cylindrical-harmonic cosine basis (sensor pair, order)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sin_2D</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order2D</span><span class="p">[</span><span class="kc">None</span><span class="p">,:]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">az</span><span class="p">[:,</span><span class="kc">None</span><span class="p">])</span>  <span class="c1"># Cylindrical-harmonic sine basis (sensor pair, order)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">i_m</span>       <span class="o">=</span> <span class="mi">1</span><span class="n">j</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">order2D</span>                              <span class="c1"># Cylindrical-harmonic imaginary unit powers (order)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">e_m</span>       <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order2D</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_m</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="mf">2.0</span>  <span class="c1"># Cylindrical-harmonic cosine/sine normalization factors (order)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">order_2D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_order_2D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>                 <span class="c1"># Cylindrical-harmonic order vector (order)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cos_2D</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order_2D</span><span class="p">[</span><span class="kc">None</span><span class="p">,:]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">az</span><span class="p">[:,</span><span class="kc">None</span><span class="p">])</span>  <span class="c1"># Cylindrical-harmonic cosine basis (receiver pair, order)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sin_2D</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order_2D</span><span class="p">[</span><span class="kc">None</span><span class="p">,:]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">az</span><span class="p">[:,</span><span class="kc">None</span><span class="p">])</span>  <span class="c1"># Cylindrical-harmonic sine basis (receiver pair, order)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">i_m</span>       <span class="o">=</span> <span class="mi">1</span><span class="n">j</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">order_2D</span>                              <span class="c1"># Cylindrical-harmonic imaginary unit powers (order)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">e_m</span>       <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order_2D</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_m</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="mf">2.0</span>  <span class="c1"># Cylindrical-harmonic cosine/sine normalisation factors (order)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">order2D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cos_2D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sin_2D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">i_m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_m</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">order_2D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cos_2D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sin_2D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">i_m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_m</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1">#__ 3D harmonic basis __</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_order_3D</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pol</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"noise3D requires 3-component separation vectors."</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">order3D</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_order_3D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>             <span class="c1"># Spherical-harmonic order vector (order)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">degree3D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_order_3D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>             <span class="c1"># Spherical-harmonic degree vector (degree)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cos_3D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order3D</span><span class="p">[</span><span class="kc">None</span><span class="p">,:]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">az</span><span class="p">[:,</span><span class="kc">None</span><span class="p">])</span>  <span class="c1"># Spherical-harmonic cosine basis (sensor pair, order)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sin_3D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order3D</span><span class="p">[</span><span class="kc">None</span><span class="p">,:]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">az</span><span class="p">[:,</span><span class="kc">None</span><span class="p">])</span>  <span class="c1"># Spherical-harmonic sine basis (sensor pair, order)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">i_n</span>    <span class="o">=</span> <span class="mi">1</span><span class="n">j</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">degree3D</span>                             <span class="c1"># Spherical-harmonic imaginary unit powers (degree)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">order_3D</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_order_3D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>             <span class="c1"># Spherical-harmonic order vector (order)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">degree_3D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_order_3D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>             <span class="c1"># Spherical-harmonic degree vector (degree)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cos_3D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order_3D</span><span class="p">[</span><span class="kc">None</span><span class="p">,:]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">az</span><span class="p">[:,</span><span class="kc">None</span><span class="p">])</span>  <span class="c1"># Spherical-harmonic cosine basis (receiver pair, order)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sin_3D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order_3D</span><span class="p">[</span><span class="kc">None</span><span class="p">,:]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">az</span><span class="p">[:,</span><span class="kc">None</span><span class="p">])</span>  <span class="c1"># Spherical-harmonic sine basis (receiver pair, order)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">i_n</span>    <span class="o">=</span> <span class="mi">1</span><span class="n">j</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">degree_3D</span>                             <span class="c1"># Spherical-harmonic imaginary unit powers (degree)</span>
 
             <span class="c1">#__ Legendre polynomials __</span>
             <span class="n">polynomial_argument</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pol</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">P_nm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">N_pair</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order3D</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degree3D</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1"># Spherical-harmonic Legendre polynomials (sensor pair, order, degree)</span>
-            <span class="k">for</span> <span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">m_l</span><span class="p">),</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">n_p</span><span class="p">)</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order3D</span><span class="p">),</span>
-                                                        <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degree3D</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">P_nm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">N_pair</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order_3D</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degree_3D</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1"># Spherical-harmonic Legendre polynomials (receiver pair, order, degree)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">m_l</span><span class="p">),</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">n_p</span><span class="p">)</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order_3D</span><span class="p">),</span>
+                                                        <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degree_3D</span><span class="p">)):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">P_nm</span><span class="p">[:,</span><span class="n">l</span><span class="p">,</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">legendre_polynomial</span><span class="p">(</span><span class="n">polynomial_argument</span><span class="p">,</span> <span class="n">n_p</span><span class="p">,</span> <span class="n">m_l</span><span class="p">)</span>  <span class="c1"># Populate P_nm</span>
 
             <span class="c1">#__ Triangular (m &lt;= n) index set __</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_tri_ord</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tri_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tril_indices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_order_3D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Degree/order index set for lower triangle of degree-order pair matrix</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tri_deg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tri_ord</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tril_indices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_order_3D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># rows = degree n, cols = order m, so m &lt;= n</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">N_tri</span>   <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tri_ord</span><span class="p">)</span>                              <span class="c1"># Number of spherical-harmonic order-degree pairs</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_a_free</span> <span class="o">=</span> <span class="o">~</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_tri_ord</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tri_deg</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span>  <span class="c1"># Free spherical-harmonic cosine-basis coefficients</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_b_free</span> <span class="o">=</span>   <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tri_ord</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>                          <span class="c1"># Free spherical-harmonic sine-basis coefficients</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_n_a3D</span>  <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_a_free</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>                         <span class="c1"># Number of free spherical-harmonic cosine-basis coefficients</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_n_b3D</span>  <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_b_free</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>                         <span class="c1"># Number of free spherical-harmonic sine-basis coefficients</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_n_a_3D</span>  <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_a_free</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>                         <span class="c1"># Number of free spherical-harmonic cosine-basis coefficients</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_n_b_3D</span>  <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_b_free</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>                         <span class="c1"># Number of free spherical-harmonic sine-basis coefficients</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">P_nm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_tri</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span>
 
     <span class="c1">#__ Helper: read the truncation order out of a signal spec __</span>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_infer_max_order</span><span class="p">(</span><span class="n">signal_type</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">'max_order'</span> <span class="ow">in</span> <span class="n">signal_type</span><span class="p">):</span> <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">signal_type</span><span class="p">[</span><span class="s1">'max_order'</span><span class="p">])</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">'a'</span> <span class="ow">in</span> <span class="n">signal_type</span><span class="p">):</span>         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal_type</span><span class="p">[</span><span class="s1">'a'</span><span class="p">])[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_infer_max_order</span><span class="p">(</span><span class="n">sig</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">'max_order'</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">):</span> <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">sig</span><span class="p">[</span><span class="s1">'max_order'</span><span class="p">])</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">'a'</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">):</span>         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">sig</span><span class="p">[</span><span class="s1">'a'</span><span class="p">])[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Harmonic signal needs 'max_order' or explicit 'a'/'b'."</span><span class="p">)</span>
 
     <span class="c1">#__ Cached Bessel evaluation, value and derivative together __</span>
@@ -707,7 +703,7 @@
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 
-<span class="sd">        Function that retuns the characteristic function for a point (plane wave) distribution.</span>
+<span class="sd">        Function that returns the characteristic function for a point (plane wave) distribution.</span>
 
 <span class="sd">        Input</span>
 <span class="sd">        -----</span>
@@ -722,12 +718,12 @@
 <span class="sd">        ------</span>
 <span class="sd">        cf : ``numpy.ndarray``</span>
 <span class="sd">            Characteristic function</span>
-<span class="sd">            (model, frequency, sensor pair)</span>
+<span class="sd">            (model, frequency, receiver pair)</span>
 
 <span class="sd">        grad_cf : ``dict``</span>
 <span class="sd">            Gradient of the characteristic function, keyed by parameter name. </span>
 
-<span class="sd">            - **xi** : (``numpy.ndarray``) -- (model, frequency, sensor pair, direction)</span>
+<span class="sd">            - **xi** : (``numpy.ndarray``) -- (model, frequency, receiver pair, direction)</span>
 
 <span class="sd">        </span>
 <span class="sd">        The characteristic function for a point (plane wave) distribution is given by</span>
@@ -736,7 +732,7 @@
 <span class="sd">                </span>
 <span class="sd">                    \varphi_\mathbf{s} \left(\mathbf{t} ; \mathbf{\xi}\right) = \exp \left[i \mathbf{t}^T \mathbf{\xi}\right]</span>
 
-<span class="sd">        where :math:`\mathbf{t}` is the characteristic function argument (frequency, sensor pair, direction) and :math:`\mathbf{\xi}` is the location vector (slowness).</span>
+<span class="sd">        where :math:`\mathbf{t}` is the characteristic function argument (frequency, receiver pair, direction) and :math:`\mathbf{\xi}` is the location vector (slowness).</span>
 <span class="sd">                </span>
 <span class="sd">        The gradients of the characteristic function are given by the following expression:</span>
 
@@ -750,10 +746,10 @@
         <span class="c1">#__ np.einsum subscripts:  </span>
         <span class="c1">#__ [i] model </span>
         <span class="c1">#__ [j] frequency</span>
-        <span class="c1">#__ [k] sensor pair</span>
+        <span class="c1">#__ [k] receiver pair</span>
         <span class="c1">#__ [l] direction</span>
 
-        <span class="c1">#__ Calculate characteristic function (model, frequency, sensor pair) __</span>
+        <span class="c1">#__ Calculate characteristic function (model, frequency, receiver pair) __</span>
         <span class="n">L</span>  <span class="o">=</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'jkl,il-&gt;ijk'</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">xi</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">cf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
 
@@ -778,7 +774,7 @@
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 
-<span class="sd">        Function that retuns the characteristic function for a normal distribution.</span>
+<span class="sd">        Function that returns the characteristic function for a normal distribution.</span>
 <span class="sd">        </span>
 <span class="sd">        Input</span>
 <span class="sd">        -----</span>
@@ -801,16 +797,16 @@
 <span class="sd">        ------</span>
 <span class="sd">        cf : ``numpy.ndarray``</span>
 <span class="sd">            Characteristic function</span>
-<span class="sd">            (model, frequency, sensor pair)</span>
+<span class="sd">            (model, frequency, receiver pair)</span>
 
 <span class="sd">        grad_cf : ``dict``</span>
 <span class="sd">            Gradient of the characteristic function, keyed by parameter name:</span>
 
-<span class="sd">            - **xi** : (``numpy.ndarray``) -- (model, frequency, sensor pair, direction)</span>
+<span class="sd">            - **xi** : (``numpy.ndarray``) -- (model, frequency, receiver pair, direction)</span>
 
-<span class="sd">            - **sigma** : (``numpy.ndarray``) -- (model, frequency, sensor pair, direction)</span>
+<span class="sd">            - **sigma** : (``numpy.ndarray``) -- (model, frequency, receiver pair, direction)</span>
 
-<span class="sd">            - **corr** : (``numpy.ndarray``) -- (model, frequency, sensor pair, direction pair)</span>
+<span class="sd">            - **corr** : (``numpy.ndarray``) -- (model, frequency, receiver pair, direction pair)</span>
 <span class="sd">                    </span>
 <span class="sd">        Note</span>
 <span class="sd">        ----</span>
@@ -829,7 +825,7 @@
 
 <span class="sd">                \Omega_z = \left\|\rho_{ij}\right\|</span>
 
-<span class="sd">        where :math:`\mathbf{t}` is the characteristic function argument (frequency, sensor pair, direction), :math:`\mathbf{\xi}` is the location vector (slowness), :math:`\Omega` is the covariance matrix, :math:`W` is the diagonal scale matrix, and :math:`\Omega_z` is the correlation matrix.</span>
+<span class="sd">        where :math:`\mathbf{t}` is the characteristic function argument (frequency, receiver pair, direction), :math:`\mathbf{\xi}` is the location vector (slowness), :math:`\Omega` is the covariance matrix, :math:`W` is the diagonal scale matrix, and :math:`\Omega_z` is the correlation matrix.</span>
 <span class="sd">        The gradients of the characteristic function are given by the following expressions:</span>
 
 <span class="sd">        .. math::</span>
@@ -847,14 +843,14 @@
         <span class="c1">#__ np.einsum subscripts:</span>
         <span class="c1">#__ [i] model</span>
         <span class="c1">#__ [j] frequency</span>
-        <span class="c1">#__ [k] sensor pair</span>
+        <span class="c1">#__ [k] receiver pair</span>
         <span class="c1">#__ [l],[p] direction</span>
 
         <span class="c1">#__ Intermediates (model, frequency, pair, direction) __</span>
         <span class="n">w</span>   <span class="o">=</span> <span class="n">sigma</span><span class="p">[:,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">,:]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="o">...</span><span class="p">]</span>
         <span class="n">Ozw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'ilp,ijkp-&gt;ijkl'</span><span class="p">,</span> <span class="n">Omega_z</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="c1">#__ Calculate characteristic function (model, frequency, sensor pair) __</span>
+        <span class="c1">#__ Calculate characteristic function (model, frequency, receiver pair) __</span>
         <span class="n">Q</span>  <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'ijkl,ijkl-&gt;ijk'</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">Ozw</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">L</span>  <span class="o">=</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'jkl,il-&gt;ijk'</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">xi</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-</span> <span class="n">Q</span>
         <span class="n">cf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
@@ -863,13 +859,13 @@
         <span class="n">grad_cf</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">grad</span><span class="p">:</span>
 
-            <span class="c1">#__ Location (model, frequency, sensor pair, direction) __</span>
+            <span class="c1">#__ Location (model, frequency, receiver pair, direction) __</span>
             <span class="n">grad_cf</span><span class="p">[</span><span class="s1">'xi'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">*</span> <span class="n">cf</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span>
 
-            <span class="c1">#__ Scale (model, frequency, sensor pair, direction) __</span>
+            <span class="c1">#__ Scale (model, frequency, receiver pair, direction) __</span>
             <span class="n">grad_cf</span><span class="p">[</span><span class="s1">'sigma'</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">cf</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">*</span> <span class="n">Ozw</span>
 
-            <span class="c1">#__ Correlation (model, frequency, sensor pair, direction pair) __</span>
+            <span class="c1">#__ Correlation (model, frequency, receiver pair, direction pair) __</span>
             <span class="n">grad_cf</span><span class="p">[</span><span class="s1">'corr'</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">cf</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">w</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_iu0_dir</span><span class="p">]</span> <span class="o">*</span> <span class="n">w</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_iu1_dir</span><span class="p">]</span>
 
         <span class="c1">#__ Return output __</span>
@@ -889,7 +885,7 @@
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        </span>
-<span class="sd">        Function that retuns the characteristic function for a skew-normal distribution.</span>
+<span class="sd">        Function that returns the characteristic function for a skew-normal distribution.</span>
 
 <span class="sd">        Input</span>
 <span class="sd">        -----</span>
@@ -916,18 +912,18 @@
 <span class="sd">        ------</span>
 <span class="sd">        cf : ``numpy.ndarray``</span>
 <span class="sd">            Characteristic function</span>
-<span class="sd">            (model, frequency, sensor pair)</span>
+<span class="sd">            (model, frequency, receiver pair)</span>
 
 <span class="sd">        grad_cf : ``dict``</span>
 <span class="sd">            Gradient of the characteristic function, keyed by parameter name:</span>
 
-<span class="sd">            - **xi** : (``numpy.ndarray``) -- (model, frequency, sensor pair, direction)</span>
+<span class="sd">            - **xi** : (``numpy.ndarray``) -- (model, frequency, receiver pair, direction)</span>
 
-<span class="sd">            - **sigma** : (``numpy.ndarray``) -- (model, frequency, sensor pair, direction)</span>
+<span class="sd">            - **sigma** : (``numpy.ndarray``) -- (model, frequency, receiver pair, direction)</span>
 
-<span class="sd">            - **corr** : (``numpy.ndarray``) -- (model, frequency, sensor pair, direction pair)</span>
+<span class="sd">            - **corr** : (``numpy.ndarray``) -- (model, frequency, receiver pair, direction pair)</span>
 
-<span class="sd">            - **alpha** : (``numpy.ndarray``) -- (model, frequency, sensor pair, direction pair)</span>
+<span class="sd">            - **alpha** : (``numpy.ndarray``) -- (model, frequency, receiver pair, direction pair)</span>
 
 
 <span class="sd">        Note</span>
@@ -950,7 +946,7 @@
 <span class="sd">            \mathbf{\delta} = \frac{\Omega_z \mathbf{\alpha}}{\sqrt{1 + \mathbf{\alpha}^T \Omega_z \mathbf{\alpha}}}</span>
 
 
-<span class="sd">        where :math:`\mathbf{t}` is the characteristic function argument (frequency, sensor pair, direction), :math:`\mathbf{\xi}` is the location vector (slowness), :math:`\Omega` is the covariance matrix, :math:`W` is the diagonal scale matrix, :math:`\Omega_z` is the correlation matrix, and :math:`\mathbf{\delta}` is the skewness-direction vector.</span>
+<span class="sd">        where :math:`\mathbf{t}` is the characteristic function argument (frequency, receiver pair, direction), :math:`\mathbf{\xi}` is the location vector (slowness), :math:`\Omega` is the covariance matrix, :math:`W` is the diagonal scale matrix, :math:`\Omega_z` is the correlation matrix, and :math:`\mathbf{\delta}` is the skewness-direction vector.</span>
 <span class="sd">        The gradients of the characteristic function are given by the following expressions:</span>
 
 <span class="sd">        .. math::</span>
@@ -965,7 +961,7 @@
 <span class="sd">            </span>
 <span class="sd">            \frac{\partial \varphi_\mathbf{s}}{\partial \rho_{ij}} = - \sigma_i \sigma_j t_i t_j \varphi_\mathbf{s} + \sqrt{\frac{2}{\pi}} i N \exp \left[u^2 + L\right] \left(\sigma_i t_i \alpha_j + \sigma_j t_j \alpha_i - N^2 \alpha_i \alpha_j \sum_{k, l} \sigma_k t_k \rho_{kl} \alpha_l\right)</span>
 <span class="sd">            </span>
-<span class="sd">            N = \sqrt{1 + \mathbf{\alpha}^T \Omega_z \mathbf{\alpha}}</span>
+<span class="sd">            N = \left(1 + \mathbf{\alpha}^T \Omega_z \mathbf{\alpha}\right)^\tfrac{-1}{2}</span>
 
 <span class="sd">            \frac{\partial \varphi_\mathbf{s}}{\partial \alpha_i} = \sqrt{\frac{2}{\pi}} i \exp \left[u^2 + L\right] \sum_{j, k, l} \sigma_j t_j \left(\rho_{ji} N - \rho_{il} \alpha_l \rho_{jk} \alpha_k N^3\right)</span>
 <span class="sd">            </span>
@@ -975,7 +971,7 @@
         <span class="c1">#__ np.einsum subscripts:</span>
         <span class="c1">#__ [i] model</span>
         <span class="c1">#__ [j] frequency</span>
-        <span class="c1">#__ [k] sensor pair</span>
+        <span class="c1">#__ [k] receiver pair</span>
         <span class="c1">#__ [l],[p] direction</span>
 
         <span class="c1">#__ Intermediates (model, frequency, pair, direction) __</span>
@@ -987,7 +983,7 @@
         <span class="n">N</span>     <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'il,il-&gt;i'</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">Oza</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
         <span class="n">delta</span> <span class="o">=</span> <span class="n">N</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">Oza</span>
 
-        <span class="c1">#__ Calculate characteristic function (model, frequency, sensor pair) __</span>
+        <span class="c1">#__ Calculate characteristic function (model, frequency, receiver pair) __</span>
         <span class="n">Q</span>  <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'ijkl,ijkl-&gt;ijk'</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">Ozw</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">L</span>  <span class="o">=</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'jkl,il-&gt;ijk'</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">xi</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-</span> <span class="n">Q</span>
         <span class="n">u</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'il,ijkl-&gt;ijk'</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
@@ -1002,14 +998,14 @@
             <span class="c1">#__ Shared prefactor __</span>
             <span class="c1">#K = np.sqrt(2.0/np.pi) * 1j * np.exp(u**2 + L)</span>
 
-            <span class="c1">#__ Location (model, frequency, sensor pair, direction) __</span>
+            <span class="c1">#__ Location (model, frequency, receiver pair, direction) __</span>
             <span class="n">grad_cf</span><span class="p">[</span><span class="s1">'xi'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">*</span> <span class="n">cf</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span>
 
-            <span class="c1">#__ Scale (model, frequency, sensor pair, direction) __</span>
+            <span class="c1">#__ Scale (model, frequency, receiver pair, direction) __</span>
             <span class="n">grad_cf</span><span class="p">[</span><span class="s1">'sigma'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">cf</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">*</span> <span class="n">Ozw</span>
                                 <span class="o">+</span> <span class="n">K</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">delta</span><span class="p">[:,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">,:]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="o">...</span><span class="p">])</span>
 
-            <span class="c1">#__ Correlation (model, frequency, sensor pair, direction pair) __</span>
+            <span class="c1">#__ Correlation (model, frequency, receiver pair, direction pair) __</span>
             <span class="n">w0</span><span class="p">,</span> <span class="n">w1</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_iu0_dir</span><span class="p">],</span> <span class="n">w</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_iu1_dir</span><span class="p">]</span>
             <span class="n">a0</span>     <span class="o">=</span> <span class="n">alpha</span><span class="p">[:,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_iu0_dir</span><span class="p">]</span>
             <span class="n">a1</span>     <span class="o">=</span> <span class="n">alpha</span><span class="p">[:,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_iu1_dir</span><span class="p">]</span>
@@ -1018,7 +1014,7 @@
                                <span class="o">+</span> <span class="n">K</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">Nb</span> <span class="o">*</span> <span class="p">(</span><span class="n">w0</span><span class="o">*</span><span class="n">a1</span> <span class="o">+</span> <span class="n">a0</span><span class="o">*</span><span class="n">w1</span><span class="p">)</span>
                                                 <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">Nb</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">u</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">a0</span> <span class="o">*</span> <span class="n">a1</span><span class="p">))</span>
 
-            <span class="c1">#__ Shape (model, frequency, sensor pair, direction) __</span>
+            <span class="c1">#__ Shape (model, frequency, receiver pair, direction) __</span>
             <span class="n">grad_cf</span><span class="p">[</span><span class="s1">'alpha'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">K</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span><span class="p">[:,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span>
                                 <span class="o">*</span> <span class="p">(</span><span class="n">Ozw</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">delta</span><span class="p">[:,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">,:]))</span>
 
@@ -1038,7 +1034,7 @@
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">""" </span>
 <span class="sd">        </span>
-<span class="sd">        Function that retuns the characteristic function for an isotropic noise field.</span>
+<span class="sd">        Function that returns the characteristic function for an isotropic noise field.</span>
 
 <span class="sd">        Input</span>
 <span class="sd">        -----</span>
@@ -1059,12 +1055,12 @@
 <span class="sd">        ------</span>
 <span class="sd">        cf : ``numpy.ndarray``</span>
 <span class="sd">            Characteristic function</span>
-<span class="sd">            (model, frequency, sensor pair)</span>
+<span class="sd">            (model, frequency, receiver pair)</span>
 
 <span class="sd">        grad_cf : ``dict``</span>
 <span class="sd">            Gradient of the characteristic function, keyed by parameter name:</span>
 
-<span class="sd">            - **s** : (``numpy.ndarray``) -- (model, frequency, sensor pair)</span>
+<span class="sd">            - **s** : (``numpy.ndarray``) -- (model, frequency, receiver pair)</span>
 <span class="sd">            </span>
 
 <span class="sd">        The characteristic function for an isotropic noise field is given by</span>
@@ -1098,14 +1094,14 @@
         <span class="k">elif</span> <span class="p">(</span><span class="n">dim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">):</span> <span class="n">shape</span> <span class="o">=</span> <span class="s1">'spherical'</span>
         <span class="k">else</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"`dim` should be 2 or 3."</span><span class="p">)</span>
 
-        <span class="c1">#__ Bessel argument (model, frequency, sensor pair) __</span>
+        <span class="c1">#__ Bessel argument (model, frequency, receiver pair) __</span>
         <span class="n">argument</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base</span> <span class="o">*</span> <span class="n">s</span><span class="p">[:,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span>
 
         <span class="c1">#__ Calculate characteristic function __</span>
         <span class="n">J_0</span><span class="p">,</span> <span class="n">dJ</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bessel</span><span class="p">(</span><span class="n">argument</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">grad_s</span><span class="p">,</span> <span class="n">fixed_key</span><span class="p">)</span>
         <span class="n">cf</span> <span class="o">=</span> <span class="n">J_0</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="c1">#__ Calculate gradient (model, frequency, sensor pair) __</span>
+        <span class="c1">#__ Calculate gradient (model, frequency, receiver pair) __</span>
         <span class="n">grad_cf</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">grad_s</span><span class="p">:</span>
             <span class="n">grad_cf</span><span class="p">[</span><span class="s1">'s'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base</span> <span class="o">*</span> <span class="n">dJ</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
@@ -1129,7 +1125,7 @@
 
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 
-<span class="sd">        Function that retuns the characteristic function for a 2D isotropic noise field.</span>
+<span class="sd">        Function that returns the characteristic function for a 2D isotropic noise field.</span>
 
 <span class="sd">        Input</span>
 <span class="sd">        -----</span>
@@ -1148,16 +1144,16 @@
 <span class="sd">        ------</span>
 <span class="sd">        cf : ``numpy.ndarray``</span>
 <span class="sd">            Characteristic function</span>
-<span class="sd">            (model, frequency, sensor pair)</span>
+<span class="sd">            (model, frequency, receiver pair)</span>
 
 <span class="sd">        grad_cf : ``dict``</span>
 <span class="sd">            Gradient of the characteristic function, keyed by parameter name:</span>
 
-<span class="sd">            - **a** : (``numpy.ndarray``) -- (model, frequency, sensor pair, order)</span>
+<span class="sd">            - **a** : (``numpy.ndarray``) -- (model, frequency, receiver pair, order)</span>
 
-<span class="sd">            - **b** : (``numpy.ndarray``) -- (model, frequency, sensor pair, order)</span>
+<span class="sd">            - **b** : (``numpy.ndarray``) -- (model, frequency, receiver pair, order)</span>
 
-<span class="sd">            - **s** : (``numpy.ndarray``) -- (model, frequency, sensor pair)</span>
+<span class="sd">            - **s** : (``numpy.ndarray``) -- (model, frequency, receiver pair)</span>
 
 <span class="sd">        </span>
 <span class="sd">        The characteristic function for a 2D isotropic noise field is given by</span>
@@ -1198,25 +1194,25 @@
         <span class="c1">#__ np.einsum subscripts:</span>
         <span class="c1">#__ [i] model</span>
         <span class="c1">#__ [j] frequency</span>
-        <span class="c1">#__ [k] sensor pair</span>
+        <span class="c1">#__ [k] receiver pair</span>
         <span class="c1">#__ [l] order</span>
 
         <span class="c1">#__ Sort inputs __</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">))</span>
         <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
 
-        <span class="c1">#__ Calculate coefficient (model, sensor pair, order) __</span>
+        <span class="c1">#__ Calculate coefficient (model, receiver pair, order) __</span>
         <span class="n">C_m</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'il,kl-&gt;ikl'</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cos_2D</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'il,kl-&gt;ikl'</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sin_2D</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 
-        <span class="c1">#__ Bessel argument (model, frequency, sensor pair) __</span>
+        <span class="c1">#__ Bessel argument (model, frequency, receiver pair) __</span>
         <span class="n">argument</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base</span> <span class="o">*</span> <span class="n">s</span><span class="p">[:,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span>
 
-        <span class="c1">#__ Bessel functions (model, frequency, sensor pair, order) __</span>
-        <span class="n">J_m</span><span class="p">,</span> <span class="n">dJ</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bessel</span><span class="p">(</span><span class="n">argument</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">order2D</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="c1">#__ Bessel functions (model, frequency, receiver pair, order) __</span>
+        <span class="n">J_m</span><span class="p">,</span> <span class="n">dJ</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bessel</span><span class="p">(</span><span class="n">argument</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">order_2D</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
                                   <span class="s1">'cylindrical'</span><span class="p">,</span> <span class="n">grad_s</span><span class="p">,</span> <span class="n">fixed_key</span><span class="p">)</span>
 
-        <span class="c1">#__ Calculate characteristic function (model, frequency, sensor pair) __</span>
+        <span class="c1">#__ Calculate characteristic function (model, frequency, receiver pair) __</span>
         <span class="n">cf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'l,l,ikl,ijkl-&gt;ijk'</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">i_m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_m</span><span class="p">,</span> <span class="n">C_m</span><span class="p">,</span> <span class="n">J_m</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1">#__ Gradients __</span>
@@ -1248,7 +1244,7 @@
 
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        </span>
-<span class="sd">        Function that retuns the characteristic function for a 3D isotropic noise field.</span>
+<span class="sd">        Function that returns the characteristic function for a 3D isotropic noise field.</span>
 
 <span class="sd">        Input</span>
 <span class="sd">        -----</span>
@@ -1264,16 +1260,16 @@
 <span class="sd">        ------</span>
 <span class="sd">        cf : ``numpy.ndarray``</span>
 <span class="sd">            Characteristic function</span>
-<span class="sd">            (model, frequency, sensor pair)</span>
+<span class="sd">            (model, frequency, receiver pair)</span>
 <span class="sd">        </span>
 <span class="sd">        grad_cf : ``dict``</span>
 <span class="sd">            Gradient of the characteristic function, keyed by parameter name.</span>
 
-<span class="sd">            - **a** : (``numpy.ndarray``) -- (model, frequency, sensor pair, triangle)</span>
+<span class="sd">            - **a** : (``numpy.ndarray``) -- (model, frequency, receiver pair, triangle)</span>
 
-<span class="sd">            - **b** : (``numpy.ndarray``) -- (model, frequency, sensor pair, triangle)</span>
+<span class="sd">            - **b** : (``numpy.ndarray``) -- (model, frequency, receiver pair, triangle)</span>
 
-<span class="sd">            - **s** : (``numpy.ndarray``) -- (model, frequency, sensor pair)</span>
+<span class="sd">            - **s** : (``numpy.ndarray``) -- (model, frequency, receiver pair)</span>
 
 <span class="sd">        Note</span>
 <span class="sd">        ----</span>
@@ -1323,7 +1319,7 @@
         <span class="c1">#__ np.einsum subscripts:</span>
         <span class="c1">#__ [i] model</span>
         <span class="c1">#__ [j] frequency</span>
-        <span class="c1">#__ [k] sensor pair</span>
+        <span class="c1">#__ [k] receiver pair</span>
         <span class="c1">#__ [l] order  </span>
         <span class="c1">#__ [p] degree</span>
 
@@ -1332,23 +1328,23 @@
         <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span> <span class="n">a</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="kc">None</span><span class="p">,:,:]</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="kc">None</span><span class="p">,:,:]</span>
 
-        <span class="c1">#__ Calculate coefficient (model, sensor pair, order, degree) __</span>
+        <span class="c1">#__ Calculate coefficient (model, receiver pair, order, degree) __</span>
         <span class="n">C_nm</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'ilp,kl-&gt;iklp'</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cos_3D</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                 <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'ilp,kl-&gt;iklp'</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sin_3D</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 
-        <span class="c1">#__ Bessel argument (model, frequency, sensor pair) __</span>
+        <span class="c1">#__ Bessel argument (model, frequency, receiver pair) __</span>
         <span class="n">argument</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base</span> <span class="o">*</span> <span class="n">s</span><span class="p">[:,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span>
 
-        <span class="c1">#__ Spherical Bessel functions (model, frequency, sensor pair, degree) __</span>
-        <span class="n">j_n</span><span class="p">,</span> <span class="n">djn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bessel</span><span class="p">(</span><span class="n">argument</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">degree3D</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="c1">#__ Spherical Bessel functions (model, frequency, receiver pair, degree) __</span>
+        <span class="n">j_n</span><span class="p">,</span> <span class="n">djn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bessel</span><span class="p">(</span><span class="n">argument</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">degree_3D</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
                                    <span class="s1">'spherical'</span><span class="p">,</span> <span class="n">grad_s</span><span class="p">,</span> <span class="n">fixed_key</span><span class="p">)</span>
 
-        <span class="c1">#__ Calculate characteristic function (model, frequency, sensor pair) __</span>
+        <span class="c1">#__ Calculate characteristic function (model, frequency, receiver pair) __</span>
         <span class="n">cf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'p,iklp,klp,ijkp-&gt;ijk'</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">i_n</span><span class="p">,</span> <span class="n">C_nm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P_nm</span><span class="p">,</span> <span class="n">j_n</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1">#__ Gradients __</span>
         <span class="n">grad_cf</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">if</span> <span class="n">grad_ab</span><span class="p">:</span>  <span class="c1"># (model, frequency, sensor pair, degree-order pair)</span>
+        <span class="k">if</span> <span class="n">grad_ab</span><span class="p">:</span>  <span class="c1"># (model, frequency, receiver pair, degree-order pair)</span>
             <span class="n">P_tri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">P_nm</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tri_ord</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tri_deg</span><span class="p">]</span>
             <span class="n">i_tri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">i_n</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_tri_deg</span><span class="p">]</span>
             <span class="n">jn_tri</span> <span class="o">=</span> <span class="n">j_n</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tri_deg</span><span class="p">]</span>
@@ -1356,7 +1352,7 @@
                             <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cos_3D</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">,:,</span><span class="bp">self</span><span class="o">.</span><span class="n">_tri_ord</span><span class="p">]</span> <span class="o">*</span> <span class="n">jn_tri</span><span class="p">)</span>
             <span class="n">grad_cf</span><span class="p">[</span><span class="s1">'b'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">i_tri</span> <span class="o">*</span> <span class="n">P_tri</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">,:,:]</span>
                             <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sin_3D</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">,:,</span><span class="bp">self</span><span class="o">.</span><span class="n">_tri_ord</span><span class="p">]</span> <span class="o">*</span> <span class="n">jn_tri</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">grad_s</span><span class="p">:</span>  <span class="c1"># (model, frequency, sensor pair)</span>
+        <span class="k">if</span> <span class="n">grad_s</span><span class="p">:</span>  <span class="c1"># (model, frequency, receiver pair)</span>
             <span class="n">grad_cf</span><span class="p">[</span><span class="s1">'s'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'p,iklp,klp,ijkp-&gt;ijk'</span><span class="p">,</span>
                                            <span class="bp">self</span><span class="o">.</span><span class="n">i_n</span><span class="p">,</span> <span class="n">C_nm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P_nm</span><span class="p">,</span> <span class="n">djn</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -1367,19 +1363,19 @@
     <span class="c1">#________ FORWARD FUNCTION ________#</span>
 
     <span class="c1">#__ Number of parameters per signal __</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_n_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal_type</span> <span class="p">:</span> <span class="nb">str</span><span class="o">|</span><span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_n_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sig</span> <span class="p">:</span> <span class="nb">str</span><span class="o">|</span><span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""Length of this signal's slice of the model vector (excluding weight)."""</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">signal_type</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">signal_type</span> <span class="o">==</span> <span class="s1">'point'</span><span class="p">):</span>      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_dir</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">signal_type</span> <span class="o">==</span> <span class="s1">'normal'</span><span class="p">):</span>     <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">N_dir</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_corr</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">signal_type</span> <span class="o">==</span> <span class="s1">'skewnormal'</span><span class="p">):</span> <span class="k">return</span> <span class="mi">3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">N_dir</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_corr</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">signal_type</span> <span class="o">==</span> <span class="s1">'isoselfnoise'</span><span class="p">):</span>  <span class="k">return</span> <span class="mi">0</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown signal type '</span><span class="si">{</span><span class="n">signal_type</span><span class="si">}</span><span class="s2">'."</span><span class="p">)</span>
-        <span class="n">sig</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">signal_type</span><span class="p">[</span><span class="s1">'sig'</span><span class="p">],</span> <span class="mi">0</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">'s'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">signal_type</span><span class="p">):</span> <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="p">((</span><span class="s1">'a'</span> <span class="ow">in</span> <span class="n">signal_type</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">'b'</span> <span class="ow">in</span> <span class="n">signal_type</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">sig</span> <span class="o">==</span> <span class="s1">'point'</span><span class="p">):</span>      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_dir</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">sig</span> <span class="o">==</span> <span class="s1">'normal'</span><span class="p">):</span>     <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">N_dir</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_corr</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">sig</span> <span class="o">==</span> <span class="s1">'skewnormal'</span><span class="p">):</span> <span class="k">return</span> <span class="mi">3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">N_dir</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_corr</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">sig</span> <span class="o">==</span> <span class="s1">'isoselfnoise'</span><span class="p">):</span>  <span class="k">return</span> <span class="mi">0</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown signal type '</span><span class="si">{</span><span class="n">sig</span><span class="si">}</span><span class="s2">'."</span><span class="p">)</span>
+        <span class="n">sig</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">sig</span><span class="p">[</span><span class="s1">'sig'</span><span class="p">],</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">'s'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">):</span> <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">((</span><span class="s1">'a'</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">'b'</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">)):</span>
             <span class="k">if</span>   <span class="p">(</span><span class="n">sig</span> <span class="o">==</span> <span class="s1">'noise2D'</span><span class="p">):</span> <span class="n">n</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_order_2D</span>
-            <span class="k">elif</span> <span class="p">(</span><span class="n">sig</span> <span class="o">==</span> <span class="s1">'noise3D'</span><span class="p">):</span> <span class="n">n</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_a3D</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_b3D</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">sig</span> <span class="o">==</span> <span class="s1">'noise3D'</span><span class="p">):</span> <span class="n">n</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_a_3D</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_b_3D</span>
         <span class="k">return</span> <span class="n">n</span>
 
     <span class="c1">#__ Unpack model vector __</span>
@@ -1404,22 +1400,21 @@
 <span class="sd">        """</span>
 
         <span class="c1">#__ Instantiate outputs __</span>
-        <span class="n">sig_list</span><span class="p">,</span> <span class="n">kwargs_list</span><span class="p">,</span> <span class="n">idx_list</span><span class="p">,</span> <span class="n">weights_list</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[]</span>
+        <span class="n">sig_list</span><span class="p">,</span> <span class="n">kwargs_list</span><span class="p">,</span> <span class="n">idx_list</span><span class="p">,</span> <span class="n">weight_list</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[]</span>
 
         <span class="c1">#__ Loop through signal types __</span>
-        <span class="k">for</span> <span class="n">signal_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal_types</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">sig</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigs</span><span class="p">:</span>
             <span class="n">idx</span> <span class="o">=</span> <span class="n">idx_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
             <span class="c1">#__ Weight __</span>
             <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight_units</span> <span class="o">==</span> <span class="s1">'dB'</span><span class="p">):</span>
-                <span class="n">weights_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">m</span><span class="p">[:,</span><span class="n">idx</span><span class="p">][:,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span><span class="o">/</span><span class="mi">10</span><span class="p">))</span>
+                <span class="n">weight_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">m</span><span class="p">[:,</span><span class="n">idx</span><span class="p">][:,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span><span class="o">/</span><span class="mi">10</span><span class="p">))</span>
             <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight_units</span> <span class="o">==</span> <span class="s1">'linear'</span><span class="p">):</span>
-                <span class="n">weights_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="p">[:,</span><span class="n">idx</span><span class="p">][:,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">])</span>
+                <span class="n">weight_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="p">[:,</span><span class="n">idx</span><span class="p">][:,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">])</span>
             <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
 
             <span class="c1">#__ Density functions __</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">signal_type</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-                <span class="n">sig</span> <span class="o">=</span> <span class="n">signal_type</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                 <span class="n">sig_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
 
                 <span class="c1">#__ Location __</span>
@@ -1444,33 +1439,32 @@
                 <span class="c1">#__ Custom function __</span>
                 <span class="k">if</span> <span class="p">(</span><span class="n">sig</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_cf</span><span class="p">):</span>
                     <span class="n">N_custom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_cf</span><span class="p">[</span><span class="n">sig</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="n">mi</span> <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="n">idx</span><span class="p">:</span><span class="n">idx</span><span class="o">+</span><span class="n">N_custom</span><span class="p">]</span> <span class="p">;</span> <span class="n">idx</span> <span class="o">+=</span> <span class="n">N_custom</span>
-                    <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">mi</span> <span class="o">=</span> <span class="n">mi</span><span class="p">)</span>
+                    <span class="n">m_s</span> <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="n">idx</span><span class="p">:</span><span class="n">idx</span><span class="o">+</span><span class="n">N_custom</span><span class="p">]</span> <span class="p">;</span> <span class="n">idx</span> <span class="o">+=</span> <span class="n">N_custom</span>
+                    <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">m_s</span> <span class="o">=</span> <span class="n">m_s</span><span class="p">)</span>
 
                 <span class="c1">#__ Self noise __</span>
                 <span class="k">if</span> <span class="p">(</span><span class="n">sig</span> <span class="o">==</span> <span class="s1">'isoselfnoise'</span><span class="p">):</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
             <span class="c1">#__ Harmonic functions __</span>
-            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">signal_type</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-                <span class="n">sig</span> <span class="o">=</span> <span class="n">signal_type</span><span class="p">[</span><span class="s1">'sig'</span><span class="p">]</span>
-                <span class="n">sig_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">sig_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sig</span><span class="p">[</span><span class="s1">'sig'</span><span class="p">])</span>
                 <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
                 <span class="c1">#__ Slowness __</span>
-                <span class="k">if</span> <span class="p">(</span><span class="s1">'s'</span> <span class="ow">in</span> <span class="n">signal_type</span><span class="p">):</span>
-                    <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">s</span> <span class="o">=</span> <span class="n">signal_type</span><span class="p">[</span><span class="s1">'s'</span><span class="p">],</span> <span class="n">grad_s</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-                                  <span class="n">fixed_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">signal_type</span><span class="p">[</span><span class="s1">'s'</span><span class="p">])[</span><span class="mi">0</span><span class="p">])))</span>
+                <span class="k">if</span> <span class="p">(</span><span class="s1">'s'</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">):</span>
+                    <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">s</span> <span class="o">=</span> <span class="n">sig</span><span class="p">[</span><span class="s1">'s'</span><span class="p">],</span> <span class="n">grad_s</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                                  <span class="n">fixed_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">sig</span><span class="p">[</span><span class="s1">'s'</span><span class="p">])[</span><span class="mi">0</span><span class="p">])))</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">s</span> <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="n">idx</span><span class="p">],</span> <span class="n">grad_s</span> <span class="o">=</span> <span class="n">grad</span><span class="p">)</span> <span class="p">;</span> <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
 
                 <span class="c1">#__ Isotropic noise __</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">sig</span> <span class="o">==</span> <span class="s1">'isonoise'</span><span class="p">):</span>
-                    <span class="n">kwargs</span><span class="p">[</span><span class="s1">'dim'</span><span class="p">]</span> <span class="o">=</span> <span class="n">signal_type</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'dim'</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">sig</span><span class="p">[</span><span class="s1">'sig'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'isonoise'</span><span class="p">):</span>
+                    <span class="n">kwargs</span><span class="p">[</span><span class="s1">'dim'</span><span class="p">]</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'dim'</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
                 <span class="c1">#__ Noise (2D) __</span>
-                <span class="k">elif</span> <span class="p">(</span><span class="n">sig</span> <span class="o">==</span> <span class="s1">'noise2D'</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="s1">'a'</span> <span class="ow">in</span> <span class="n">signal_type</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">'b'</span> <span class="ow">in</span> <span class="n">signal_type</span><span class="p">):</span>
-                        <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">signal_type</span><span class="p">[</span><span class="s1">'a'</span><span class="p">],</span> <span class="n">b</span><span class="o">=</span><span class="n">signal_type</span><span class="p">[</span><span class="s1">'b'</span><span class="p">],</span>
+                <span class="k">elif</span> <span class="p">(</span><span class="n">sig</span><span class="p">[</span><span class="s1">'sig'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'noise2D'</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="s1">'a'</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">'b'</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">):</span>
+                        <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">sig</span><span class="p">[</span><span class="s1">'a'</span><span class="p">],</span> <span class="n">b</span><span class="o">=</span><span class="n">sig</span><span class="p">[</span><span class="s1">'b'</span><span class="p">],</span>
                                       <span class="n">grad_ab</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">n_rat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_order_2D</span>
@@ -1482,13 +1476,13 @@
                         <span class="n">idx</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">n_rat</span>
 
                 <span class="c1">#__ Noise (3D) __</span>
-                <span class="k">elif</span> <span class="p">(</span><span class="n">sig</span> <span class="o">==</span> <span class="s1">'noise3D'</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="s1">'a'</span> <span class="ow">in</span> <span class="n">signal_type</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">'b'</span> <span class="ow">in</span> <span class="n">signal_type</span><span class="p">):</span>
-                        <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">signal_type</span><span class="p">[</span><span class="s1">'a'</span><span class="p">],</span> <span class="n">b</span><span class="o">=</span><span class="n">signal_type</span><span class="p">[</span><span class="s1">'b'</span><span class="p">],</span>
+                <span class="k">elif</span> <span class="p">(</span><span class="n">sig</span><span class="p">[</span><span class="s1">'sig'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'noise3D'</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="s1">'a'</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">'b'</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">):</span>
+                        <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">sig</span><span class="p">[</span><span class="s1">'a'</span><span class="p">],</span> <span class="n">b</span><span class="o">=</span><span class="n">sig</span><span class="p">[</span><span class="s1">'b'</span><span class="p">],</span>
                                       <span class="n">grad_ab</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">n_ord</span><span class="p">,</span> <span class="n">n_tri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_order_3D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_tri</span>
-                        <span class="n">na</span><span class="p">,</span> <span class="n">nb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_a3D</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_b3D</span>
+                        <span class="n">na</span><span class="p">,</span> <span class="n">nb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_a_3D</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_b_3D</span>
                         <span class="n">a_flat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">m</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n_tri</span><span class="p">))</span> <span class="p">;</span> <span class="n">b_flat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">m</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n_tri</span><span class="p">))</span>
                         <span class="n">a_flat</span><span class="p">[:,</span> <span class="o">~</span><span class="bp">self</span><span class="o">.</span><span class="n">_a_free</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
                         <span class="n">a_flat</span><span class="p">[:,</span>  <span class="bp">self</span><span class="o">.</span><span class="n">_a_free</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span> <span class="n">idx</span>      <span class="p">:</span> <span class="n">idx</span><span class="o">+</span><span class="n">na</span><span class="p">]</span>
@@ -1504,18 +1498,18 @@
             <span class="n">idx_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="p">;</span> <span class="n">kwargs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="c1">#__ Return outputs __</span>
-        <span class="k">return</span> <span class="n">sig_list</span><span class="p">,</span> <span class="n">kwargs_list</span><span class="p">,</span> <span class="n">idx_list</span><span class="p">,</span> <span class="n">weights_list</span>
+        <span class="k">return</span> <span class="n">sig_list</span><span class="p">,</span> <span class="n">kwargs_list</span><span class="p">,</span> <span class="n">idx_list</span><span class="p">,</span> <span class="n">weight_list</span>
 
     <span class="c1">#__ Write gradient blocks straight into a preallocated view __</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_write_grad</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">signal_type</span> <span class="p">:</span> <span class="nb">str</span><span class="o">|</span><span class="nb">dict</span><span class="p">,</span>
+        <span class="n">sig</span> <span class="p">:</span> <span class="nb">str</span><span class="o">|</span><span class="nb">dict</span><span class="p">,</span>
         <span class="n">grad_cf</span>     <span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
         <span class="n">out</span>         <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
         <span class="n">weight</span>      <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="o">|</span><span class="nb">float</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
-<span class="sd">        Fill `out` (a view on dcov_dm, shape (model, freq, pair, n_param)) with</span>
+<span class="sd">        Fill `out` (a view on dcov, shape (model, freq, pair, n_param)) with</span>
 <span class="sd">        this signal's gradients, scaled by its mixture weight.</span>
 <span class="sd">        """</span>
 
@@ -1529,26 +1523,26 @@
             <span class="n">c</span> <span class="o">+=</span> <span class="n">n</span>
 
         <span class="c1">#__ Density functions __</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">signal_type</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">signal_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'point'</span><span class="p">,</span><span class="s1">'normal'</span><span class="p">,</span><span class="s1">'skewnormal'</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">sig</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'point'</span><span class="p">,</span><span class="s1">'normal'</span><span class="p">,</span><span class="s1">'skewnormal'</span><span class="p">]):</span>
                 <span class="n">put</span><span class="p">(</span><span class="n">grad_cf</span><span class="p">[</span><span class="s1">'xi'</span><span class="p">])</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">signal_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'normal'</span><span class="p">,</span><span class="s1">'skewnormal'</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">sig</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'normal'</span><span class="p">,</span><span class="s1">'skewnormal'</span><span class="p">]):</span>
                 <span class="n">put</span><span class="p">(</span><span class="n">grad_cf</span><span class="p">[</span><span class="s1">'sigma'</span><span class="p">])</span>
                 <span class="n">put</span><span class="p">(</span><span class="n">grad_cf</span><span class="p">[</span><span class="s1">'corr'</span><span class="p">])</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">signal_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'skewnormal'</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">sig</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'skewnormal'</span><span class="p">]):</span>
                 <span class="n">put</span><span class="p">(</span><span class="n">grad_cf</span><span class="p">[</span><span class="s1">'alpha'</span><span class="p">])</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">signal_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_cf</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">sig</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_cf</span><span class="p">):</span>
                 <span class="n">put</span><span class="p">(</span><span class="n">grad_cf</span><span class="p">)</span>
 
         <span class="c1">#__ Harmonic functions __</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">signal_type</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">'s'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">signal_type</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">'s'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">):</span>
                 <span class="n">put</span><span class="p">(</span><span class="n">grad_cf</span><span class="p">[</span><span class="s1">'s'</span><span class="p">][</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">])</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="p">((</span><span class="s1">'a'</span> <span class="ow">in</span> <span class="n">signal_type</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">'b'</span> <span class="ow">in</span> <span class="n">signal_type</span><span class="p">)):</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">signal_type</span><span class="p">[</span><span class="s1">'sig'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'noise2D'</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">((</span><span class="s1">'a'</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">'b'</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">sig</span><span class="p">[</span><span class="s1">'sig'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'noise2D'</span><span class="p">):</span>
                     <span class="n">put</span><span class="p">(</span><span class="n">grad_cf</span><span class="p">[</span><span class="s1">'a'</span><span class="p">][</span><span class="o">...</span><span class="p">,</span><span class="mi">1</span><span class="p">:])</span>
                     <span class="n">put</span><span class="p">(</span><span class="n">grad_cf</span><span class="p">[</span><span class="s1">'b'</span><span class="p">][</span><span class="o">...</span><span class="p">,</span><span class="mi">1</span><span class="p">:])</span>
-                <span class="k">elif</span> <span class="p">(</span><span class="n">signal_type</span><span class="p">[</span><span class="s1">'sig'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'noise3D'</span><span class="p">):</span>
+                <span class="k">elif</span> <span class="p">(</span><span class="n">sig</span><span class="p">[</span><span class="s1">'sig'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'noise3D'</span><span class="p">):</span>
                     <span class="n">put</span><span class="p">(</span><span class="n">grad_cf</span><span class="p">[</span><span class="s1">'a'</span><span class="p">][</span><span class="o">...</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_a_free</span><span class="p">])</span>
                     <span class="n">put</span><span class="p">(</span><span class="n">grad_cf</span><span class="p">[</span><span class="s1">'b'</span><span class="p">][</span><span class="o">...</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_b_free</span><span class="p">])</span>
 
@@ -1603,44 +1597,44 @@
 <span class="sd">        ------</span>
 <span class="sd">        cov : ``numpy.ndarray``</span>
 <span class="sd">            Covariance</span>
-<span class="sd">            (model, frequency, sensor pair)</span>
+<span class="sd">            (model, frequency, receiver pair)</span>
 
-<span class="sd">        dcov_dm : ``numpy.ndarray`` or None</span>
+<span class="sd">        dcov : ``numpy.ndarray`` or None</span>
 <span class="sd">            Gradient of covariance wrt. model parameters</span>
-<span class="sd">            (model, frequency, sensor pair, parameter)</span>
+<span class="sd">            (model, frequency, receiver pair, parameter)</span>
 
 <span class="sd">        cov_noise : ``numpy.ndarray``</span>
 <span class="sd">            Covariance (noise-only)</span>
-<span class="sd">            (model, frequency, sensor pair)</span>
+<span class="sd">            (model, frequency, receiver pair)</span>
 <span class="sd">        </span>
-<span class="sd">        dcov_dm_noise : ``numpy.ndarray`` or None</span>
+<span class="sd">        dcov_noise : ``numpy.ndarray`` or None</span>
 <span class="sd">            Gradient of covariance wrt. model parameters (noise-only)</span>
-<span class="sd">            (model, frequency, sensor pair, parameter)</span>
+<span class="sd">            (model, frequency, receiver pair, parameter)</span>
 
 <span class="sd">        </span>
 <span class="sd">        Note</span>
 <span class="sd">        ----</span>
 <span class="sd">        </span>
-<span class="sd">        If requested noise-only calculation (``calc_noise_only`` is ``True``), **cov_noise** and **dcov_dm_noise** will be returned in addition to **cov** and **dcov_dm**. </span>
+<span class="sd">        If requested noise-only calculation (``calc_noise_only`` is ``True``), **cov_noise** and **dcov_noise** will be returned in addition to **cov** and **dcov**. </span>
 
 <span class="sd">        """</span>
 
         <span class="c1">#__ Instantiate covariance __</span>
         <span class="n">N_model</span><span class="p">,</span> <span class="n">N_param</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">shape</span>
         <span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_freq</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_pair</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'complex'</span><span class="p">)</span>
-        <span class="n">dcov_dm</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_freq</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_pair</span><span class="p">,</span> <span class="n">N_param</span><span class="p">),</span>
+        <span class="n">dcov</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_freq</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_pair</span><span class="p">,</span> <span class="n">N_param</span><span class="p">),</span>
                             <span class="n">dtype</span><span class="o">=</span><span class="s1">'complex'</span><span class="p">)</span> <span class="k">if</span> <span class="n">grad</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_noise_only</span><span class="p">:</span>
             <span class="n">cov_noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_freq</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_pair</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'complex'</span><span class="p">)</span>
-            <span class="n">dcov_dm_noise</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_freq</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_pair</span><span class="p">,</span> <span class="n">N_param</span><span class="p">),</span>
+            <span class="n">dcov_noise</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_freq</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_pair</span><span class="p">,</span> <span class="n">N_param</span><span class="p">),</span>
                                     <span class="n">dtype</span><span class="o">=</span><span class="s1">'complex'</span><span class="p">)</span> <span class="k">if</span> <span class="n">grad</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
 
         <span class="c1">#__ Unpack model vector __</span>
         <span class="n">sig_list</span><span class="p">,</span> <span class="n">kwargs_list</span><span class="p">,</span> <span class="n">idx_list</span><span class="p">,</span> <span class="n">weight_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unpack</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="n">grad</span><span class="p">)</span>
         
         <span class="c1">#__ Loop through signals __</span>
-        <span class="k">for</span> <span class="n">signal_type</span><span class="p">,</span> <span class="n">sig</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">istart</span><span class="p">,</span> <span class="n">iend</span><span class="p">,</span> <span class="n">weight</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">signal_types</span><span class="p">,</span> <span class="n">sig_list</span><span class="p">,</span> <span class="n">kwargs_list</span><span class="p">,</span>
+        <span class="k">for</span> <span class="n">sig</span><span class="p">,</span> <span class="n">sig</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">istart</span><span class="p">,</span> <span class="n">iend</span><span class="p">,</span> <span class="n">weight</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sigs</span><span class="p">,</span> <span class="n">sig_list</span><span class="p">,</span> <span class="n">kwargs_list</span><span class="p">,</span>
                 <span class="n">idx_list</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">idx_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">weight_list</span><span class="p">):</span>
 
             <span class="c1">#__ Calculate characteristic function __</span>
@@ -1654,49 +1648,49 @@
             <span class="c1">#__ Write gradients directly into the output view __</span>
             <span class="k">if</span> <span class="n">grad</span><span class="p">:</span>
                 <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight_units</span> <span class="o">==</span> <span class="s1">'dB'</span><span class="p">):</span>
-                    <span class="n">dcov_dm</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">istart</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wscale</span> <span class="o">*</span> <span class="n">weight</span> <span class="o">*</span> <span class="n">cf</span>
+                    <span class="n">dcov</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">istart</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wscale</span> <span class="o">*</span> <span class="n">weight</span> <span class="o">*</span> <span class="n">cf</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_noise_only</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sig</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_NOISE_SIGS</span><span class="p">):</span>
-                        <span class="n">dcov_dm_noise</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">istart</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wscale</span> <span class="o">*</span> <span class="n">weight</span> <span class="o">*</span> <span class="n">cf</span>
+                        <span class="n">dcov_noise</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">istart</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wscale</span> <span class="o">*</span> <span class="n">weight</span> <span class="o">*</span> <span class="n">cf</span>
                 <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight_units</span> <span class="o">==</span> <span class="s1">'linear'</span><span class="p">):</span>
-                    <span class="n">dcov_dm</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">istart</span><span class="p">]</span> <span class="o">=</span> <span class="n">cf</span>
+                    <span class="n">dcov</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">istart</span><span class="p">]</span> <span class="o">=</span> <span class="n">cf</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_noise_only</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sig</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_NOISE_SIGS</span><span class="p">):</span>
-                        <span class="n">dcov_dm_noise</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">istart</span><span class="p">]</span> <span class="o">=</span> <span class="n">cf</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_write_grad</span><span class="p">(</span><span class="n">signal_type</span><span class="p">,</span> <span class="n">grad_cf</span><span class="p">,</span>
-                <span class="n">dcov_dm</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">istart</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">iend</span><span class="p">],</span> <span class="n">weight</span><span class="p">)</span>
+                        <span class="n">dcov_noise</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">istart</span><span class="p">]</span> <span class="o">=</span> <span class="n">cf</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_write_grad</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">grad_cf</span><span class="p">,</span>
+                <span class="n">dcov</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">istart</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">iend</span><span class="p">],</span> <span class="n">weight</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_noise_only</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sig</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_NOISE_SIGS</span><span class="p">):</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_write_grad</span><span class="p">(</span><span class="n">signal_type</span><span class="p">,</span> <span class="n">grad_cf</span><span class="p">,</span>
-                    <span class="n">dcov_dm_noise</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">istart</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">iend</span><span class="p">],</span> <span class="n">weight</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_write_grad</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">grad_cf</span><span class="p">,</span>
+                    <span class="n">dcov_noise</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">istart</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">iend</span><span class="p">],</span> <span class="n">weight</span><span class="p">)</span>
 
         <span class="c1">#__ Return output __</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_noise_only</span><span class="p">:</span> <span class="k">return</span> <span class="n">cov</span><span class="p">,</span> <span class="n">dcov_dm</span><span class="p">,</span> <span class="n">cov_noise</span><span class="p">,</span> <span class="n">dcov_dm_noise</span>
-        <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="n">cov</span><span class="p">,</span> <span class="n">dcov_dm</span></div>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_noise_only</span><span class="p">:</span> <span class="k">return</span> <span class="n">cov</span><span class="p">,</span> <span class="n">dcov</span><span class="p">,</span> <span class="n">cov_noise</span><span class="p">,</span> <span class="n">dcov_noise</span>
+        <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="n">cov</span><span class="p">,</span> <span class="n">dcov</span></div>
 
 
-    <span class="c1">#__ Expand sensor pair axis __</span>
+    <span class="c1">#__ Expand receiver pair axis __</span>
 <div class="viewcode-block" id="ArrayCovarianceModel.expand">
 <a class="viewcode-back" href="../../topophone2.modelling.html#topophone2.modelling.ArrayCovarianceModel.expand">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">expand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">dcov_dm</span><span class="p">):</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""(sensor pair) -&gt; (sensor, sensor)"""</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">expand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">dcov</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""(receiver pair) -&gt; (receiver, receiver)"""</span>
 
         <span class="c1">#__ Shape of full matrix __</span>
         <span class="n">N_model</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cov</span><span class="o">.</span><span class="n">shape</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">dcov_dm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">N_param</span> <span class="o">=</span> <span class="n">dcov_dm</span><span class="o">.</span><span class="n">shape</span>
-        <span class="n">shp</span> <span class="o">=</span> <span class="p">(</span><span class="n">N_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_freq</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_sta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_sta</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">dcov</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">N_param</span> <span class="o">=</span> <span class="n">dcov</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">shp</span> <span class="o">=</span> <span class="p">(</span><span class="n">N_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_freq</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_rec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_rec</span><span class="p">)</span>
 
         <span class="c1">#__ Array-covariance matrix __</span>
         <span class="n">Gamma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shp</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">cov</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-        <span class="n">Gamma</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iu0_sta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iu1_sta</span><span class="p">]</span> <span class="o">=</span> <span class="n">cov</span>
-        <span class="n">Gamma</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_il0_sta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_il1_sta</span><span class="p">]</span> <span class="o">=</span> <span class="n">Gamma</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_il1_sta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_il0_sta</span><span class="p">]</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span>
+        <span class="n">Gamma</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iu0_rec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iu1_rec</span><span class="p">]</span> <span class="o">=</span> <span class="n">cov</span>
+        <span class="n">Gamma</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_il0_rec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_il1_rec</span><span class="p">]</span> <span class="o">=</span> <span class="n">Gamma</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_il1_rec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_il0_rec</span><span class="p">]</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span>
 
         <span class="c1">#__ Gradient of array-covariance matrix __</span>
-        <span class="n">dGamma_dm</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="n">dcov_dm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">dGamma_dm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shp</span> <span class="o">+</span> <span class="p">(</span><span class="n">N_param</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dcov_dm</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-            <span class="n">dGamma_dm</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iu0_sta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iu1_sta</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">dcov_dm</span>
-            <span class="n">dGamma_dm</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_il0_sta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_il1_sta</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">dGamma_dm</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_il1_sta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_il0_sta</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span>
+        <span class="n">dGamma</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">dcov</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dGamma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shp</span> <span class="o">+</span> <span class="p">(</span><span class="n">N_param</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dcov</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+            <span class="n">dGamma</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iu0_rec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iu1_rec</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">dcov</span>
+            <span class="n">dGamma</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_il0_rec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_il1_rec</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">dGamma</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_il1_rec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_il0_rec</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span>
         
         <span class="c1">#__ Return output</span>
-        <span class="k">return</span> <span class="n">Gamma</span><span class="p">,</span> <span class="n">dGamma_dm</span></div>
+        <span class="k">return</span> <span class="n">Gamma</span><span class="p">,</span> <span class="n">dGamma</span></div>
 </div>
 
 </pre></div>

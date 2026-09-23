@@ -397,7 +397,7 @@ for a given geometry and frequency vector recording any combination of energy di
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="topophone2.modelling.ArrayCovarianceModel">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">topophone2.modelling.</span></span><span class="sig-name descname"><span class="pre">ArrayCovarianceModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signal_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_units</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'dB'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calc_noise_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_cf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/modelling.html#ArrayCovarianceModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.modelling.ArrayCovarianceModel" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">topophone2.modelling.</span></span><span class="sig-name descname"><span class="pre">ArrayCovarianceModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_units</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'dB'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calc_noise_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_cf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/modelling.html#ArrayCovarianceModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.modelling.ArrayCovarianceModel" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class to model the array covariance for a given geometry
 and frequency vector recording any combination of energy distributions: point (plane wave),
@@ -415,20 +415,21 @@ normal distribution, skew-normal distribution, and spherically-/cylindrically-ha
 <dl class="field-list">
 <dt class="field-odd">Input<span class="colon">:</span></dt>
 <dd class="field-odd"><ul>
-<li><p><strong>x</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Sensor location vectors
-(sensor, direction)</p></li>
+<li><p><strong>x</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Receiver location vectors
+(receiver, direction)</p></li>
 <li><p><strong>freq</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Angular frequency vector
 (frequency)</p></li>
-<li><p><strong>signal_types</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">str</span></code> or <code class="docutils literal notranslate"><span class="pre">dict</span></code>) – Signal components to superpose.</p>
+<li><p><strong>sigs</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">str</span></code> or <code class="docutils literal notranslate"><span class="pre">dict</span></code>) – Signal components to superpose.</p>
 <ol class="loweralpha">
 <li><p><code class="docutils literal notranslate"><span class="pre">str</span></code>: density functions (‘point’, ‘normal’, ‘skewnormal’)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">dict</span></code>: harmonic functions for noise field (‘noise2D’, ‘noise3D’) with optional parameters.</p>
+<li><p><code class="docutils literal notranslate"><span class="pre">dict</span></code>: harmonic functions for noise field (‘isonoise’, ‘noise2D’, ‘noise3D’) with optional parameters.</p>
 <blockquote>
 <div><p><strong>sig</strong> : <code class="docutils literal notranslate"><span class="pre">str</span></code> (required) - signal type (‘isonoise’, ‘noise2D’, ‘noise3D’)</p>
 <p><strong>s</strong> : <code class="docutils literal notranslate"><span class="pre">float</span></code> (optional) - local slowness</p>
 <p><strong>a</strong> : <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> (optional) - cosine coefficients</p>
 <p><strong>b</strong> : <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> (optional) - sine coefficients</p>
 <p><strong>max_order</strong> : <code class="docutils literal notranslate"><span class="pre">int</span></code> (optional) - maximum order of harmonic basis (if <strong>a</strong>/<strong>b</strong> not specified)</p>
+<p><strong>dim</strong> : <code class="docutils literal notranslate"><span class="pre">int</span></code> (required for ‘isonoise’, default <code class="docutils literal notranslate"><span class="pre">2</span></code>) - cylindrical (<code class="docutils literal notranslate"><span class="pre">2</span></code>) or spherical (<code class="docutils literal notranslate"><span class="pre">3</span></code>) isotropy</p>
 </div></blockquote>
 </li>
 </ol>
@@ -439,13 +440,13 @@ normal distribution, skew-normal distribution, and spherically-/cylindrically-ha
 <li><p><strong>custom_cf</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code> (default <cite>{}</cite>)) – Custom characteristic functions keyed by signal name,
 containing tuple of number of parameters and function with arguments:</p>
 <blockquote>
-<div><p><strong>t</strong>   <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> : Characteristic function argument (frequency, sensor pair, direction)</p>
-<p><strong>m_i</strong> <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> : Model vector (model, parameter)</p>
+<div><p><strong>t</strong>   <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> : Characteristic function argument (frequency, receiver pair, direction)</p>
+<p><strong>m_s</strong> <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> : Model vector (model, parameter)</p>
 </div></blockquote>
 <p>and returns:</p>
 <blockquote>
-<div><p><strong>cf</strong>     <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> : Characteristic function (model, frequency, sensor pair)</p>
-<p><strong>dcf_dm</strong> <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) : Characteristic function gradient wrt. model parameters (model, frequency, sensor pair, parameter)</p>
+<div><p><strong>cf</strong>     <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> : Characteristic function (model, frequency, receiver pair)</p>
+<p><strong>dcf</strong> <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) : Characteristic function gradient wrt. model parameters (model, frequency, receiver pair, parameter)</p>
 </div></blockquote>
 </li>
 </ul>
@@ -458,30 +459,28 @@ containing tuple of number of parameters and function with arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dist</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Inter-sensor distances (sensor pair)</p></li>
-<li><p><strong>az</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Inter-sensor azimuths (sensor pair)</p></li>
-<li><p><strong>pol</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Inter-sensor polar angles (sensor pair)</p></li>
-<li><p><strong>t</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Characteristic function argument (frequency, sensor pair, direction)</p></li>
+<li><p><strong>dist</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Inter-receiver distances (receiver pair)</p></li>
+<li><p><strong>az</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Inter-receiver azimuths (receiver pair)</p></li>
+<li><p><strong>pol</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Inter-receiver polar angles (receiver pair)</p></li>
+<li><p><strong>t</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Characteristic function argument (frequency, receiver pair, direction)</p></li>
 <li><p><strong>weight_units</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – Units of the signal weights in the model vector</p></li>
-<li><p><strong>signal_types</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code>) – Signal components to superpose</p></li>
+<li><p><strong>sigs</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code>) – Signal components to superpose</p></li>
 <li><p><strong>freq</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Angular frequency vector</p></li>
-<li><p><strong>N_pair</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of sensor pairs</p></li>
+<li><p><strong>N_pair</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of receiver pairs</p></li>
 <li><p><strong>N_dir</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of directional components</p></li>
 <li><p><strong>N_freq</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of frequency bins</p></li>
 <li><p><strong>N_corr</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of correlation coefficients (upper triangle of Omega_z)</p></li>
-<li><p><strong>max_order_2D</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Maximum order of 2D harmonic basis</p></li>
-<li><p><strong>max_order_3D</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Maximum order of 3D harmonic basis</p></li>
-<li><p><strong>order2D</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – 2D harmonic orders</p></li>
-<li><p><strong>order3D</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – 3D harmonic orders</p></li>
-<li><p><strong>degree3D</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – 3D harmonic degrees</p></li>
-<li><p><strong>cos_2D</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – 2D harmonic cosine basis (sensor pair, order)</p></li>
-<li><p><strong>sin_2D</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – 2D harmonic sine basis (sensor pair, order)</p></li>
-<li><p><strong>cos_3D</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – 3D harmonic cosine basis (sensor pair, order)</p></li>
-<li><p><strong>sin_3D</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – 3D harmonic sine basis (sensor pair, order)</p></li>
-<li><p><strong>e_m</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – 2D harmonic cosine/sine normalization factors (order)</p></li>
+<li><p><strong>order_2D</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – 2D harmonic orders</p></li>
+<li><p><strong>order_3D</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – 3D harmonic orders</p></li>
+<li><p><strong>degree_3D</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – 3D harmonic degrees</p></li>
+<li><p><strong>cos_2D</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – 2D harmonic cosine basis (receiver pair, order)</p></li>
+<li><p><strong>sin_2D</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – 2D harmonic sine basis (receiver pair, order)</p></li>
+<li><p><strong>cos_3D</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – 3D harmonic cosine basis (receiver pair, order)</p></li>
+<li><p><strong>sin_3D</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – 3D harmonic sine basis (receiver pair, order)</p></li>
+<li><p><strong>e_m</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – 2D harmonic cosine/sine normalisation factors (order)</p></li>
 <li><p><strong>i_m</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – 2D harmonic imaginary unit powers (order)</p></li>
 <li><p><strong>i_n</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – 3D harmonic imaginary unit powers (degree)</p></li>
-<li><p><strong>P_nm</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – 3D harmonic Legendre polynomials (sensor pair, order, degree)</p></li>
+<li><p><strong>P_nm</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – 3D harmonic Legendre polynomials (receiver pair, order, degree)</p></li>
 <li><p><strong>N_tri</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of triangular (m &lt;= n) index pairs</p></li>
 </ul>
 </dd>
@@ -489,7 +488,7 @@ containing tuple of number of parameters and function with arguments:</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="topophone2.modelling.ArrayCovarianceModel.cf_point">
 <span class="sig-name descname"><span class="pre">cf_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/topophone2/modelling.html#ArrayCovarianceModel.cf_point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.modelling.ArrayCovarianceModel.cf_point" title="Link to this definition">#</a></dt>
-<dd><p>Function that retuns the characteristic function for a point (plane wave) distribution.</p>
+<dd><p>Function that returns the characteristic function for a point (plane wave) distribution.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Input<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -501,10 +500,10 @@ containing tuple of number of parameters and function with arguments:</p>
 <dt class="field-even">Output<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>cf</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Characteristic function
-(model, frequency, sensor pair)</p></li>
+(model, frequency, receiver pair)</p></li>
 <li><p><strong>grad_cf</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) – Gradient of the characteristic function, keyed by parameter name.</p>
 <ul>
-<li><p><strong>xi</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, sensor pair, direction)</p></li>
+<li><p><strong>xi</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, receiver pair, direction)</p></li>
 </ul>
 </li>
 </ul>
@@ -513,7 +512,7 @@ containing tuple of number of parameters and function with arguments:</p>
 <p>The characteristic function for a point (plane wave) distribution is given by</p>
 <div class="math notranslate nohighlight">
 \[\varphi_\mathbf{s} \left(\mathbf{t} ; \mathbf{\xi}\right) = \exp \left[i \mathbf{t}^T \mathbf{\xi}\right]\]</div>
-<p>where <span class="math notranslate nohighlight">\(\mathbf{t}\)</span> is the characteristic function argument (frequency, sensor pair, direction) and <span class="math notranslate nohighlight">\(\mathbf{\xi}\)</span> is the location vector (slowness).</p>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{t}\)</span> is the characteristic function argument (frequency, receiver pair, direction) and <span class="math notranslate nohighlight">\(\mathbf{\xi}\)</span> is the location vector (slowness).</p>
 <p>The gradients of the characteristic function are given by the following expression:</p>
 <div class="math notranslate nohighlight">
 \[\frac{\partial \varphi_\mathbf{s}}{\partial \xi_i} = i t_i \varphi_\mathbf{s}\]</div>
@@ -522,7 +521,7 @@ containing tuple of number of parameters and function with arguments:</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="topophone2.modelling.ArrayCovarianceModel.cf_normal">
 <span class="sig-name descname"><span class="pre">cf_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Omega_z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/topophone2/modelling.html#ArrayCovarianceModel.cf_normal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.modelling.ArrayCovarianceModel.cf_normal" title="Link to this definition">#</a></dt>
-<dd><p>Function that retuns the characteristic function for a normal distribution.</p>
+<dd><p>Function that returns the characteristic function for a normal distribution.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Input<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -538,12 +537,12 @@ containing tuple of number of parameters and function with arguments:</p>
 <dt class="field-even">Output<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>cf</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Characteristic function
-(model, frequency, sensor pair)</p></li>
+(model, frequency, receiver pair)</p></li>
 <li><p><strong>grad_cf</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) – Gradient of the characteristic function, keyed by parameter name:</p>
 <ul>
-<li><p><strong>xi</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, sensor pair, direction)</p></li>
-<li><p><strong>sigma</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, sensor pair, direction)</p></li>
-<li><p><strong>corr</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, sensor pair, direction pair)</p></li>
+<li><p><strong>xi</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, receiver pair, direction)</p></li>
+<li><p><strong>sigma</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, receiver pair, direction)</p></li>
+<li><p><strong>corr</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, receiver pair, direction pair)</p></li>
 </ul>
 </li>
 </ul>
@@ -556,7 +555,7 @@ containing tuple of number of parameters and function with arguments:</p>
 <p>The characteristic function for a normal distribution is given by</p>
 <div class="math notranslate nohighlight">
 \[ \begin{align}\begin{aligned}\varphi_\mathbf{s} \left(\mathbf{t} ; \mathbf{\xi}, \Omega\right) = \exp \left[i \mathbf{t}^T \mathbf{\xi} - \frac{1}{2} \mathbf{t}^T \Omega \mathbf{t}\right]\\\Omega = W \Omega_z W\\W = \mathrm{diag} \left(\mathbf{\sigma}\right)\\\Omega_z = \left\|\rho_{ij}\right\|\end{aligned}\end{align} \]</div>
-<p>where <span class="math notranslate nohighlight">\(\mathbf{t}\)</span> is the characteristic function argument (frequency, sensor pair, direction), <span class="math notranslate nohighlight">\(\mathbf{\xi}\)</span> is the location vector (slowness), <span class="math notranslate nohighlight">\(\Omega\)</span> is the covariance matrix, <span class="math notranslate nohighlight">\(W\)</span> is the diagonal scale matrix, and <span class="math notranslate nohighlight">\(\Omega_z\)</span> is the correlation matrix.
+<p>where <span class="math notranslate nohighlight">\(\mathbf{t}\)</span> is the characteristic function argument (frequency, receiver pair, direction), <span class="math notranslate nohighlight">\(\mathbf{\xi}\)</span> is the location vector (slowness), <span class="math notranslate nohighlight">\(\Omega\)</span> is the covariance matrix, <span class="math notranslate nohighlight">\(W\)</span> is the diagonal scale matrix, and <span class="math notranslate nohighlight">\(\Omega_z\)</span> is the correlation matrix.
 The gradients of the characteristic function are given by the following expressions:</p>
 <div class="math notranslate nohighlight">
 \[ \begin{align}\begin{aligned}\frac{\partial \varphi_\mathbf{s}}{\partial \xi_i} = i t_i \varphi_\mathbf{s}\\\frac{\partial \varphi_\mathbf{s}}{\partial \sigma_i} = - \sum_j rho_{ij} \sigma_j t_i t_j \varphi_\mathbf{s}\\\frac{\partial \varphi_\mathbf{s}}{\partial \rho_{ij}} = - \sigma_i \sigma_j t_i t_j \varphi_\mathbf{s}\end{aligned}\end{align} \]</div>
@@ -566,7 +565,7 @@ The gradients of the characteristic function are given by the following expressi
 <dl class="py method">
 <dt class="sig sig-object py" id="topophone2.modelling.ArrayCovarianceModel.cf_skewnormal">
 <span class="sig-name descname"><span class="pre">cf_skewnormal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Omega_z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/topophone2/modelling.html#ArrayCovarianceModel.cf_skewnormal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.modelling.ArrayCovarianceModel.cf_skewnormal" title="Link to this definition">#</a></dt>
-<dd><p>Function that retuns the characteristic function for a skew-normal distribution.</p>
+<dd><p>Function that returns the characteristic function for a skew-normal distribution.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Input<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -584,13 +583,13 @@ The gradients of the characteristic function are given by the following expressi
 <dt class="field-even">Output<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>cf</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Characteristic function
-(model, frequency, sensor pair)</p></li>
+(model, frequency, receiver pair)</p></li>
 <li><p><strong>grad_cf</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) – Gradient of the characteristic function, keyed by parameter name:</p>
 <ul>
-<li><p><strong>xi</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, sensor pair, direction)</p></li>
-<li><p><strong>sigma</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, sensor pair, direction)</p></li>
-<li><p><strong>corr</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, sensor pair, direction pair)</p></li>
-<li><p><strong>alpha</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, sensor pair, direction pair)</p></li>
+<li><p><strong>xi</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, receiver pair, direction)</p></li>
+<li><p><strong>sigma</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, receiver pair, direction)</p></li>
+<li><p><strong>corr</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, receiver pair, direction pair)</p></li>
+<li><p><strong>alpha</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, receiver pair, direction pair)</p></li>
 </ul>
 </li>
 </ul>
@@ -603,16 +602,16 @@ The gradients of the characteristic function are given by the following expressi
 <p>The characteristic function for a skew-normal distribution is given by</p>
 <div class="math notranslate nohighlight">
 \[ \begin{align}\begin{aligned}\varphi_\mathbf{s} \left(\mathbf{t} ; \mathbf{\xi}, \Omega, \mathbf{\alpha}\right) = \exp \left[i \mathbf{t}^T \mathbf{\xi} - \frac{1}{2} \mathbf{t}^T \Omega \mathbf{t}\right] \left[1 + i \erfi \left(\frac{\sqrt{2}}{2} \mathbf{\delta}^T W \mathbf{t}\right)\right]\\\Omega = W \Omega_z W\\W = \mathrm{diag} \left(\mathbf{\sigma}\right)\\\Omega_z = \left\|\rho_{ij}\right\|\\\mathbf{\delta} = \frac{\Omega_z \mathbf{\alpha}}{\sqrt{1 + \mathbf{\alpha}^T \Omega_z \mathbf{\alpha}}}\end{aligned}\end{align} \]</div>
-<p>where <span class="math notranslate nohighlight">\(\mathbf{t}\)</span> is the characteristic function argument (frequency, sensor pair, direction), <span class="math notranslate nohighlight">\(\mathbf{\xi}\)</span> is the location vector (slowness), <span class="math notranslate nohighlight">\(\Omega\)</span> is the covariance matrix, <span class="math notranslate nohighlight">\(W\)</span> is the diagonal scale matrix, <span class="math notranslate nohighlight">\(\Omega_z\)</span> is the correlation matrix, and <span class="math notranslate nohighlight">\(\mathbf{\delta}\)</span> is the skewness-direction vector.
+<p>where <span class="math notranslate nohighlight">\(\mathbf{t}\)</span> is the characteristic function argument (frequency, receiver pair, direction), <span class="math notranslate nohighlight">\(\mathbf{\xi}\)</span> is the location vector (slowness), <span class="math notranslate nohighlight">\(\Omega\)</span> is the covariance matrix, <span class="math notranslate nohighlight">\(W\)</span> is the diagonal scale matrix, <span class="math notranslate nohighlight">\(\Omega_z\)</span> is the correlation matrix, and <span class="math notranslate nohighlight">\(\mathbf{\delta}\)</span> is the skewness-direction vector.
 The gradients of the characteristic function are given by the following expressions:</p>
 <div class="math notranslate nohighlight">
-\[ \begin{align}\begin{aligned}\frac{\partial \varphi_\mathbf{s}}{\partial \xi_i} = i t_i \varphi_\mathbf{s}\\\frac{\partial \varphi_\mathbf{s}}{\partial \sigma_i} = - \sum_j \rho_{ij} \sigma_j t_i t_j \varphi_\mathbf{s} + \sqrt{\frac{2}{\pi}} i \exp \left[u^2 + L\right] \delta_i t_i\\u = \frac{\sqrt{2}}{2} \mathbf{\delta}^T W \mathbf{t}\\L = i \mathbf{t}^T \mathbf{\xi} - \frac{1}{2} \mathbf{t}^T \Omega \mathbf{t}\\\frac{\partial \varphi_\mathbf{s}}{\partial \rho_{ij}} = - \sigma_i \sigma_j t_i t_j \varphi_\mathbf{s} + \sqrt{\frac{2}{\pi}} i N \exp \left[u^2 + L\right] \left(\sigma_i t_i \alpha_j + \sigma_j t_j \alpha_i - N^2 \alpha_i \alpha_j \sum_{k, l} \sigma_k t_k \rho_{kl} \alpha_l\right)\\N = \sqrt{1 + \mathbf{\alpha}^T \Omega_z \mathbf{\alpha}}\\\frac{\partial \varphi_\mathbf{s}}{\partial \alpha_i} = \sqrt{\frac{2}{\pi}} i \exp \left[u^2 + L\right] \sum_{j, k, l} \sigma_j t_j \left(\rho_{ji} N - \rho_{il} \alpha_l \rho_{jk} \alpha_k N^3\right)\end{aligned}\end{align} \]</div>
+\[ \begin{align}\begin{aligned}\frac{\partial \varphi_\mathbf{s}}{\partial \xi_i} = i t_i \varphi_\mathbf{s}\\\frac{\partial \varphi_\mathbf{s}}{\partial \sigma_i} = - \sum_j \rho_{ij} \sigma_j t_i t_j \varphi_\mathbf{s} + \sqrt{\frac{2}{\pi}} i \exp \left[u^2 + L\right] \delta_i t_i\\u = \frac{\sqrt{2}}{2} \mathbf{\delta}^T W \mathbf{t}\\L = i \mathbf{t}^T \mathbf{\xi} - \frac{1}{2} \mathbf{t}^T \Omega \mathbf{t}\\\frac{\partial \varphi_\mathbf{s}}{\partial \rho_{ij}} = - \sigma_i \sigma_j t_i t_j \varphi_\mathbf{s} + \sqrt{\frac{2}{\pi}} i N \exp \left[u^2 + L\right] \left(\sigma_i t_i \alpha_j + \sigma_j t_j \alpha_i - N^2 \alpha_i \alpha_j \sum_{k, l} \sigma_k t_k \rho_{kl} \alpha_l\right)\\N = \left(1 + \mathbf{\alpha}^T \Omega_z \mathbf{\alpha}\right)^\tfrac{-1}{2}\\\frac{\partial \varphi_\mathbf{s}}{\partial \alpha_i} = \sqrt{\frac{2}{\pi}} i \exp \left[u^2 + L\right] \sum_{j, k, l} \sigma_j t_j \left(\rho_{ji} N - \rho_{il} \alpha_l \rho_{jk} \alpha_k N^3\right)\end{aligned}\end{align} \]</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="topophone2.modelling.ArrayCovarianceModel.cf_isonoise">
 <span class="sig-name descname"><span class="pre">cf_isonoise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/topophone2/modelling.html#ArrayCovarianceModel.cf_isonoise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.modelling.ArrayCovarianceModel.cf_isonoise" title="Link to this definition">#</a></dt>
-<dd><p>Function that retuns the characteristic function for an isotropic noise field.</p>
+<dd><p>Function that returns the characteristic function for an isotropic noise field.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Input<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -626,10 +625,10 @@ The gradients of the characteristic function are given by the following expressi
 <dt class="field-even">Output<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>cf</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Characteristic function
-(model, frequency, sensor pair)</p></li>
+(model, frequency, receiver pair)</p></li>
 <li><p><strong>grad_cf</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) – Gradient of the characteristic function, keyed by parameter name:</p>
 <ul>
-<li><p><strong>s</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, sensor pair)</p></li>
+<li><p><strong>s</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, receiver pair)</p></li>
 </ul>
 </li>
 </ul>
@@ -655,7 +654,7 @@ The gradients of the characteristic function are given by the following expressi
 <dl class="py method">
 <dt class="sig sig-object py" id="topophone2.modelling.ArrayCovarianceModel.cf_noise2D">
 <span class="sig-name descname"><span class="pre">cf_noise2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_ab</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/topophone2/modelling.html#ArrayCovarianceModel.cf_noise2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.modelling.ArrayCovarianceModel.cf_noise2D" title="Link to this definition">#</a></dt>
-<dd><p>Function that retuns the characteristic function for a 2D isotropic noise field.</p>
+<dd><p>Function that returns the characteristic function for a 2D isotropic noise field.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Input<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -669,12 +668,12 @@ The gradients of the characteristic function are given by the following expressi
 <dt class="field-even">Output<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>cf</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Characteristic function
-(model, frequency, sensor pair)</p></li>
+(model, frequency, receiver pair)</p></li>
 <li><p><strong>grad_cf</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) – Gradient of the characteristic function, keyed by parameter name:</p>
 <ul>
-<li><p><strong>a</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, sensor pair, order)</p></li>
-<li><p><strong>b</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, sensor pair, order)</p></li>
-<li><p><strong>s</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, sensor pair)</p></li>
+<li><p><strong>a</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, receiver pair, order)</p></li>
+<li><p><strong>b</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, receiver pair, order)</p></li>
+<li><p><strong>s</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, receiver pair)</p></li>
 </ul>
 </li>
 </ul>
@@ -699,7 +698,7 @@ The gradients of the characteristic function are given by the following expressi
 <dl class="py method">
 <dt class="sig sig-object py" id="topophone2.modelling.ArrayCovarianceModel.cf_noise3D">
 <span class="sig-name descname"><span class="pre">cf_noise3D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_ab</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/topophone2/modelling.html#ArrayCovarianceModel.cf_noise3D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.modelling.ArrayCovarianceModel.cf_noise3D" title="Link to this definition">#</a></dt>
-<dd><p>Function that retuns the characteristic function for a 3D isotropic noise field.</p>
+<dd><p>Function that returns the characteristic function for a 3D isotropic noise field.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Input<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -712,12 +711,12 @@ The gradients of the characteristic function are given by the following expressi
 <dt class="field-even">Output<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>cf</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Characteristic function
-(model, frequency, sensor pair)</p></li>
+(model, frequency, receiver pair)</p></li>
 <li><p><strong>grad_cf</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) – Gradient of the characteristic function, keyed by parameter name.</p>
 <ul>
-<li><p><strong>a</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, sensor pair, triangle)</p></li>
-<li><p><strong>b</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, sensor pair, triangle)</p></li>
-<li><p><strong>s</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, sensor pair)</p></li>
+<li><p><strong>a</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, receiver pair, triangle)</p></li>
+<li><p><strong>b</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, receiver pair, triangle)</p></li>
+<li><p><strong>s</strong> : (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – (model, frequency, receiver pair)</p></li>
 </ul>
 </li>
 </ul>
@@ -763,26 +762,26 @@ The harmonic coefficient <span class="math notranslate nohighlight">\(C_n^m\)</s
 <dt class="field-even">Output<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>cov</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Covariance
-(model, frequency, sensor pair)</p></li>
-<li><p><strong>dcov_dm</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> or None) – Gradient of covariance wrt. model parameters
-(model, frequency, sensor pair, parameter)</p></li>
+(model, frequency, receiver pair)</p></li>
+<li><p><strong>dcov</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> or None) – Gradient of covariance wrt. model parameters
+(model, frequency, receiver pair, parameter)</p></li>
 <li><p><strong>cov_noise</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Covariance (noise-only)
-(model, frequency, sensor pair)</p></li>
-<li><p><strong>dcov_dm_noise</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> or None) – Gradient of covariance wrt. model parameters (noise-only)
-(model, frequency, sensor pair, parameter)</p></li>
+(model, frequency, receiver pair)</p></li>
+<li><p><strong>dcov_noise</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> or None) – Gradient of covariance wrt. model parameters (noise-only)
+(model, frequency, receiver pair, parameter)</p></li>
 </ul>
 </dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If requested noise-only calculation (<code class="docutils literal notranslate"><span class="pre">calc_noise_only</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>), <strong>cov_noise</strong> and <strong>dcov_dm_noise</strong> will be returned in addition to <strong>cov</strong> and <strong>dcov_dm</strong>.</p>
+<p>If requested noise-only calculation (<code class="docutils literal notranslate"><span class="pre">calc_noise_only</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>), <strong>cov_noise</strong> and <strong>dcov_noise</strong> will be returned in addition to <strong>cov</strong> and <strong>dcov</strong>.</p>
 </div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="topophone2.modelling.ArrayCovarianceModel.expand">
-<span class="sig-name descname"><span class="pre">expand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cov</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dcov_dm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/modelling.html#ArrayCovarianceModel.expand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.modelling.ArrayCovarianceModel.expand" title="Link to this definition">#</a></dt>
-<dd><p>(sensor pair) -&gt; (sensor, sensor)</p>
+<span class="sig-name descname"><span class="pre">expand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cov</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dcov</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/modelling.html#ArrayCovarianceModel.expand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.modelling.ArrayCovarianceModel.expand" title="Link to this definition">#</a></dt>
+<dd><p>(receiver pair) -&gt; (receiver, receiver)</p>
 </dd></dl>
 
 </dd></dl>
