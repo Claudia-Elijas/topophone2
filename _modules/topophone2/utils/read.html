@@ -363,9 +363,9 @@
 
 <span class="sd">    The following functions are used to read and write the input data files:</span>
 
-<span class="sd">        :func:`read_txt` - Reads the frequency, x, and Gamma arrays from a text file.</span>
+<span class="sd">        :func:`read_txt` - Reads the frequency, x, and Gamma_obs arrays from a text file.</span>
 
-<span class="sd">        :func:`convert_to_txt` - Converts the frequency, x, and Gamma arrays to the suitable input text file for Topophone2.</span>
+<span class="sd">        :func:`convert_to_txt` - Converts the frequency, x, and Gamma_obs arrays to the suitable input text file for Topophone2.</span>
 
 <span class="sd">        :func:`row` - Converts a 1D array of values to a comma-separated string with 17 significant digits.</span>
 
@@ -412,20 +412,20 @@
     
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">data_input</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&gt;&gt; Signal data file </span><span class="si">{</span><span class="n">data_input</span><span class="si">}</span><span class="s2"> does not exist."</span><span class="p">)</span>
-    <span class="n">freq_Hz</span><span class="p">,</span> <span class="n">sensor_positions</span><span class="p">,</span> <span class="n">Gamma</span><span class="p">,</span> <span class="n">n_obs</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="n">data_input</span><span class="p">)</span>
+    <span class="n">freq_Hz</span><span class="p">,</span> <span class="n">sensor_positions</span><span class="p">,</span> <span class="n">Gamma_obs</span><span class="p">,</span> <span class="n">N_obs</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="n">data_input</span><span class="p">)</span>
 
     <span class="c1"># noise data</span>
     <span class="n">noise_data_input</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"data"</span><span class="p">,</span> <span class="s2">"noise_data_path"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="c1"># if no input file is specified, set noise data to None</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">noise_data_input</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">No noise data file specified in config file. Setting Gamma_noise to None.</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
-        <span class="n">Gamma_noise</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">n_obs_noise</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">No noise data file specified in config file. Setting Gamma_obs_noise to None.</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">Gamma_obs_noise</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">N_obs_noise</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Reading noise data from: </span><span class="si">{</span><span class="n">noise_data_input</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">noise_data_input</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&gt;&gt; Noise data file </span><span class="si">{</span><span class="n">noise_data_input</span><span class="si">}</span><span class="s2"> does not exist."</span><span class="p">)</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">Gamma_noise</span><span class="p">,</span> <span class="n">n_obs_noise</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="n">noise_data_input</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">Gamma_obs_noise</span><span class="p">,</span> <span class="n">N_obs_noise</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="n">noise_data_input</span><span class="p">)</span>
 
     <span class="c1"># read variables from file ==================================   </span>
     <span class="n">angular_freq</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">freq_Hz</span>
@@ -440,17 +440,17 @@
     <span class="n">max_order</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"noise_model"</span><span class="p">]</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s2">"max_order"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="n">sensor_selfnoise</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"noise_model"</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s2">"sensor_selfnoise"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-    <span class="n">bounds</span> <span class="o">=</span> <span class="n">read_csv_to_array</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s2">"posterior_pdf"</span><span class="p">,</span> <span class="s2">"bounds"</span><span class="p">)</span>
+    <span class="n">prior_bounds</span> <span class="o">=</span> <span class="n">read_csv_to_array</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s2">"posterior_pdf"</span><span class="p">,</span> <span class="s2">"prior_bounds"</span><span class="p">)</span>
 
-    <span class="n">n_flows</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"inversion"</span><span class="p">]</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s2">"n_flows"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">N_flow</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"inversion"</span><span class="p">]</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s2">"N_flow"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="n">mean_field</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"inversion"</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s2">"mean_field"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">initial_distr</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"inversion"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"initial_distr"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="s2">"Uniform"</span><span class="p">)</span>
+    <span class="n">ini_dist</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"inversion"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"ini_dist"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="s2">"Uniform"</span><span class="p">)</span>
     <span class="n">learning_rate</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"inversion"</span><span class="p">]</span><span class="o">.</span><span class="n">getfloat</span><span class="p">(</span><span class="s2">"learning_rate"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="n">iterations</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"inversion"</span><span class="p">]</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s2">"iterations"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="n">n_sample</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"inversion"</span><span class="p">]</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s2">"n_sample"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="n">inversion_n_out</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"inversion"</span><span class="p">]</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s2">"n_out"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">N_iterations</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"inversion"</span><span class="p">]</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s2">"N_iterations"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">N_montecarlo</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"inversion"</span><span class="p">]</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s2">"N_montecarlo"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">N_out</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"inversion"</span><span class="p">]</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s2">"N_out"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="n">verbose</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"inversion"</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s2">"verbose"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">posterior_samples</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"inversion"</span><span class="p">]</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s2">"posterior_samples"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">N_samples</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"inversion"</span><span class="p">]</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s2">"N_samples"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
     <span class="n">inversion_outpath</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"save_out"</span><span class="p">,</span> <span class="s2">"inversion_outpath"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> 
     <span class="n">model_outpath</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"save_out"</span><span class="p">,</span> <span class="s2">"model_outpath"</span><span class="p">)</span>
@@ -462,34 +462,34 @@
     <span class="k">if</span> <span class="n">inversion_outpath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">save_intermediate_result</span> <span class="o">=</span> <span class="kc">True</span> 
 
-    <span class="n">custom_cf</span> <span class="o">=</span> <span class="kc">None</span> 
+    <span class="n">custom_cf</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="n">sigs</span> <span class="o">=</span> <span class="n">sigs_input</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">dim</span> <span class="p">,</span> <span class="n">signal_noise</span> <span class="p">,</span> <span class="n">a</span> <span class="p">,</span> <span class="n">b</span> <span class="p">,</span> <span class="n">s</span> <span class="p">,</span> <span class="n">max_order</span> <span class="p">,</span> <span class="n">sensor_selfnoise</span><span class="p">)</span>
 
 
     <span class="c1"># make dict to hold variables ==========================</span>
     <span class="n">args</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-                <span class="n">Gamma</span> <span class="o">=</span> <span class="n">Gamma</span><span class="p">,</span>
-                <span class="n">Gamma_noise</span> <span class="o">=</span> <span class="n">Gamma_noise</span><span class="p">,</span>
-                <span class="n">Nobs</span> <span class="o">=</span> <span class="n">n_obs</span><span class="p">,</span>
-                <span class="n">Nobs_n</span> <span class="o">=</span> <span class="n">n_obs_noise</span><span class="p">,</span>
+                <span class="n">Gamma_obs</span> <span class="o">=</span> <span class="n">Gamma_obs</span><span class="p">,</span>
+                <span class="n">Gamma_obs_noise</span> <span class="o">=</span> <span class="n">Gamma_obs_noise</span><span class="p">,</span>
+                <span class="n">N_obs</span> <span class="o">=</span> <span class="n">N_obs</span><span class="p">,</span>
+                <span class="n">N_obs_noise</span> <span class="o">=</span> <span class="n">N_obs_noise</span><span class="p">,</span>
                 <span class="n">x</span> <span class="o">=</span> <span class="n">sensor_positions</span><span class="p">,</span>
                 <span class="n">freq</span> <span class="o">=</span> <span class="n">angular_freq</span><span class="p">,</span>
                 <span class="n">sigs</span> <span class="o">=</span> <span class="n">sigs</span><span class="p">,</span>
                 <span class="n">weight_units</span> <span class="o">=</span> <span class="n">weight_units</span><span class="p">,</span>
                 <span class="n">custom_cf</span> <span class="o">=</span> <span class="n">custom_cf</span><span class="p">,</span>
-                <span class="n">prior_bounds</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">,</span>
-                <span class="n">N_flow</span> <span class="o">=</span> <span class="n">n_flows</span><span class="p">,</span>
+                <span class="n">prior_bounds</span> <span class="o">=</span> <span class="n">prior_bounds</span><span class="p">,</span>
+                <span class="n">N_flow</span> <span class="o">=</span> <span class="n">N_flow</span><span class="p">,</span>
                 <span class="n">mean_field</span> <span class="o">=</span> <span class="n">mean_field</span><span class="p">,</span>
-                <span class="n">ini_dist</span> <span class="o">=</span> <span class="n">initial_distr</span><span class="p">,</span>
+                <span class="n">ini_dist</span> <span class="o">=</span> <span class="n">ini_dist</span><span class="p">,</span>
                 <span class="n">learning_rate</span> <span class="o">=</span> <span class="n">learning_rate</span><span class="p">,</span>
                 <span class="n">outpath</span> <span class="o">=</span> <span class="n">inversion_outpath</span><span class="p">,</span>
-                <span class="n">iterations</span> <span class="o">=</span> <span class="n">iterations</span><span class="p">,</span>
-                <span class="n">nsample</span> <span class="o">=</span> <span class="n">n_sample</span><span class="p">,</span>
-                <span class="n">nout</span> <span class="o">=</span> <span class="n">inversion_n_out</span><span class="p">,</span>
+                <span class="n">N_iterations</span> <span class="o">=</span> <span class="n">N_iterations</span><span class="p">,</span>
+                <span class="n">N_montecarlo</span> <span class="o">=</span> <span class="n">N_montecarlo</span><span class="p">,</span>
+                <span class="n">N_out</span> <span class="o">=</span> <span class="n">N_out</span><span class="p">,</span>
                 <span class="n">save_intermediate_result</span> <span class="o">=</span> <span class="n">save_intermediate_result</span><span class="p">,</span>
                 <span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span><span class="p">,</span>
-                <span class="n">N_samples</span> <span class="o">=</span> <span class="n">posterior_samples</span><span class="p">,</span>
+                <span class="n">N_samples</span> <span class="o">=</span> <span class="n">N_samples</span><span class="p">,</span>
                 <span class="n">model_outpath</span> <span class="o">=</span> <span class="n">model_outpath</span><span class="p">,</span>
                 <span class="n">loss_outpath</span> <span class="o">=</span> <span class="n">loss_outpath</span>
             <span class="p">)</span>
@@ -581,7 +581,7 @@
 <a class="viewcode-back" href="../../../topophone2.utils.read.html#topophone2.utils.read.read_txt">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">read_txt</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">'C'</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""</span>
-<span class="sd">    Read the frequency, x, and Gamma arrays from a text file.</span>
+<span class="sd">    Read the frequency, x, and Gamma_obs arrays from a text file.</span>
 
 <span class="sd">    Input</span>
 <span class="sd">    -----</span>
@@ -589,7 +589,7 @@
 <span class="sd">        Path to the input text file</span>
 
 <span class="sd">    order : ``str`` (default ``'C'``)</span>
-<span class="sd">        Order in which Gamma is flattened if no ``ORDER`` line is found in the file.</span>
+<span class="sd">        Order in which Gamma_obs is flattened if no ``ORDER`` line is found in the file.</span>
 <span class="sd">        ``'C'`` means receiver q varies fastest, then receiver p, then frequency</span>
 
 <span class="sd">    Output</span>
@@ -602,11 +602,11 @@
 <span class="sd">        Receiver positions array</span>
 <span class="sd">        (N_rec, dims)</span>
 
-<span class="sd">    Gamma : ``numpy.ndarray``</span>
+<span class="sd">    Gamma_obs : ``numpy.ndarray``</span>
 <span class="sd">        Transfer function array</span>
 <span class="sd">        (N_freq, N_rec, N_rec)</span>
 
-<span class="sd">    n_obs : ``int``</span>
+<span class="sd">    N_obs : ``int``</span>
 <span class="sd">        Number of observations</span>
 <span class="sd">    """</span>
 
@@ -626,9 +626,9 @@
 
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"ORDER line found in input file. Using order '</span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2">':"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">order</span> <span class="o">==</span> <span class="s1">'C'</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">"&gt;&gt;&gt; Reading Gamma in 'C' order (receiver q varies fastest, then receiver p, then frequency).</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"&gt;&gt;&gt; Reading Gamma_obs in 'C' order (receiver q varies fastest, then receiver p, then frequency).</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">order</span> <span class="o">==</span> <span class="s1">'F'</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">"&gt;&gt;&gt; Reading Gamma in 'F' order (frequency varies fastest, then receiver p, then receiver q).</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span> 
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"&gt;&gt;&gt; Reading Gamma_obs in 'F' order (frequency varies fastest, then receiver p, then receiver q).</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span> 
 
     <span class="k">else</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"WARNING: ORDER line NOT found in input file. Using provided order '</span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2">'."</span><span class="p">)</span>
@@ -637,16 +637,16 @@
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Invalid order '</span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2">' found in </span><span class="si">{</span><span class="n">input_file</span><span class="si">}</span><span class="s2">. Must be 'C' or 'F'."</span><span class="p">)</span>
     
         <span class="k">if</span> <span class="n">order</span> <span class="o">==</span> <span class="s1">'C'</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">"&gt;&gt;&gt; Reading Gamma in 'C' order (receiver q varies fastest, then receiver p, then frequency).</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"&gt;&gt;&gt; Reading Gamma_obs in 'C' order (receiver q varies fastest, then receiver p, then frequency).</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">order</span> <span class="o">==</span> <span class="s1">'F'</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">"&gt;&gt;&gt; Reading Gamma in 'F' order (frequency varies fastest, then receiver p, then receiver q).</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"&gt;&gt;&gt; Reading Gamma_obs in 'F' order (frequency varies fastest, then receiver p, then receiver q).</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># Read number of observations</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"NOBS"</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">):</span> <span class="c1"># check if NOBS line exists, if not, raise an error</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"NOBS line not found in </span><span class="si">{</span><span class="n">input_file</span><span class="si">}</span><span class="s2">. Please include the number of observations (NOBS) in the input file."</span><span class="p">)</span>
     
     <span class="n">nobs_line</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span> <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"NOBS"</span><span class="p">))</span>
-    <span class="n">n_obs</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nobs_line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">N_obs</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nobs_line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
 
     <span class="c1"># Read frequency</span>
     <span class="n">freq_line</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span> <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"FREQ"</span><span class="p">))</span>
@@ -671,36 +671,36 @@
     <span class="k">if</span> <span class="n">N_rec</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"At least 2 receivers are required."</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&gt;&gt;&gt; Number of coordinate dimensions (N_dim): </span><span class="si">{</span><span class="n">N_dim</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&gt;&gt;&gt; Number of observations (N_obs): </span><span class="si">{</span><span class="n">n_obs</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&gt;&gt;&gt; Number of observations (N_obs): </span><span class="si">{</span><span class="n">N_obs</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># check that the number of rows in co_quad_data matches N_freq * N_rec * N_rec   </span>
     <span class="k">if</span> <span class="n">co_quad_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">N_freq</span> <span class="o">*</span> <span class="n">N_rec</span> <span class="o">*</span> <span class="n">N_rec</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Mismatch between CO, QUAD data and expected shape based on frequency and receiver positions."</span><span class="p">)</span>
 
-    <span class="c1"># reshape co_quad_data into a complex array and then into Gamma</span>
-    <span class="n">Gamma_flat</span> <span class="o">=</span> <span class="n">co_quad_data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">co_quad_data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="c1"># reshape co_quad_data into a complex array and then into Gamma_obs</span>
+    <span class="n">Gamma_obs_flat</span> <span class="o">=</span> <span class="n">co_quad_data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">co_quad_data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
 
-    <span class="c1"># reshape Gamma_flat into (N_freq, N_rec, N_rec) using the specified order</span>
-    <span class="n">Gamma</span> <span class="o">=</span> <span class="n">Gamma_flat</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">N_freq</span><span class="p">,</span> <span class="n">N_rec</span><span class="p">,</span> <span class="n">N_rec</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">)</span>
+    <span class="c1"># reshape Gamma_obs_flat into (N_freq, N_rec, N_rec) using the specified order</span>
+    <span class="n">Gamma_obs</span> <span class="o">=</span> <span class="n">Gamma_obs_flat</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">N_freq</span><span class="p">,</span> <span class="n">N_rec</span><span class="p">,</span> <span class="n">N_rec</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">)</span>
 
-    <span class="c1"># check that Gamma is Hermitian</span>
-    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">Gamma</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">Gamma</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">)),</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-8</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Gamma</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">CHECKED: Gamma is Hermitian."</span><span class="p">)</span>
+    <span class="c1"># check that Gamma_obs is Hermitian</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">Gamma_obs</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">Gamma_obs</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">)),</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-8</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Gamma_obs</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">CHECKED: Gamma_obs is Hermitian."</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"WARNING:Gamma is not Hermitian."</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"WARNING:Gamma_obs is not Hermitian."</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Data successfully read from: </span><span class="si">{</span><span class="n">input_file</span><span class="si">}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">Gamma</span><span class="p">,</span> <span class="n">n_obs</span></div>
+    <span class="k">return</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">Gamma_obs</span><span class="p">,</span> <span class="n">N_obs</span></div>
 
 
 
 <span class="c1"># ________FUNC convert arrays to txt input file________</span>
 <div class="viewcode-block" id="convert_to_txt">
 <a class="viewcode-back" href="../../../topophone2.utils.read.html#topophone2.utils.read.convert_to_txt">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">convert_to_txt</span><span class="p">(</span><span class="n">frequency</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">Gamma</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">n_obs</span><span class="p">,</span> <span class="n">out_order</span><span class="o">=</span><span class="s1">'C'</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_to_txt</span><span class="p">(</span><span class="n">frequency</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">Gamma_obs</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">N_obs</span><span class="p">,</span> <span class="n">out_order</span><span class="o">=</span><span class="s1">'C'</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""</span>
-<span class="sd">    Convert the frequency, x, and Gamma arrays to the suitable input text file for Topophone2.</span>
+<span class="sd">    Convert the frequency, x, and Gamma_obs arrays to the suitable input text file for Topophone2.</span>
 
 <span class="sd">    Input</span>
 <span class="sd">    -----</span>
@@ -712,18 +712,18 @@
 <span class="sd">        Receiver positions array</span>
 <span class="sd">        (N_rec, dims)</span>
 
-<span class="sd">    Gamma : ``numpy.ndarray``</span>
-<span class="sd">        Transfer function array</span>
+<span class="sd">    Gamma_obs : ``numpy.ndarray``</span>
+<span class="sd">        Array-covariance matrix</span>
 <span class="sd">        (N_freq, N_rec, N_rec)</span>
 
 <span class="sd">    output_path : ``str``</span>
 <span class="sd">        Path to the output text file (``_topophone2.txt`` is appended)</span>
 
-<span class="sd">    n_obs : ``int``</span>
-<span class="sd">        Number of observations (N_obs)</span>
+<span class="sd">    N_obs : ``int``</span>
+<span class="sd">        Number of observations</span>
 
 <span class="sd">    out_order : ``str`` (default ``'C'``)</span>
-<span class="sd">        Order in which Gamma is flattened. ``'C'`` means receiver q varies fastest,</span>
+<span class="sd">        Order in which Gamma_obs is flattened. ``'C'`` means receiver q varies fastest,</span>
 <span class="sd">        then receiver p, then frequency</span>
 
 <span class="sd">    Output</span>
@@ -753,17 +753,17 @@
     <span class="n">N_rec</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># number of receiver positions</span>
     <span class="n">N_dim</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># number of coordinate dimensions</span>
    
-    <span class="c1"># make sure the frequency, x, and Gamma arrays have compatible shapes</span>
+    <span class="c1"># make sure the frequency, x, and Gamma_obs arrays have compatible shapes</span>
     <span class="k">if</span> <span class="n">frequency</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Frequency array must be 1D."</span><span class="p">)</span>
 
-    <span class="c1"># check that Gamma has 3 dims </span>
-    <span class="k">if</span> <span class="n">Gamma</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Gamma array must be 3D."</span><span class="p">)</span>
+    <span class="c1"># check that Gamma_obs has 3 dims </span>
+    <span class="k">if</span> <span class="n">Gamma_obs</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Gamma_obs array must be 3D."</span><span class="p">)</span>
 
-    <span class="c1"># check that Gamma.shape is N_freq x N_rec x N_rec</span>
-    <span class="k">if</span> <span class="n">Gamma</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">N_freq</span><span class="p">,</span> <span class="n">N_rec</span><span class="p">,</span> <span class="n">N_rec</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Gamma shape </span><span class="si">{</span><span class="n">Gamma</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> does not match expected shape </span><span class="si">{</span><span class="p">(</span><span class="n">N_freq</span><span class="p">,</span><span class="w"> </span><span class="n">N_rec</span><span class="p">,</span><span class="w"> </span><span class="n">N_rec</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="c1"># check that Gamma_obs.shape is N_freq x N_rec x N_rec</span>
+    <span class="k">if</span> <span class="n">Gamma_obs</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">N_freq</span><span class="p">,</span> <span class="n">N_rec</span><span class="p">,</span> <span class="n">N_rec</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Gamma_obs shape </span><span class="si">{</span><span class="n">Gamma_obs</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> does not match expected shape </span><span class="si">{</span><span class="p">(</span><span class="n">N_freq</span><span class="p">,</span><span class="w"> </span><span class="n">N_rec</span><span class="p">,</span><span class="w"> </span><span class="n">N_rec</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">N_dim</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"x can have at most 3 dimensions (XPSN, YPSN, ZPSN)."</span><span class="p">)</span>
@@ -774,7 +774,7 @@
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&gt;&gt;&gt; Number of frequency points (N_freq): </span><span class="si">{</span><span class="n">N_freq</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&gt;&gt;&gt; Number of receiver positions (N_rec): </span><span class="si">{</span><span class="n">N_rec</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&gt;&gt;&gt; Number of coordinate dimensions (N_dim): </span><span class="si">{</span><span class="n">N_dim</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&gt;&gt;&gt; Number of observations (N_obs): </span><span class="si">{</span><span class="n">n_obs</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&gt;&gt;&gt; Number of observations (N_obs): </span><span class="si">{</span><span class="n">N_obs</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     
     <span class="c1"># build the output file</span>
@@ -783,19 +783,19 @@
     <span class="c1"># 'C' order gives (freq, p, q) with q fastest: Re111, Re112, ..., Re121, ..., Re211, ...</span>
     <span class="c1"># so it is read back with CO.reshape(N_freq, N_rec, N_rec)</span>
     <span class="k">if</span> <span class="n">out_order</span> <span class="o">==</span> <span class="s1">'C'</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Flattening Gamma in 'C' order (receiver q varies fastest, then receiver p, then frequency)."</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Flattening Gamma_obs in 'C' order (receiver q varies fastest, then receiver p, then frequency)."</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">out_order</span> <span class="o">==</span> <span class="s1">'F'</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Flattening Gamma in 'F' order (frequency varies fastest, then receiver p, then receiver q)."</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Flattening Gamma_obs in 'F' order (frequency varies fastest, then receiver p, then receiver q)."</span><span class="p">)</span>
 
-    <span class="n">Gamma_flat</span> <span class="o">=</span> <span class="n">Gamma</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">out_order</span><span class="p">)</span>
-    <span class="n">co_quad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">Gamma_flat</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">Gamma_flat</span><span class="o">.</span><span class="n">imag</span><span class="p">])</span>
+    <span class="n">Gamma_obs_flat</span> <span class="o">=</span> <span class="n">Gamma_obs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">out_order</span><span class="p">)</span>
+    <span class="n">co_quad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">Gamma_obs_flat</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">Gamma_obs_flat</span><span class="o">.</span><span class="n">imag</span><span class="p">])</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
 
-        <span class="c1"># write the order of the flattened Gamma</span>
+        <span class="c1"># write the order of the flattened Gamma_obs</span>
         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">"ORDER </span><span class="si">{</span><span class="n">out_order</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="c1"># write the number of observations</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">"NOBS </span><span class="si">{</span><span class="n">n_obs</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">"NOBS </span><span class="si">{</span><span class="n">N_obs</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="c1"># write the frequency and receiver positions</span>
         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">"FREQ </span><span class="si">{</span><span class="n">row</span><span class="p">(</span><span class="n">frequency</span><span class="p">)</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
@@ -812,7 +812,7 @@
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Data successfully written to: </span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
 
 
-<span class="c1"># ________FUNC rows of gamma________</span>
+<span class="c1"># ________FUNC rows of Gamma_obs________</span>
 <div class="viewcode-block" id="row">
 <a class="viewcode-back" href="../../../topophone2.utils.read.html#topophone2.utils.read.row">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">row</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>

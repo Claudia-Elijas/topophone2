@@ -396,8 +396,8 @@
 </div></blockquote>
 <p>The following functions are used to read and write the input data files:</p>
 <blockquote>
-<div><p><a class="reference internal" href="#topophone2.utils.read.read_txt" title="topophone2.utils.read.read_txt"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_txt()</span></code></a> - Reads the frequency, x, and Gamma arrays from a text file.</p>
-<p><a class="reference internal" href="#topophone2.utils.read.convert_to_txt" title="topophone2.utils.read.convert_to_txt"><code class="xref py py-func docutils literal notranslate"><span class="pre">convert_to_txt()</span></code></a> - Converts the frequency, x, and Gamma arrays to the suitable input text file for Topophone2.</p>
+<div><p><a class="reference internal" href="#topophone2.utils.read.read_txt" title="topophone2.utils.read.read_txt"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_txt()</span></code></a> - Reads the frequency, x, and Gamma_obs arrays from a text file.</p>
+<p><a class="reference internal" href="#topophone2.utils.read.convert_to_txt" title="topophone2.utils.read.convert_to_txt"><code class="xref py py-func docutils literal notranslate"><span class="pre">convert_to_txt()</span></code></a> - Converts the frequency, x, and Gamma_obs arrays to the suitable input text file for Topophone2.</p>
 <p><a class="reference internal" href="#topophone2.utils.read.row" title="topophone2.utils.read.row"><code class="xref py py-func docutils literal notranslate"><span class="pre">row()</span></code></a> - Converts a 1D array of values to a comma-separated string with 17 significant digits.</p>
 </div></blockquote>
 </div>
@@ -433,12 +433,12 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="topophone2.utils.read.read_txt">
 <span class="sig-prename descclassname"><span class="pre">topophone2.utils.read.</span></span><span class="sig-name descname"><span class="pre">read_txt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/utils/read.html#read_txt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.utils.read.read_txt" title="Link to this definition">#</a></dt>
-<dd><p>Read the frequency, x, and Gamma arrays from a text file.</p>
+<dd><p>Read the frequency, x, and Gamma_obs arrays from a text file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Input<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>input_file</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – Path to the input text file</p></li>
-<li><p><strong>order</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code> (default <code class="docutils literal notranslate"><span class="pre">'C'</span></code>)) – Order in which Gamma is flattened if no <code class="docutils literal notranslate"><span class="pre">ORDER</span></code> line is found in the file.
+<li><p><strong>order</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code> (default <code class="docutils literal notranslate"><span class="pre">'C'</span></code>)) – Order in which Gamma_obs is flattened if no <code class="docutils literal notranslate"><span class="pre">ORDER</span></code> line is found in the file.
 <code class="docutils literal notranslate"><span class="pre">'C'</span></code> means receiver q varies fastest, then receiver p, then frequency</p></li>
 </ul>
 </dd>
@@ -448,9 +448,9 @@
 (N_freq,)</p></li>
 <li><p><strong>x</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Receiver positions array
 (N_rec, dims)</p></li>
-<li><p><strong>Gamma</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Transfer function array
+<li><p><strong>Gamma_obs</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Transfer function array
 (N_freq, N_rec, N_rec)</p></li>
-<li><p><strong>n_obs</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of observations</p></li>
+<li><p><strong>N_obs</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of observations</p></li>
 </ul>
 </dd>
 </dl>
@@ -458,8 +458,8 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="topophone2.utils.read.convert_to_txt">
-<span class="sig-prename descclassname"><span class="pre">topophone2.utils.read.</span></span><span class="sig-name descname"><span class="pre">convert_to_txt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/utils/read.html#convert_to_txt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.utils.read.convert_to_txt" title="Link to this definition">#</a></dt>
-<dd><p>Convert the frequency, x, and Gamma arrays to the suitable input text file for Topophone2.</p>
+<span class="sig-prename descclassname"><span class="pre">topophone2.utils.read.</span></span><span class="sig-name descname"><span class="pre">convert_to_txt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Gamma_obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/utils/read.html#convert_to_txt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.utils.read.convert_to_txt" title="Link to this definition">#</a></dt>
+<dd><p>Convert the frequency, x, and Gamma_obs arrays to the suitable input text file for Topophone2.</p>
 <dl class="field-list">
 <dt class="field-odd">Input<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -467,11 +467,11 @@
 (N_freq,)</p></li>
 <li><p><strong>x</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Receiver positions array
 (N_rec, dims)</p></li>
-<li><p><strong>Gamma</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Transfer function array
+<li><p><strong>Gamma_obs</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Array-covariance matrix
 (N_freq, N_rec, N_rec)</p></li>
 <li><p><strong>output_path</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – Path to the output text file (<code class="docutils literal notranslate"><span class="pre">_topophone2.txt</span></code> is appended)</p></li>
-<li><p><strong>n_obs</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of observations (N_obs)</p></li>
-<li><p><strong>out_order</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code> (default <code class="docutils literal notranslate"><span class="pre">'C'</span></code>)) – Order in which Gamma is flattened. <code class="docutils literal notranslate"><span class="pre">'C'</span></code> means receiver q varies fastest,
+<li><p><strong>N_obs</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of observations</p></li>
+<li><p><strong>out_order</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code> (default <code class="docutils literal notranslate"><span class="pre">'C'</span></code>)) – Order in which Gamma_obs is flattened. <code class="docutils literal notranslate"><span class="pre">'C'</span></code> means receiver q varies fastest,
 then receiver p, then frequency</p></li>
 </ul>
 </dd>
