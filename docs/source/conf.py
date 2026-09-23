@@ -22,6 +22,7 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
     'sphinx.ext.mathjax',
+    'nbsphinx',
 ]
 
 templates_path = ['_templates']
@@ -63,6 +64,13 @@ napoleon_custom_sections = [
     # duplicate definition.
     'Methods',
 ]
+
+# -- nbsphinx --------------------------------------------------------------
+# https://nbsphinx.readthedocs.io/en/latest/configuration.html
+# Render the outputs already stored in the notebooks rather than re-running
+# them at build time (they need data files and geopvi, which CI lacks).
+
+nbsphinx_execute = 'never'
 
 
 

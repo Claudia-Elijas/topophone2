@@ -24,6 +24,8 @@ jobs:
           pip install sphinx
           pip install pydata-sphinx-theme
           pip install sphinx-autodoc-typehints
+          pip install nbsphinx ipykernel
+          sudo apt-get install -y pandoc
           pip install -r requirements.txt
 
       - name: Build docs
