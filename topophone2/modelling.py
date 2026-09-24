@@ -1085,7 +1085,7 @@ class ArrayCovarianceModel():
                 #__ Slowness __
                 if ('s' in sig):
                     kwargs.update(s = sig['s'], grad_s = False,
-                                  fixed_key = (sig, float(np.ravel(sig['s'])[0])))
+                                  fixed_key = (sig['s'], float(np.ravel(sig['s'])[0])))
                 else:
                     kwargs.update(s = m[:,idx], grad_s = grad) ; idx += 1
 
