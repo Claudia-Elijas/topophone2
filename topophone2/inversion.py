@@ -635,12 +635,18 @@ class MarginalStats():
     ''''''
 
     #__ Initialise class __
-    def __init__(self, m, posterior=None, prior_bounds=None):
+    def __init__(self, m, lnp_dm=None, posterior=None, prior_bounds=None):
         self.m   = m
-        if (posterior is not None):
+        if (lnp_dm is not None):
+            self.lnp_dm = lnp_dm
+        elif (posterior is not None):
             self.lnp_dm, _ = posterior.log_likelihood(m, grad=False)
+        else:
+            self.lnp_dm = None
         if (prior_bounds is not None):
             self.Vi = prior_bounds[1] - prior_bounds[0]
+        else:
+            self.Vi = None
 
     #__ Calculate evidence __
     def calc_evidence(self, nchains=10, temperature=0.8):
