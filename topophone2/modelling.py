@@ -1263,7 +1263,7 @@ class ArrayCovarianceModel():
         sig_list, kwargs_list, idx_list, weight_list = self._unpack(m, grad=grad)
         
         #__ Loop through signals __
-        for sig, sig, kwargs, istart, iend, weight in zip(
+        for spec, sig, kwargs, istart, iend, weight in zip(
                 self.sigs, sig_list, kwargs_list,
                 idx_list[:-1], idx_list[1:], weight_list):
 
@@ -1285,10 +1285,10 @@ class ArrayCovarianceModel():
                     dcov[...,istart] = cf
                     if self._calc_noise_only and (sig in self._NOISE_SIGS):
                         dcov_noise[...,istart] = cf
-                self._write_grad(sig, grad_cf,
+                self._write_grad(spec, grad_cf,
                 dcov[...,istart+1:iend], weight)
                 if self._calc_noise_only and (sig in self._NOISE_SIGS):
-                    self._write_grad(sig, grad_cf,
+                    self._write_grad(spec, grad_cf,
                     dcov_noise[...,istart+1:iend], weight)
 
         #__ Return output __
