@@ -457,6 +457,7 @@ class Inference():
     - :meth:`load` : Load the results of the inversion.
     - :meth:`sample` : Sample from the posterior distribution of model parameters.
     - :meth:`unpack` : Unpack the model vector into its constituent parameters.
+    - :meth:`get_lnELBO` : Function to return logarithmic evidence lower bound.
 
     Input
     -----
@@ -608,6 +609,24 @@ class Inference():
         The unpacked model.
         '''
         return self._unpack(m)
+
+    #__ Return ELBO __
+    def get_lnELBO(self):
+        '''
+        Function to return logarithmic evidence lower bound.
+
+        Output
+        ------
+        lnELBO : ``numpy.ndarray``
+            Log-ELBO.
+            (iteration,)
+        '''
+
+        #__ Extract log-ELBO __
+        lnELBO = -np.array(self.loss_his)
+
+        #__ Return output __
+        return lnELBO
 
 #________ POST-PROCESSING ________#
 
