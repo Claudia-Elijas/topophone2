@@ -217,14 +217,17 @@ def sigs_input(signals, dim , signal_noise , a , b , s , max_order , sensor_self
 # =========================================== # 
 
 # ________FUNC read txt input ________
-def read_txt(input_file, order='C'):
+def read_txt(input_file, verbose=False, order='C'):
     """
     Read the frequency, x, and Gamma_obs arrays from a text file.
 
     Input
     -----
     input_file : ``str``
-        Path to the input text file
+        Path to the input text file.
+
+    verbose : ``bool``
+        Print file contents.
 
     order : ``str`` (default ``'C'``)
         Order in which Gamma_obs is flattened if no ``ORDER`` line is found in the file.
@@ -248,7 +251,7 @@ def read_txt(input_file, order='C'):
         Number of observations
     """
 
-    print(f"\nReading data from: {input_file} ............................\n")
+    if verbose: print(f"\nReading data from: {input_file} ............................\n")
     with open(input_file, "r") as f:
         lines = f.readlines()
 
@@ -262,11 +265,11 @@ def read_txt(input_file, order='C'):
         if order not in ['C', 'F']:
             raise ValueError(f"Invalid order '{order}' found in {input_file}. Must be 'C' or 'F'.")
 
-        print(f"ORDER line found in input file. Using order '{order}':")
+        if verbose: print(f"ORDER line found in input file. Using order '{order}':")
         if order == 'C':
-            print(">>> Reading Gamma_obs in 'C' order (receiver q varies fastest, then receiver p, then frequency).\n")
+            if verbose: print(">>> Reading Gamma_obs in 'C' order (receiver q varies fastest, then receiver p, then frequency).\n")
         if order == 'F':
-            print(">>> Reading Gamma_obs in 'F' order (frequency varies fastest, then receiver p, then receiver q).\n") 
+            if verbose: print(">>> Reading Gamma_obs in 'F' order (frequency varies fastest, then receiver p, then receiver q).\n") 
 
     else:
         print(f"WARNING: ORDER line NOT found in input file. Using provided order '{order}'.")
@@ -275,9 +278,9 @@ def read_txt(input_file, order='C'):
                     raise ValueError(f"Invalid order '{order}' found in {input_file}. Must be 'C' or 'F'.")
     
         if order == 'C':
-            print(">>> Reading Gamma_obs in 'C' order (receiver q varies fastest, then receiver p, then frequency).\n")
+            if verbose: print(">>> Reading Gamma_obs in 'C' order (receiver q varies fastest, then receiver p, then frequency).\n")
         if order == 'F':
-            print(">>> Reading Gamma_obs in 'F' order (frequency varies fastest, then receiver p, then receiver q).\n")
+            if verbose: print(">>> Reading Gamma_obs in 'F' order (frequency varies fastest, then receiver p, then receiver q).\n")
 
     # Read number of observations
     if not any(line.startswith("NOBS") for line in lines): # check if NOBS line exists, if not, raise an error
@@ -303,13 +306,13 @@ def read_txt(input_file, order='C'):
     N_rec = x.shape[0]  
     N_dim = x.shape[1]
 
-    print(f"Data info:")
-    print(f">>> Number of frequencies (N_freq): {N_freq}")
-    print(f">>> Number of receivers (N_rec): {N_rec}")
+    if verbose: print(f"Data info:")
+    if verbose: print(f">>> Number of frequencies (N_freq): {N_freq}")
+    if verbose: print(f">>> Number of receivers (N_rec): {N_rec}")
     if N_rec < 2:
         raise ValueError("At least 2 receivers are required.")
-    print(f">>> Number of coordinate dimensions (N_dim): {N_dim}")
-    print(f">>> Number of observations (N_obs): {N_obs}")
+    if verbose: print(f">>> Number of coordinate dimensions (N_dim): {N_dim}")
+    if verbose: print(f">>> Number of observations (N_obs): {N_obs}")
 
     # check that the number of rows in co_quad_data matches N_freq * N_rec * N_rec   
     if co_quad_data.shape[0] != N_freq * N_rec * N_rec:
@@ -323,11 +326,11 @@ def read_txt(input_file, order='C'):
 
     # check that Gamma_obs is Hermitian
     if np.allclose(Gamma_obs, np.conj(np.swapaxes(Gamma_obs, -1, -2)), atol=1e-8 * np.abs(Gamma_obs).max()):
-        print("\nCHECKED: Gamma_obs is Hermitian.")
+        if verbose: print("\nCHECKED: Gamma_obs is Hermitian.")
     else:
         raise ValueError("WARNING:Gamma_obs is not Hermitian.")
 
-    print(f"\nData successfully read from: {input_file}.\n")
+    if verbose: print(f"\nData successfully read from: {input_file}.\n")
 
     return frequency, x, Gamma_obs, N_obs
 
