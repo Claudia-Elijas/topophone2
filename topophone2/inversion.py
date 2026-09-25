@@ -742,7 +742,7 @@ class MarginalStats():
 
         Output
         ------
-        lnD : ``float``
+        D : ``float``
             Information gain [nats]
         '''
 
@@ -753,7 +753,7 @@ class MarginalStats():
             lnp_d, _ = self.calc_evidence()
 
             #__ Calculate information gain __
-            lnD = np.mean(self.lnp_dm) - lnp_d
+            D = np.mean(self.lnp_dm) - lnp_d
 
         #__ Partial model parameter set __
         else:
@@ -765,10 +765,10 @@ class MarginalStats():
             kde, m_s = self._gaussian_kde(idx, thin)
 
             #__ Calculate information gain __
-            lnD = lnVs + np.mean(kde.logpdf(m_s[:,1::thin]))
+            D = lnVs + np.mean(kde.logpdf(m_s[:,1::thin]))
 
         #__ Return output __
-        return lnD
+        return D
 
     #__ Calculate mean __
     def marginal_mean(self, idx, harmonic=False):
