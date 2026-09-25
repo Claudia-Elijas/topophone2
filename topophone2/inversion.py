@@ -666,8 +666,8 @@ class MarginalStats():
         lnp_d : ``float``
             Log-evidence.
 
-        lnp_d_std : ``float``
-            Standard deviation of estimate.
+        lnp_d_err : ``Tuple[float,float]``
+            Error bounds on estimate.
         '''
 
         #__ Reshape model vector __
@@ -694,10 +694,12 @@ class MarginalStats():
         ev.add_chains(chains_infer)
         
         #__ Compute evidence __
-        lnp_d, lnp_d_std = ev.compute_ln_evidence()
+        lnp_d, _  = ev.compute_ln_evidence()
+        err_neg, err_pos = ev.compute_ln_inv_evidence_errors()
+        lnp_d_err = (-err_pos, -err_neg)
 
         #__ Return output __
-        return lnp_d, lnp_d_std
+        return lnp_d, lnp_d_err
 
     #__ Fit Gaussian KDE __
     def _gaussian_kde(self, idx, thin=None):
