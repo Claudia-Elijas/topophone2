@@ -8,34 +8,41 @@
 
 """
 
+#________ IMPORT ________#
 
-from topophone2 import inversion, modelling
+#__ Import: Numerical __
 import numpy as np
 
+#__ Import: Topophone2 __
+from topophone2.modelling import ArrayCovarianceModel
+from topophone2.inversion import Uniform, Posterior, LinearFlowsModel, Inference
+
+#________ HELPER FUNCTION ________#
+
+#__ Function to run Topophone2 core functionality __
 def decompose(
-    Gamma_obs         : np.ndarray,
-    Gamma_obs_noise       : np.ndarray,
-    N_obs          : int,
-    N_obs_noise        : int,
-    x             : np.ndarray,
-    freq          : np.ndarray,
-    sigs          : list,
-    weight_units  : str,
-    custom_cf     : dict,
-    prior_bounds  : tuple,
-    N_flow        : int,
-    mean_field    : bool,
-    ini_dist      : str,
-    learning_rate : float,
-    outpath       : str ,
-    N_iterations    : int,
-    N_montecarlo       : int,
-    N_out          : int,
-    save_intermediate_result : bool,
-    verbose       : bool,
-    N_samples     : int,
-    model_outpath : str,
-    loss_outpath  : str,
+    Gamma_obs       : np.ndarray = None,
+    Gamma_obs_noise : np.ndarray = None,
+    N_obs           : int        = None,
+    N_obs_noise     : int        = None,
+    x               : np.ndarray = None,
+    freq            : np.ndarray = None,
+    sigs            : list       = None,
+    weight_units    : str        = 'dB',
+    custom_cf       : dict       = {},
+    prior_bounds    : tuple      = None,
+    N_flow          : int        = None,
+    mean_field      : bool       = False,
+    ini_dist        : str        = 'Uniform',
+    learning_rate   : float      = None,
+    outpath         : str        = None,
+    N_iterations    : int        = None,
+    N_montecarlo    : int        = None,
+    N_out           : int        = 0,
+    save_intermediate_result : bool = False,
+    verbose         : bool       = False,
+    N_samples       : int        = None,
+    calc_likelihood : bool       = False
 ):
     r'''
     
@@ -48,14 +55,14 @@ def decompose(
         Observed array-covariance matrix
         (frequency, receiver, receiver)
 
-    Gamma_obs_noise : ``numpy.ndarray``
+    Gamma_obs_noise : ``numpy.ndarray`` (optional)
         Observed noise-only array-covariance matrix
         (frequency, receiver, receiver)
 
     N_obs: ``int``
         Degrees of freedom
 
-    N_obs_noise : ``int``
+    N_obs_noise : ``int`` (optional)
         Degrees of freedom (noise)
 
     x : ``numpy.ndarray``
@@ -69,11 +76,11 @@ def decompose(
     sigs : ``list``
         List of signals
 
-    weight_units : ``str``
+    weight_units : ``str`` (default ``'dB'``)
         Units of the signal weights in the model vector
         ('dB' or 'linear')
 
-    custom_cf : ``dict``
+    custom_cf : ``dict`` (optional)
         Custom characteristic functions keyed by signal name
 
     prior_bounds : ``(numpy.ndarray,numpy.ndarray)``
@@ -82,38 +89,57 @@ def decompose(
     N_flow : ``int``
         Number of normalising flows
 
-    mean_field : ``bool``
+    mean_field : ``bool`` (default ``False``)
         Use mean-field approximation
 
-    ini_dist : ``str``
+    ini_dist : ``str`` (default ``'Uniform'``)
         Initial distribution to transform
 
     learning_rate : ``float``
         Learning rate for the variational inference
 
     outpath : ``str``
-        Output path for saving intermediate results
+        Output path for saving results
 
+    N_iterations : ``int``
+        Number of iterations to run optimiser
 
+    N_montecarlo : ``int``
+        Number of samples to estimate ELBO
+
+    N_out : ``int`` (default ``0``)
+        Number of print statements and/or intermediate saves
+
+    save_intermediate_result : ``bool`` (default ``False``)
+        Save intermediate results during iteration
+
+    verbose : ``bool`` (default ``False``)
+        Print progress statements
+
+    N_samples : ``int`` (optional)
+        Number of samples to draw from posterior solution
+
+    calc_likelihood : ``bool`` (default ``False``)
+        Calculate likelihood
     '''
 
-    #__ Set up array-covariance model __
+    #__ Forward modeller __
     if (Gamma_obs_noise is not None) : calc_noise_only = True
     else:        calc_noise_only = False
-    array_covariance_model = modelling.ArrayCovarianceModel(
+    array_covariance_model = ArrayCovarianceModel(
         x               = x,
         freq            = freq,
-        sigs    = sigs,
+        sigs            = sigs,
         weight_units    = weight_units,
         calc_noise_only = calc_noise_only,
         custom_cf       = custom_cf
     )
 
-    #__ Set up prior pdf __
-    prior = inversion.Uniform(*prior_bounds)
+    #__ Uniform prior pdf __
+    prior = Uniform(*prior_bounds)
 
-    #__ Set up posterior pdf __
-    posterior = inversion.Posterior(
+    #__ Posterior pdf __
+    posterior = Posterior(
         Gamma_obs             = Gamma_obs,
         N_obs                 = N_obs,
         array_covariance_model = array_covariance_model,
@@ -122,8 +148,8 @@ def decompose(
         N_obs_noise           = N_obs_noise
     )
 
-    #__ Set up normalising flow model __
-    flow = inversion.LinearFlowsModel(
+    #__ Normalising flow model __
+    flow_model = LinearFlowsModel(
         N_param      = len(prior_bounds[0]),
         prior_bounds = prior_bounds,
         N_flow       = N_flow,
@@ -132,27 +158,31 @@ def decompose(
     )
 
     #__ Set up inverse problem __
-    inverse = inversion.Inference(
-        flow_model    = flow,
+    inverse_problem = Inference(
+        flow_model    = flow_model,
         posterior     = posterior,
         learning_rate = learning_rate,
         outpath       = outpath
     )
 
     #__ Perform inversion __
-    inverse.invert(
+    inverse_problem.invert(
         N_iterations = N_iterations,
-        N_montecarlo    = N_montecarlo,
-        N_out       = N_out,
+        N_montecarlo = N_montecarlo,
+        N_out        = N_out,
         save_intermediate_result = save_intermediate_result,
-        verbose    = verbose
+        verbose      = verbose
     )
-    loss = inverse.loss_his
+
+    #__ Save flow model __
+    inverse_problem.save()
 
     #__ Sample posterior __
-    m = inverse.sample(N_samples=N_samples)
+    if (N_samples is not None):
+        m = inverse_problem.sample(N_samples=N_samples)
+        np.savetxt(f"{outpath}/model-samples_iteration-{N_iterations:05d}.txt", m)
 
-    #__ Save models __
-    if model_outpath: np.savetxt(model_outpath, m)
-    if loss_outpath : np.savetxt(loss_outpath,  loss)
-
+        #__ Calculate likelihood __
+        if calc_likelihood:
+            lnp_dm, _ = posterior.log_likelihood(m=m, grad=False)
+            np.savetxt(f"{outpath}/log-likelihood_iteration-{N_iterations:05d}.txt", lnp_dm)
