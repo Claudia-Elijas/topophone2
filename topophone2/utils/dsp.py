@@ -37,7 +37,7 @@ def rfft(
         Number of points in FFT
 
     taper : ``numpy.ndarray`` (optional)
-        Apply taper befor FFT
+        Apply taper before FFT
         (time,)
 
     Output
@@ -126,8 +126,53 @@ def irfft(
 
 #________ BEAMFORMING ________#
 
+#__ Calculate time shifts __
+def _calc_shift(
+    x        : np.ndarray,
+    p_bounds : list,
+    dp       : float
+):
+    """
+    Calculate the time shift for an ensemble of slowness vectors.
+
+    Input
+    -----
+    x : ``numpy.ndarray``
+        Receiver location [m]
+        (receiver, direction)
+
+    p_bounds : ``list``
+        (Minimum, maximum) slowness to search in each direction [s.m-1]
+
+    dp : ``float``
+        Slowness search interval [m.s-1]
+
+    Output
+    ------
+    shift : ``numpy.ndarray``
+        Time shifts [s]
+        (slowness, receiver)
+
+    p : ``numpy.ndarray``
+        Slowness vectors [s.m-1]
+        (slowness, direction)
+    """
+
+    #__ Construct slowness vectors __
+    p_cube = np.meshgrid(*[
+        np.arange(p_min, p_max+dp, dp)
+        for (p_min,p_max) in p_bounds
+    ], indexing='ij')
+    p = np.vstack([p_i.ravel() for p_i in p_cube]).T
+
+    #__ Calculate travel times __
+    shift = np.einsum('ik,jk->ij', p, x)
+
+    #__ Return output __
+    return shift, p
+
 #__ Apply time shift __
-def apply_dt(
+def _apply_shift(
     u_f         : np.ndarray,
     f           : np.ndarray,
     shift       : np.ndarray,
@@ -143,7 +188,7 @@ def apply_dt(
     -----
     u_f : ``numpy.ndarray``
         Complex spectrum
-        (..., frequency)
+        (receiver, frequency)
 
     f : ``numpy.ndarray``
         Frequency vector [Hz]
@@ -151,7 +196,7 @@ def apply_dt(
 
     shift : ``numpy.ndarray``
         Time shift [s]
-        (...)
+        (slowness, receiver)
 
     dt : ``float`` (optional)
         Sampling interval [s]
@@ -169,11 +214,11 @@ def apply_dt(
     ------
     ushift_f/ushift_t : ``numpy.ndarray``
         Shifted signal in the frequency/time domain
-        (..., frequency/time)
+        (slowness, receiver, frequency/time)
 
     phase_shift : ``numpy.ndarray``
         Phase-rotation scalar applied to signal
-        (..., frequency)
+        (slowness, receiver, frequency)
     """
 
     #__ Calculate phase shift __
@@ -181,7 +226,7 @@ def apply_dt(
     phase_shift = np.exp(- 1j * shift[...,None] * w)
 
     #__ Apply phase shift __
-    ushift_f = u_f * phase_shift
+    ushift_f = u_f[None,...] * phase_shift
 
     #__ Transform to time domain __
     if return_time: ushift_t, _, _ = irfft(ushift_f, dt=dt, nfft=nfft, npts=npts)
@@ -189,3 +234,85 @@ def apply_dt(
     #__ Return output __
     if return_time: return ushift_t, phase_shift
     else:           return ushift_f, phase_shift
+
+#__ Calculate the best beam DOA __
+def best_beam_DOA(
+    u_t      : np.ndarray,
+    t        : np.ndarray,
+    x        : np.ndarray,
+    p_bounds : list,
+    dp       : float,
+    t_w      : float,
+    T_w      : float,
+    taper    : np.ndarray = None,
+):
+    """
+    Estimate the direction-of-arrival of the best beam.
+
+    Input
+    -----
+    u_t : ``numpy.ndarray``
+        Time series
+        (receiver, time)
+
+    t : ``numpy.ndarray``
+        Time vector [s]
+        (time,)
+
+    x : ``numpy.ndarray``
+        Receiver location [m]
+        (receiver, direction)
+
+    p_bounds : ``list``
+        (Minimum, maximum) slowness to search in each direction [s.m-1]
+
+    dp : ``float``
+        Slowness search interval [m.s-1]
+
+    t_w : ``float``
+        Central time of time interval [s]
+
+    T_w : ``float``
+        Half-width of time interval [s]
+
+    taper : ``np.ndarray`` (optional)
+        Apply taper before FFT
+        (time,)
+
+    Output
+    ------
+    p_best : ``numpy.ndarray`
+        Best-beam slowness vector [s.m-1]
+        (direction,)
+
+    shift_best : ``numpy.ndarray``
+        Best-beam time shift [s]
+        (receiver,)
+    """
+
+    #__ Extract time variables __
+    N_rec, npts = u_t.shape
+    dt          = t[1] - t[0]
+    window      = (np.abs(t - t_w) < T)
+
+    #__ Convert to frequency domain __
+    u_f, f, nfft = rfft(u_t, dt, taper=taper)
+
+    #__ Calculate time shifts __
+    shift, p = _calc_shift(x, p_bounds, dp)
+
+    #__ Apply time shifts __
+    ushift_t, phase_shift = _apply_shift(u_f, f, shift, dt, nfft, npts, return_time=True)
+
+    #__ Calculate F-statistic __
+    sum_square_mean = np.sum(np.mean(ushift_t[...,window], axis=1)**2, axis=1)
+    sum_mean_square = np.sum(np.mean(ushift_t[...,window]**2, axis=1), axis=1)
+    F_statistic     = (N_rec - 1) * sum_square_mean / (sum_mean_square - sum_square_mean)
+    
+    #__ Extract maximum __
+    idx_best   = np.argmax(F_statistic)
+    p_best     = p[idx_best]
+    shift_best = shift[idx_best]
+
+    #__ Return output __
+    return p_best, shift_best
