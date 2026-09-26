@@ -126,52 +126,66 @@ def irfft(
 
 #________ BEAMFORMING ________#
 
-
-# !!! APPLY TIME SHIFT FUNCTION TO TAKE INPUT FREQUENCY OR TIME AND OUTPUT FREQUENCY OR TIME !!! #
-
 #__ Apply time shift __
-def apply_time_shift(
-    u_t   : np.ndarray,
-    dt    : float,
-    shift : np.ndarray,
-    taper : np.ndarray = None,
-    return_time : bool = False
+def apply_dt(
+    u_f         : np.ndarray,
+    f           : np.ndarray,
+    shift       : np.ndarray,
+    dt          : float = None,
+    nfft        : int   = None,
+    npts        : int   = None,
+    return_time : bool  = False
 ):
     """
-    Apply a time shift in the frequency domain.
+    Apply a time shift to a signal in the frequency domain.
 
     Input
     -----
-    u_t : ``numpy.ndarray``
-        Time series
-        (..., time)
+    u_f : ``numpy.ndarray``
+        Complex spectrum
+        (..., frequency)
 
-    dt : ``float``
-        Sampling interval [s]
+    f : ``numpy.ndarray``
+        Frequency vector [Hz]
+        (frequency,)
 
     shift : ``numpy.ndarray``
         Time shift [s]
         (...)
 
-    taper : ``numpy.ndarray``
-        Apply taper before FFT
-        (time,)
+    dt : ``float`` (optional)
+        Sampling interval [s]
+
+    nfft : ``int`` (optional)
+        Number of points in FFT
+
+    npts : ``int`` (optional)
+        Number of points in time series
 
     return_time : ``bool`` (default ``False``)
-        Return in time domain
+        Return signal in the time domain
+
+    Output
+    ------
+    ushift_f/ushift_t : ``numpy.ndarray``
+        Shifted signal in the frequency/time domain
+        (..., frequency/time)
+
+    phase_shift : ``numpy.ndarray``
+        Phase-rotation scalar applied to signal
+        (..., frequency)
     """
 
-    #__ Transform to frequency domain __
-    u_f, f, nfft = rfft(u_t=u_t, dt=dt, taper=taper)
-
-    #__ Calculate phase shifts __
-    w = 2 * np.pi * f
-    phase_shift = np.exp(-1j * w * shift[...,None])
+    #__ Calculate phase shift __
+    w           = 2 * np.pi * f
+    phase_shift = np.exp(- 1j * shift[...,None] * w)
 
     #__ Apply phase shift __
-    u_shift = u_f * phase_shift
+    ushift_f = u_f * phase_shift
 
     #__ Transform to time domain __
-    if return_time:
-        npts = u_t
-        u_shift, _, _ = irfft(u_f=u_shift, dt=dt)
+    if return_time: ushift_t, _, _ = irfft(ushift_f, dt=dt, nfft=nfft, npts=npts)
+
+    #__ Return output __
+    if return_time: return ushift_t, phase_shift
+    else:           return ushift_f, phase_shift
