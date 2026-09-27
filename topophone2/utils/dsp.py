@@ -57,14 +57,13 @@ def rfft(
     #__ Calculate number of points in FFT __
     npts = u_t.shape[-1]
     if (nfft is None):
-        nfft = next_fast_len(npts)
-        if nfft % 2: nfft = next_fast_len(nfft+1)
+        nfft = 2 * next_fast_len(-(-npts//2), real=True)
 
     #__ Apply taper __
-    if (alpha is not None): u_t *= tukey(npts, alpha)
+    if (alpha is not None): u_t = u_t * tukey(npts, alpha)
 
     #__ Perform FFT __
-    u_f = np.fft.rfft(u_t, nfft=nfft, axis=-1)
+    u_f = np.conj(np.fft.rfft(u_t, n=nfft, axis=-1))
 
     #__ Calculate frequency vector __
     f = np.fft.rfftfreq(n=nfft, d=dt)
@@ -112,7 +111,7 @@ def irfft(
     """
 
     #__ Perform inverse FFT __
-    u_t = np.fft.irfft(u_f, n=nfft, axis=-1)
+    u_t = np.fft.irfft(np.conj(u_f), n=nfft, axis=-1)
 
     #__ Truncate padding __
     if (npts is not None): u_t = u_t[..., :npts]
@@ -145,7 +144,7 @@ def _calc_shift(
         (Minimum, maximum) slowness to search in each direction [s.m-1]
 
     dp : ``float``
-        Slowness search interval [m.s-1]
+        Slowness search interval [s.m-1]
 
     Output
     ------
@@ -160,7 +159,7 @@ def _calc_shift(
 
     #__ Construct slowness vectors __
     p_cube = np.meshgrid(*[
-        np.arange(p_min, p_max+dp, dp)
+        np.linspace(p_min, p_max, int(round((p_max-p_min)/dp))+1)
         for (p_min,p_max) in p_bounds
     ], indexing='ij')
     p = np.vstack([p_i.ravel() for p_i in p_cube]).T
@@ -240,8 +239,7 @@ def apply_window(
     u_t   : np.ndarray,
     t     : np.ndarray,
     t_w   : float,
-    T_w   : float,
-    alpha : float = None
+    T_w   : float
 ):
     """
     Apply time window to signal.
@@ -256,14 +254,11 @@ def apply_window(
         Time vector [s]
         (time,)
 
-    t_w : ``float`` (optional)
+    t_w : ``float``
         Time-window centre [s]
 
-    T_w : ``float`` (optional)
+    T_w : ``float``
         Time-window half-width [s]
-
-    alpha : ``float`` (optional)
-        Time-window taper fraction
 
     Output
     ------
@@ -281,10 +276,6 @@ def apply_window(
 
     #__ Window __
     u_t_w = u_t[...,window]
-
-    #__ Taper __
-    if (alpha is not None):
-        u_t_w *= tukey(npts_w, alpha)
 
     #__ Return output __
     return u_t_w, npts_w
@@ -322,7 +313,7 @@ def best_beam_DOA(
         (Minimum, maximum) slowness to search in each direction [s.m-1]
 
     dp : ``float``
-        Slowness search interval [m.s-1]
+        Slowness search interval [s.m-1]
 
     t_w : ``float`` (optional)
         Time-window centre [s]
@@ -369,12 +360,16 @@ def best_beam_DOA(
 
     #__ Apply window __
     if (t_w is not None) and (T_w is not None):
-        ushift_t_w, npts_w = apply_window(ushift_t, t, t_w, T_w, alpha_min)
+        ushift_t_w, npts_w = apply_window(ushift_t, t, t_w, T_w)
     else: ushift_t_w, npts_w = ushift_t, npts
+
+    #__ Calculate F-stat taper __
+    if (alpha_min is not None): taper = tukey(npts_w, alpha_min)
+    else:                       taper = np.ones(npts_w)
     
     #__ Calculate F-statistic __
-    sum_square_mean = np.sum(np.mean(ushift_t_w, axis=1)**2, axis=1)
-    sum_mean_square = np.sum(np.mean(ushift_t_w**2, axis=1), axis=1)
+    sum_square_mean = np.sum(np.mean((ushift_t_w*taper), axis=1)**2, axis=1)
+    sum_mean_square = np.sum(np.mean((ushift_t_w*taper)**2, axis=1), axis=1)
     F_statistic     = (N_rec - 1) * sum_square_mean / (sum_mean_square - sum_square_mean)
     
     #__ Extract maximum __
@@ -404,7 +399,7 @@ def _slepian(
         Sampling intercval [s]
 
     bw : ``float``
-        Bandwidth [s]
+        Full bandwidth [Hz]
 
     Output
     ------
@@ -422,10 +417,10 @@ def _slepian(
     #__ Slepian-sequence parameters __
     T    = npts * dt              # Total time duration [s]
     T_bw = T * bw                 # Time-bandwidth product
-    N    = int(np.floor(2*T_bw))  # Number of tapers
+    N    = int(np.floor(T_bw)-1)  # Number of tapers
 
     #__ Calculate Slepian sequences __
-    taper = dpss(M=npts, NW=T_bw, Kmax=N)
+    taper = dpss(M=npts, NW=T_bw/2, Kmax=N)
 
     #__ Return output __
     return taper, T_bw, N
@@ -455,7 +450,7 @@ def sample_covariance_matrix(
         Sampling interval [s]
 
     bw : ``float``
-        Slepian-sequence bandwidth [Hz]
+        Slepian-sequence full bandwidth [Hz]
 
     alpha : ``float`` (optional)
         Pre-FFT taper fraction
