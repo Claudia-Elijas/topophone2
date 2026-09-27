@@ -11,7 +11,7 @@ import numpy as np
 
 #__ Signal processing __
 from scipy.fft import next_fast_len
-from scipy.signal.windows import tukey
+from scipy.signal.windows import tukey, dpss
 
 #________ DOMAIN TRANSFORMS ________#
 
@@ -235,6 +235,60 @@ def _apply_shift(
     if return_time: return ushift_t, phase_shift
     else:           return ushift_f, phase_shift
 
+#__ Apply time window to signal __
+def apply_window(
+    u_t   : np.ndarray,
+    t     : np.ndarray,
+    t_w   : float,
+    T_w   : float,
+    alpha : float = None
+):
+    """
+    Apply time window to signal.
+
+    Input
+    -----
+    u_t : ``numpy.ndarray``
+        Time series
+        (..., time)
+
+    t : ``numpy.ndarray``
+        Time vector [s]
+        (time,)
+
+    t_w : ``float`` (optional)
+        Time-window centre [s]
+
+    T_w : ``float`` (optional)
+        Time-window half-width [s]
+
+    alpha : ``float`` (optional)
+        Time-window taper fraction
+
+    Output
+    ------
+    u_t_w : ``numpy.ndarray``
+        Windowed time series
+        (..., time)
+
+    npts_w : ``int``
+        Length of time window
+    """
+
+    #__ Calculate window __
+    window = (np.abs(t - t_w) < T_w)
+    npts_w = np.sum(window)
+
+    #__ Window __
+    u_t_w = u_t[...,window]
+
+    #__ Taper __
+    if (alpha is not None):
+        u_t_w *= tukey(npts_w, alpha)
+
+    #__ Return output __
+    return u_t_w, npts_w
+
 #__ Calculate the best beam DOA __
 def best_beam_DOA(
     u_t      : np.ndarray,
@@ -284,6 +338,10 @@ def best_beam_DOA(
 
     Output
     ------
+    ushift_t_best : ``numpy.ndarray``
+        Time-shifted time series
+        (receiver, time)
+
     p_best : ``numpy.ndarray`
         Best-beam slowness vector [s.m-1]
         (direction,)
@@ -291,15 +349,14 @@ def best_beam_DOA(
     shift_best : ``numpy.ndarray``
         Best-beam time shift [s]
         (receiver,)
+
+    npts_w : ``int``
+        Number of points in time window
     """
 
     #__ Extract time variables __
     N_rec, npts = u_t.shape
     dt          = t[1] - t[0]
-    if (t_w is not None) and (T_w is not None):
-        window = (np.abs(t - t_w) < T_w)
-    else:
-        window = np.full(npts, True)
 
     #__ Convert to frequency domain __
     u_f, f, nfft = rfft(u_t, dt, alpha=alpha_maj)
@@ -311,18 +368,138 @@ def best_beam_DOA(
     ushift_t, phase_shift = _apply_shift(u_f, f, shift, dt, nfft, npts, return_time=True)
 
     #__ Apply window __
-    ushift_t = ushift_t[...,window]
-    if (alpha_min is not None): ushift_t *= tukey(np.sum(window), alpha_min)
-
+    if (t_w is not None) and (T_w is not None):
+        ushift_t_w, npts_w = apply_window(ushift_t, t, t_w, T_w, alpha_min)
+    else: ushift_t_w, npts_w = ushift_t, npts
+    
     #__ Calculate F-statistic __
-    sum_square_mean = np.sum(np.mean(ushift_t, axis=1)**2, axis=1)
-    sum_mean_square = np.sum(np.mean(ushift_t**2, axis=1), axis=1)
+    sum_square_mean = np.sum(np.mean(ushift_t_w, axis=1)**2, axis=1)
+    sum_mean_square = np.sum(np.mean(ushift_t_w**2, axis=1), axis=1)
     F_statistic     = (N_rec - 1) * sum_square_mean / (sum_mean_square - sum_square_mean)
     
     #__ Extract maximum __
-    idx_best   = np.argmax(F_statistic)
-    p_best     = p[idx_best]
-    shift_best = shift[idx_best]
+    idx_best      = np.argmax(F_statistic)
+    p_best        = p[idx_best]
+    shift_best    = shift[idx_best]
+    ushift_t_best = ushift_t_w[idx_best]
 
     #__ Return output __
-    return p_best, shift_best
+    return ushift_t_best, p_best, shift_best, npts_w
+
+#__ Create Slepian tapers __
+def _slepian(
+    npts : int,
+    dt   : float,
+    bw   : float
+):
+    """
+    Calculate set of Slepian tapers.
+
+    Input
+    -----
+    npts : ``int``
+        Number of points in time vector
+
+    dt : ``float``
+        Sampling intercval [s]
+
+    bw : ``float``
+        Bandwidth [s]
+
+    Output
+    ------
+    taper : ``numpy.ndarray``
+        Slepian tapers
+        (taper, time)
+
+    T_bw : ``float``
+        Time-bandwidth product
+
+    N : ``int``
+        Number of tapers
+    """
+
+    #__ Slepian-sequence parameters __
+    T    = npts * dt              # Total time duration [s]
+    T_bw = T * bw                 # Time-bandwidth product
+    N    = int(np.floor(2*T_bw))  # Number of tapers
+
+    #__ Calculate Slepian sequences __
+    taper = dpss(M=npts, NW=T_bw, Kmax=N)
+
+    #__ Return output __
+    return taper, T_bw, N
+
+#__ Calculate sample-covariance matrix __
+def sample_covariance_matrix(
+    u_t   : np.ndarray,
+    npts  : int,
+    dt    : float,
+    bw    : float,
+    alpha : float = None,
+    correction : np.ndarray = None
+):
+    """
+    Calculate the sample-covariance matrix.
+
+    Input
+    -----
+    u_t : ``numpy.ndarray``
+        Time series
+        (receiver, time)
+
+    npts : ``int``
+        Number of points in time series
+
+    dt : ``float``
+        Sampling interval [s]
+
+    bw : ``float``
+        Slepian-sequence bandwidth [Hz]
+
+    alpha : ``float`` (optional)
+        Pre-FFT taper fraction
+
+    correction : ``numpy.ndarray`` (optional)
+        Time shifts to be applied post-FFT [s]
+        (receiver,)
+
+    Output
+    ------
+    scm : ``numpy.ndarray``
+        Sample-covariance matrix
+        (receiver, receiver, frequency)
+
+    f : ``numpy.ndarray``
+        Frequency vector [Hz]
+        (frequency,)
+
+    N : ``int``
+        Number of tapers used to estimate array-covariance
+
+    T_bw : ``float``
+        Time-bandwidth product of Slepian sequences
+    """
+
+    #__ Calculate Slepian tapers __
+    taper, T_bw, N = _slepian(npts, dt, bw)
+
+    #__ Apply Slepian tapers __
+    utap_t = taper[:,None,:] * u_t[None,:,:]
+
+    #__ Transform to frequency domain __
+    utap_f, f, nfft = rfft(utap_t, dt, alpha=alpha)
+
+    #__ Apply correction __
+    if (correction is not None):
+        utap_f, _ = _apply_shift(utap_f, f, correction)
+        utap_f    = utap_f[0]
+
+    #__ Calculate sample-covariance matrix __
+    scm = np.mean(
+        utap_f[:,:,None,:] * np.conj(utap_f[:,None,:,:]),
+        axis=0
+    )
+
+    #__ Return output __
+    return scm, f, N, T_bw
