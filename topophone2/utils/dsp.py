@@ -11,6 +11,7 @@ import numpy as np
 
 #__ Signal processing __
 from scipy.fft import next_fast_len
+from scipy.signal.windows import tukey
 
 #________ DOMAIN TRANSFORMS ________#
 
@@ -19,7 +20,7 @@ def rfft(
     u_t   : np.ndarray,
     dt    : float,
     nfft  : int = None,
-    taper : np.ndarray = None
+    alpha : float = None
 ):
     """
     Tranform real time series to frequency domain.
@@ -36,9 +37,8 @@ def rfft(
     nfft : ``int`` (optional)
         Number of points in FFT
 
-    taper : ``numpy.ndarray`` (optional)
-        Apply taper before FFT
-        (time,)
+    alpha : ``float`` (optional)
+        Pre-FFT taper fraction
 
     Output
     ------
@@ -55,13 +55,13 @@ def rfft(
     """
 
     #__ Calculate number of points in FFT __
+    npts = u_t.shape[-1]
     if (nfft is None):
-        npts = u_t.shape[-1]
         nfft = next_fast_len(npts)
         if nfft % 2: nfft = next_fast_len(nfft+1)
 
     #__ Apply taper __
-    if (taper is not None): u_t *= taper
+    if (alpha is not None): u_t *= tukey(npts, alpha)
 
     #__ Perform FFT __
     u_f = np.fft.rfft(u_t, nfft=nfft, axis=-1)
@@ -242,9 +242,10 @@ def best_beam_DOA(
     x        : np.ndarray,
     p_bounds : list,
     dp       : float,
-    t_w      : float,
-    T_w      : float,
-    taper    : np.ndarray = None,
+    t_w      : float = None,
+    T_w      : float = None,
+    alpha_maj : float = None,
+    alpha_min : float = None
 ):
     """
     Estimate the direction-of-arrival of the best beam.
@@ -269,15 +270,17 @@ def best_beam_DOA(
     dp : ``float``
         Slowness search interval [m.s-1]
 
-    t_w : ``float``
-        Central time of time interval [s]
+    t_w : ``float`` (optional)
+        Time-window centre [s]
 
-    T_w : ``float``
-        Half-width of time interval [s]
+    T_w : ``float`` (optional)
+        Time-window half-width [s]
 
-    taper : ``np.ndarray`` (optional)
-        Apply taper before FFT
-        (time,)
+    alpha_maj : ``float`` (optional)
+        Pre-FFT taper fraction
+
+    alpha_min : ``float`` (optional)
+        Time-window taper fraction
 
     Output
     ------
@@ -293,10 +296,13 @@ def best_beam_DOA(
     #__ Extract time variables __
     N_rec, npts = u_t.shape
     dt          = t[1] - t[0]
-    window      = (np.abs(t - t_w) < T)
+    if (t_w is not None) and (T_w is not None):
+        window = (np.abs(t - t_w) < T_w)
+    else:
+        window = np.full(npts, True)
 
     #__ Convert to frequency domain __
-    u_f, f, nfft = rfft(u_t, dt, taper=taper)
+    u_f, f, nfft = rfft(u_t, dt, alpha=alpha_maj)
 
     #__ Calculate time shifts __
     shift, p = _calc_shift(x, p_bounds, dp)
@@ -304,9 +310,13 @@ def best_beam_DOA(
     #__ Apply time shifts __
     ushift_t, phase_shift = _apply_shift(u_f, f, shift, dt, nfft, npts, return_time=True)
 
+    #__ Apply window __
+    ushift_t = ushift_t[...,window]
+    if (alpha_min is not None): ushift_t *= tukey(np.sum(window), alpha_min)
+
     #__ Calculate F-statistic __
-    sum_square_mean = np.sum(np.mean(ushift_t[...,window], axis=1)**2, axis=1)
-    sum_mean_square = np.sum(np.mean(ushift_t[...,window]**2, axis=1), axis=1)
+    sum_square_mean = np.sum(np.mean(ushift_t, axis=1)**2, axis=1)
+    sum_mean_square = np.sum(np.mean(ushift_t**2, axis=1), axis=1)
     F_statistic     = (N_rec - 1) * sum_square_mean / (sum_mean_square - sum_square_mean)
     
     #__ Extract maximum __
