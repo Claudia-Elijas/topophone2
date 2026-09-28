@@ -431,7 +431,6 @@ def sample_covariance_matrix(
     npts  : int,
     dt    : float,
     bw    : float,
-    alpha : float = None,
     correction : np.ndarray = None
 ):
     """
@@ -451,9 +450,6 @@ def sample_covariance_matrix(
 
     bw : ``float``
         Slepian-sequence full bandwidth [Hz]
-
-    alpha : ``float`` (optional)
-        Pre-FFT taper fraction
 
     correction : ``numpy.ndarray`` (optional)
         Time shifts to be applied post-FFT [s]
@@ -483,7 +479,7 @@ def sample_covariance_matrix(
     utap_t = taper[:,None,:] * u_t[None,:,:]
 
     #__ Transform to frequency domain __
-    utap_f, f, nfft = rfft(utap_t, dt, alpha=alpha)
+    utap_f, f, nfft = rfft(utap_t, dt)
 
     #__ Apply correction __
     if (correction is not None):
