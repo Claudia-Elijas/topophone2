@@ -128,7 +128,7 @@ class Posterior():
 
     Methods 
     -------
-    - :meth:`log_likelihood` : Calculate log-likelihood of data given model. 
+    - :meth:`log_likelihood` : Calculate log-likelihood of data given model.
     - :meth:`log_posterior` : Calculate log-posterior for model given data and prior. 
 
     Input
@@ -153,6 +153,13 @@ class Posterior():
     N_obs_noise : ``int`` (optional)
         Number of independent samples used to estimate observed noise-only expectation
 
+    kappa : ``float`` (default ``1e5``)
+        Strength of the quadratic penalty on negative azimuthal density for free
+        cylindrical-harmonic noise signals (``0`` disables the penalty)
+
+    N_theta : ``int`` (default ``361``)
+        Number of azimuths at which positivity of the azimuthal density is evaluated
+
 
     Attributes
     ----------
@@ -164,6 +171,23 @@ class Posterior():
         Prior distribution
     forward : ``Callable``
         Function to predict array covariance from model vector
+    kappa : ``float``
+        Strength of the positivity penalty
+
+
+    Note
+    ----
+    The positivity penalty restricts the support of the prior to physically valid
+    (non-negative) azimuthal densities,
+
+    .. math::
+
+        2\pi\rho(\theta) = 1 + 2\sum_{m=1}^{M} \left[a_m \cos(m\theta) + b_m \sin(m\theta)\right] \geq 0,
+
+    and is applied in :meth:`log_posterior` rather than :meth:`log_likelihood`, so that
+    likelihood-based quantities (e.g., evidence) are unaffected. The effective prior is
+    uniform over the valid region, so the log-evidence computed with the box volume must
+    be corrected by :math:`-\ln(\text{valid fraction})`.
   
     '''
 
@@ -174,7 +198,9 @@ class Posterior():
         array_covariance_model : Callable,
         prior     : Callable,
         Gamma_obs_noise : Optional[np.ndarray] = None,
-        N_obs_noise     : Optional[int]        = None
+        N_obs_noise     : Optional[int]        = None,
+        kappa           : float                = 1e5,
+        N_theta         : int                  = 361
     ):
         
 
@@ -188,6 +214,7 @@ class Posterior():
         if self._invert_noise_only:
             self.N_obs_noise = float(N_obs_noise)  # Number of independent samples used to estimate observed noise-only expectation
         self.prior       = prior                   # Prior distribution
+        self.kappa       = float(kappa)            # Strength of positivity penalty
 
         #__ Store required attributes from model __
         self.forward  = array_covariance_model.forward   # Function to predict array covariance from model vector
@@ -198,6 +225,9 @@ class Posterior():
         self._calc_noise_only = array_covariance_model._calc_noise_only  # Include an additional noise-only calculation
         self._unpack  = array_covariance_model._unpack   # Unpack model vector
         self._expand  = array_covariance_model.expand    # Unflatten array-covariance
+
+        #__ Positivity checks for harmonic noise densities __
+        self._positivity = self._build_positivity(array_covariance_model, N_theta)
 
         #__ Lower-triangle index set for unique receiver pairs (excluding diagonal) __
         self._il0_rec, self._il1_rec = np.tril_indices(self._N_rec, k=-1)
@@ -226,30 +256,109 @@ class Posterior():
             raise ValueError(f"{var_name} is not positive definite.") from err
         return L_A
 
+    #__ Build positivity checks from the model's parameter layout __
+    @staticmethod
+    def _build_positivity(acm, N_theta):
+        r"""
+        Locate free cylindrical-harmonic coefficients in the model vector and build
+        the corresponding azimuthal basis. Fixed coefficients are validated once here.
+
+        Output
+        ------
+        terms : ``list`` of ``tuple``
+            (indices of [a_1..a_M, b_1..b_M] in model vector, basis ``torch.Tensor`` (2M, theta))
+        """
+
+        #__ Azimuth grid __
+        theta    = torch.linspace(0.0, 2*torch.pi, N_theta)
+        theta_np = theta.numpy()
+
+        #__ Loop through signals, tracking position in model vector __
+        terms, idx = [], 0
+        for sig in acm.sigs:
+
+            #__ Weight __
+            idx += 1
+
+            #__ Number of parameters (excluding weight) __
+            if isinstance(sig, str) and (sig in acm.custom_cf): n = acm.custom_cf[sig][0]
+            else:                                               n = acm._n_params(sig)
+
+            #__ Cylindrical-harmonic noise __
+            if isinstance(sig, dict) and (sig['sig'] == 'noise2D'):
+
+                #__ Free coefficients: record indices and basis __
+                if not (('a' in sig) and ('b' in sig)):
+                    i0     = idx + (0 if ('s' in sig) else 1)              # Skip free slowness
+                    M      = acm._max_order_2D
+                    orders = torch.arange(1, M+1, dtype=theta.dtype)
+                    basis  = torch.cat([torch.cos(orders[:,None]*theta),
+                                        torch.sin(orders[:,None]*theta)])  # (2M, theta)
+                    terms.append((list(range(i0, i0+2*M)), basis))
+
+                #__ Fixed coefficients: validate once __
+                else:
+                    a      = np.atleast_2d(sig['a']) ; b = np.atleast_2d(sig['b'])
+                    orders = np.arange(1, a.shape[-1])
+                    rho    = (a[:,:1]
+                              + 2.0 * a[:,1:] @ np.cos(orders[:,None]*theta_np)
+                              + 2.0 * b[:,1:] @ np.sin(orders[:,None]*theta_np))
+                    if (rho.min() < 0.0):
+                        raise ValueError("Fixed noise2D coefficients give a negative azimuthal density.")
+
+            #__ Advance past signal parameters __
+            idx += n
+
+        #__ Return output __
+        return terms
+
     #__ Calculate log-likelihood helper __
-    def _lnp_dm_and_grad(self, Gamma, dGamma, A, N_obs, grad, var_name):
+    def _lnp_dm_and_grad(self, Gamma, dGamma, A, N_obs, grad, var_name, margin=1e3, floor=-1e10):
 
-        #__ Cholesky decomposition of predicted array-covariance matrix __
-        L = self._safe_cholesky(Gamma, var_name)  # (model, freq, s)
+        #__ Cholesky decomposition, flagging non-positive-definite models __
+        N_model = Gamma.shape[0]
+        try:
+            L  = np.linalg.cholesky(Gamma)            # Fast path: whole batch
+            ok = np.ones(N_model, dtype=bool)
+        except np.linalg.LinAlgError:
+            L  = np.zeros_like(Gamma)
+            ok = np.zeros(N_model, dtype=bool)
+            for i in range(N_model):                  # Slow path: model by model
+                try:
+                    L[i]  = np.linalg.cholesky(Gamma[i])
+                    ok[i] = True
+                except np.linalg.LinAlgError:
+                    pass
 
-        #__ Log-determinant of Gamma __
-        diag   = np.real(np.diagonal(L, axis1=-2, axis2=-1))  # (model, freq, receiver)
-        logdet = 2.0 * np.sum(np.log(diag), axis=-1)          # (model, freq)
+        #__ Instantiate outputs __
+        lnp_dm  = np.empty(N_model)
+        dlnp_dm = np.zeros((N_model, dGamma.shape[-1])) if grad else None
+
+        #__ No valid models in batch __
+        if not ok.any():
+            lnp_dm[:] = floor
+            return lnp_dm, dlnp_dm
+
+        #__ Log-determinant of Gamma (valid models) __
+        L_ok, Gamma_ok = L[ok], Gamma[ok]
+        diag   = np.real(np.diagonal(L_ok, axis1=-2, axis2=-1))  # (model, freq, receiver)
+        logdet = 2.0 * np.sum(np.log(diag), axis=-1)             # (model, freq)
 
         #__ Inverse of Gamma __
-        Gamma_inv = np.linalg.inv(Gamma)  # (model, freq, receiver, receiver)
+        Gamma_inv = np.linalg.inv(Gamma_ok)  # (model, freq, receiver, receiver)
 
         #__ tr(Gamma^-1 A) __
         tr = np.real(np.sum(Gamma_inv * np.conj(A)[None,...], axis=(-2, -1)))  # (model, freq)
 
         #__ Sum over independent frequency bins __
-        lnp_dm = np.sum(-N_obs * logdet - tr, axis=-1)   # (model)
-        if not grad: return lnp_dm, None
+        lnp_dm[ok]  = np.sum(-N_obs * logdet - tr, axis=-1)  # (model)
+        lnp_dm[~ok] = lnp_dm[ok].min() - margin               # Finite floor for invalid models
 
         #__ Calculate gradient (model, parameter) __
-        B            = A[None, ...] - N_obs * Gamma
-        G            = Gamma_inv @ B @ Gamma_inv
-        dlnp_dm = np.real(np.einsum('mfij,mfjik->mk', G, dGamma, optimize=True))
+        if grad:
+            B  = A[None, ...] - N_obs * Gamma_ok
+            G  = Gamma_inv @ B @ Gamma_inv
+            dlnp_dm[ok] = np.real(np.einsum('mfij,mfjik->mk', G, dGamma[ok], optimize=True))
 
         #__ Return output __
         return lnp_dm, dlnp_dm
@@ -303,6 +412,43 @@ class Posterior():
         #__ Return output __
         return lnp_dm, dlnp_dm
 
+    #__ Calculate positivity penalty __
+    def _log_constraint(
+        self,
+        m : torch.Tensor
+    ):
+
+        r'''
+
+        Function to calculate the log-penalty for negative azimuthal density of free
+        cylindrical-harmonic noise signals.
+
+        Input
+        -----
+        m : ``torch.Tensor``
+            Model vector
+            (model, parameter)
+
+        Output
+        ------
+        lnp_c : ``torch.Tensor``
+            Log-penalty (zero for valid densities)
+            (model,)
+
+        '''
+
+        #__ No penalty required __
+        lnp_c = torch.zeros(m.shape[:-1], dtype=m.dtype)
+        if (self.kappa == 0.0) or (not self._positivity): return lnp_c
+
+        #__ Accumulate quadratic penalty on negative density __
+        for idx, basis in self._positivity:
+            rho   = 1.0 + 2.0 * m[..., idx] @ basis  # 2*pi*rho(theta) (model, theta)
+            lnp_c = lnp_c - self.kappa * torch.sum(torch.relu(-rho)**2, dim=-1)
+
+        #__ Return output __
+        return lnp_c
+
     #__ Calculate log-posterior __
     def log_posterior(
         self,
@@ -334,11 +480,234 @@ class Posterior():
         #__ Calculate log-prior __
         lnp_m = self.prior.log_prior(m)
 
+        #__ Calculate positivity penalty (restricts prior support) __
+        lnp_c = self._log_constraint(m)
+
         #__ Calculate log-posterior __
-        lnp_md = lnp_m + lnp_dm
+        lnp_md = lnp_m + lnp_dm + lnp_c
 
         #__ Return output __
         return lnp_md
+
+# #__ Posterior distribution __
+# class Posterior():
+#     r'''
+    
+#     Class to calculate log-posterior for array-covariance inversion.
+
+#     Methods 
+#     -------
+#     - :meth:`log_likelihood` : Calculate log-likelihood of data given model. 
+#     - :meth:`log_posterior` : Calculate log-posterior for model given data and prior. 
+
+#     Input
+#     -----
+#     Gamma_obs : ``numpy.ndarray``
+#         Observed array-covariance matrix
+#         (frequency, receiver, receiver)
+    
+#     N_obs : ``int``
+#         Number of independent samples used to estimate observed expectation
+
+#     array_covariance_model : ``Callable``
+#         Array covariance model (:class:`ArrayCovarianceModel`)
+
+#     prior : ``Callable``
+#         Prior distribution (:class:`Uniform`)
+
+#     Gamma_obs_noise : ``numpy.ndarray`` (optional)
+#         Observed noise-only array-covariance matrix
+#         (frequency, receiver, receiver)
+
+#     N_obs_noise : ``int`` (optional)
+#         Number of independent samples used to estimate observed noise-only expectation
+
+
+#     Attributes
+#     ----------
+#     N_obs : ``float``
+#         Number of independent samples used to estimate observed expectation
+#     N_obs_noise : ``float``
+#         Number of independent samples used to estimate observed noise-only expectation
+#     prior : ``Callable``
+#         Prior distribution
+#     forward : ``Callable``
+#         Function to predict array covariance from model vector
+  
+#     '''
+
+#     def __init__(
+#         self,
+#         Gamma_obs : np.ndarray,
+#         N_obs     : int,
+#         array_covariance_model : Callable,
+#         prior     : Callable,
+#         Gamma_obs_noise : Optional[np.ndarray] = None,
+#         N_obs_noise     : Optional[int]        = None
+#     ):
+        
+
+#         #__ Throw error if noise-only not calculated but noise ACM specified here, or warning if specified but not provided __
+#         self._invert_noise_only = (Gamma_obs_noise is not None)
+#         if self._invert_noise_only and not array_covariance_model._calc_noise_only:
+#             raise ValueError('Noise data provided, must specify `calc_noise_only` in ArrayCovarianceModel.')
+
+#         #__ Store arguments as attributes __
+#         self.N_obs       = float(N_obs)            # Number of independent samples used to estimate observed expectation
+#         if self._invert_noise_only:
+#             self.N_obs_noise = float(N_obs_noise)  # Number of independent samples used to estimate observed noise-only expectation
+#         self.prior       = prior                   # Prior distribution
+
+#         #__ Store required attributes from model __
+#         self.forward  = array_covariance_model.forward   # Function to predict array covariance from model vector
+#         self._iu0_rec = array_covariance_model._iu0_rec  # Upper-triangle index set for unique receiver pairs (including diagonal)
+#         self._iu1_rec = array_covariance_model._iu1_rec  # ^
+#         self._N_rec   = array_covariance_model.N_rec     # Number of receivers
+#         self._N_freq  = array_covariance_model.N_freq    # Number of frequency bins
+#         self._calc_noise_only = array_covariance_model._calc_noise_only  # Include an additional noise-only calculation
+#         self._unpack  = array_covariance_model._unpack   # Unpack model vector
+#         self._expand  = array_covariance_model.expand    # Unflatten array-covariance
+
+#         #__ Lower-triangle index set for unique receiver pairs (excluding diagonal) __
+#         self._il0_rec, self._il1_rec = np.tril_indices(self._N_rec, k=-1)
+
+#         #__ Check Hermitian symmetry of observation __
+#         def check_hermitian(Gamma_obs, var_name):
+#             if not np.allclose(Gamma_obs,
+#                             np.conj(np.swapaxes(Gamma_obs, -1, -2))):
+#                 raise ValueError(f"{var_name} is not Hermitian.")
+#         check_hermitian(Gamma_obs, 'Gamma_obs')
+#         if self._invert_noise_only: check_hermitian(Gamma_obs_noise, 'Gamma_obs_noise')
+
+#         #__ Scaled Gamma_obs (A in Goodman [1963]) __
+#         self._A = self.N_obs * Gamma_obs  # (frequency, receiver, receiver)
+#         if self._invert_noise_only: self._A_noise = self.N_obs_noise * Gamma_obs_noise
+
+#         #__ Cholesky factorisation of A __
+#         self._L_A = self._safe_cholesky(self._A, 'Gamma_obs')
+#         if self._invert_noise_only: self._L_A_noise = self._safe_cholesky(self._A_noise, 'Gamma_obs_noise')
+
+#     #__ Safe Cholesky decomposition __
+#     @staticmethod
+#     def _safe_cholesky(A, var_name):
+#         try: L_A = np.linalg.cholesky(A)
+#         except np.linalg.LinAlgError as err:
+#             raise ValueError(f"{var_name} is not positive definite.") from err
+#         return L_A
+
+#     #__ Calculate log-likelihood helper __
+#     def _lnp_dm_and_grad(self, Gamma, dGamma, A, N_obs, grad, var_name):
+
+#         #__ Cholesky decomposition of predicted array-covariance matrix __
+#         L = self._safe_cholesky(Gamma, var_name)  # (model, freq, s)
+
+#         #__ Log-determinant of Gamma __
+#         diag   = np.real(np.diagonal(L, axis1=-2, axis2=-1))  # (model, freq, receiver)
+#         logdet = 2.0 * np.sum(np.log(diag), axis=-1)          # (model, freq)
+
+#         #__ Inverse of Gamma __
+#         Gamma_inv = np.linalg.inv(Gamma)  # (model, freq, receiver, receiver)
+
+#         #__ tr(Gamma^-1 A) __
+#         tr = np.real(np.sum(Gamma_inv * np.conj(A)[None,...], axis=(-2, -1)))  # (model, freq)
+
+#         #__ Sum over independent frequency bins __
+#         lnp_dm = np.sum(-N_obs * logdet - tr, axis=-1)   # (model)
+#         if not grad: return lnp_dm, None
+
+#         #__ Calculate gradient (model, parameter) __
+#         B            = A[None, ...] - N_obs * Gamma
+#         G            = Gamma_inv @ B @ Gamma_inv
+#         dlnp_dm = np.real(np.einsum('mfij,mfjik->mk', G, dGamma, optimize=True))
+
+#         #__ Return output __
+#         return lnp_dm, dlnp_dm
+
+#     #__ Calculate log-likelihood __
+#     def log_likelihood(self, m, grad=True):
+#         r"""
+
+#         Function to calculate the log-likelihood of the observed array-covariance matrix given a model vector.
+
+#         Input
+#         -----
+#         m : ``numpy.ndarray``
+#             Model vector
+#             (model, parameter)
+
+#         grad : ``bool`` (default: ``True``)
+#             If ``True``, calculate gradient of log-likelihood wrt. model parameters
+
+#         Output
+#         ------
+#         lnp_dm : ``numpy.ndarray``
+#             Log-likelihood of observed array-covariance matrix given model vector
+#             (model,)
+
+#         dlnp_dm : ``numpy.ndarray``
+#             Gradient of log-likelihood wrt. model parameters
+#             (model, parameter)
+
+#         """
+
+#         #__ Extract model shape (model, parameter) __
+#         if not isinstance(m, np.ndarray):
+#             m = m.detach().numpy()
+#         m = np.atleast_2d(m)
+#         N_model, N_param = m.shape
+
+#         #__ Synthesise array-covariance matrix __
+#         if self._calc_noise_only: cov, dcov, cov_noise, dcov_noise = self.forward(m, grad=grad)  # (model, frequency, receiver pair, [parameter])
+#         else: cov, dcov = self.forward(m, grad=grad)  # (model, frequency, receiver pair, [parameter])
+#         Gamma, dGamma = self._expand(cov, dcov if grad else None)
+#         if self._invert_noise_only: Gamma_noise, dGamma_noise = self._expand(cov_noise, dcov_noise if grad else None)
+
+#         #__ Calculate likelihood __
+#         lnp_dm, dlnp_dm = self._lnp_dm_and_grad(Gamma, dGamma, self._A, self.N_obs, grad, 'Gamma')
+#         if self._invert_noise_only:
+#             lnp_dm_noise, dlnp_dm_noise = self._lnp_dm_and_grad(Gamma_noise, dGamma_noise, self._A_noise, self.N_obs_noise, grad, 'Gamma_noise')
+#             lnp_dm += lnp_dm_noise
+#             if (dlnp_dm is not None): dlnp_dm += dlnp_dm_noise
+
+#         #__ Return output __
+#         return lnp_dm, dlnp_dm
+
+#     #__ Calculate log-posterior __
+#     def log_posterior(
+#         self,
+#         m : np.ndarray
+#     ):
+
+#         r'''
+        
+#         Function to calculate the log-posterior for a model vector given observed array-covariance matrix and prior distribution.
+
+#         Input
+#         -----
+#         m : ``numpy.ndarray``
+#             Model vector
+#             (model, parameter)
+
+#         Output
+#         ------
+#         lnp_md : ``torch.Tensor``
+#             Log-posterior for model vector given observed array-covariance matrix and prior distribution
+#             (model,)
+        
+        
+#         '''
+
+#         #__ Calculate log-likelihood __
+#         lnp_dm = ForwardModel.apply(m, self.log_likelihood)
+
+#         #__ Calculate log-prior __
+#         lnp_m = self.prior.log_prior(m)
+
+#         #__ Calculate log-posterior __
+#         lnp_md = lnp_m + lnp_dm
+
+#         #__ Return output __
+#         return lnp_md
 
 #________ NORMALISING FLOWS MODEL ________#
 
