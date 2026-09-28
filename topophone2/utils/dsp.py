@@ -459,7 +459,7 @@ def sample_covariance_matrix(
     ------
     scm : ``numpy.ndarray``
         Sample-covariance matrix
-        (receiver, receiver, frequency)
+        (frequency, receiver, receiver)
 
     f : ``numpy.ndarray``
         Frequency vector [Hz]
@@ -491,6 +491,9 @@ def sample_covariance_matrix(
         utap_f[:,:,None,:] * np.conj(utap_f[:,None,:,:]),
         axis=0
     )
+
+    #__ Transpose SCM __
+    scm = np.transpose(scm, axes=(2,0,1))
 
     #__ Return output __
     return scm, f, N, T_bw
