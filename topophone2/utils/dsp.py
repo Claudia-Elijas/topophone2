@@ -23,7 +23,7 @@ def rfft(
     alpha : float = None
 ):
     """
-    Tranform real time series to frequency domain (engineering phase convention).
+    Transform real time series to frequency domain (engineering phase convention).
 
     Input
     -----
@@ -333,7 +333,7 @@ def best_beam_DOA(
         Time-shifted time series
         (receiver, time)
 
-    p_best : ``numpy.ndarray`
+    p_best : ``numpy.ndarray``
         Best-beam slowness vector [s.m-1]
         (direction,)
 
@@ -396,7 +396,7 @@ def _slepian(
         Number of points in time vector
 
     dt : ``float``
-        Sampling intercval [s]
+        Sampling interval [s]
 
     bw : ``float``
         Full bandwidth [Hz]
