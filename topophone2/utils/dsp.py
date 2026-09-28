@@ -495,5 +495,10 @@ def sample_covariance_matrix(
     #__ Transpose SCM __
     scm = np.transpose(scm, axes=(2,0,1))
 
+    #__ Scale to one-sided cross-spectral density __
+    scm *= 2 * dt                     # unit2 -> unit2.Hz-1
+    scm[0] /= 2                       # DC has no negative frequency partner
+    if (nfft % 2 == 0): scm[-1] /= 2  # Nyquist has no negative-frequency partner
+
     #__ Return output __
     return scm, f, N, T_bw
