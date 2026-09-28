@@ -1,53 +1,74 @@
 Installation
 ============
 
-Welcome to the installation of topophone2!
+In this section, we will guide you through the installation process of the **topophone2** package.
 
-There are several ways to install topophone2, depending on your preferences and needs. 
+.. admonition:: Requirements
+   :class: banner
 
+   The **topophone2** package requires a Linux system (on Windows, use
+   `WSL <https://learn.microsoft.com/en-us/windows/wsl/install>`_), with
+   ``git`` and ``conda`` (or ``mamba``) installed.
 
-1. **Using GitHub repository**: You can clone the topophone2 repository from GitHub and install it locally. This method allows you to access the latest version of the code and contribute to its development if you wish.
-    
-    First, clone the repository and navigate to the project directory:
+The installation will be done through the terminal, following the steps below.
 
-    .. code-block:: bash
-        
-        git clone https://github.com/Claudia-Elijas/topophone2.git
-        cd topophone2
-    
-    Then, you can install the required dependencies from the environment yml file:
+1. Clone the repository
+-----------------------
 
-    .. code-block:: bash
+First, create a copy of the **topophone2** code on your local machine using ``git clone``:
 
-        conda env create -f topophone2_env.yml
-    
-    And finally, install the package:
+.. code-block:: bash
 
-    .. code-block:: bash
+   git clone https://github.com/Claudia-Elijas/topophone2.git
 
-        pip install -e .
-    
-    Note that the `-e` flag allows you to install the package in editable mode, which means that any changes you make to the code will be reflected in the installed package without needing to reinstall it. This is particularly useful for development and testing purposes.
+.. note::
 
-For more details, please refer to the `topophone2 GitHub repository <https://github.com/Claudia-Elijas/topophone2>`_   
+   This downloads the latest code from the GitHub repository. To install a
+   specific release instead, pass its tag after ``--checkout``. For example, for
+   version 1.0.0:
 
+   .. code-block:: bash
 
-2. **Using pip**: You can install topophone2 using pip, which **will be available soon on PyPI**. This method is straightforward and allows you to easily manage the package and its dependencies.
-     
-    First make sure you have pip installed and updated:
-    
-    .. code-block:: bash
+      git clone https://github.com/Claudia-Elijas/topophone2.git 
+      git fetch --quiet origin 
+      git checkout --quiet v1.0.0
 
-        pip install --upgrade pip
-    
-    Then, you can install topophone2 using pip:
+2. Run the setup script
+-----------------------
 
-    .. code-block:: bash 
+Then run the ``setup.sh`` script from inside the ``topophone2`` folder:
 
-        pip install topophone2
+.. code-block:: bash
 
+   cd topophone2
+   bash setup.sh
 
+The script:
 
+1. creates (or updates, if it already exists) a conda environment called
+   ``topophone2`` from ``conda_env.yml``;
+2. downloads `GeoPVI <https://github.com/XuebinZhaoZXB/GeoPVI>`_ into
+   ``external/GeoPVI``, compiles its solver and installs it;
+3. installs **topophone2** in editable mode, so changes to the source code take
+   effect without reinstalling.
 
+This can take several minutes the first time. Running it again later is safe,
+and brings the environment up to date with ``conda_env.yml``.
 
+3. Activate the environment for use
+-----------------------------------
 
+The script does not leave the environment active, so activate it before using
+**topophone2**:
+
+.. code-block:: bash
+
+   conda activate topophone2
+
+To check that everything is installed, run:
+
+.. code-block:: bash
+
+   python -c "import topophone2.inversion; print('topophone2 is ready')"
+
+For more details, please refer to the `topophone2 GitHub repository <https://github.com/Claudia-Elijas/topophone2>`_.
