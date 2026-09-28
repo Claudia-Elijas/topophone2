@@ -1,7 +1,7 @@
 """
 .. container:: module-intro
 
-    The ``topophone2.utils.dsp`` module provides utilities for digital signal processing.
+    The ``topophone2.utils.dsp`` module provides utilities for digital signal processing. Note that the engineering phase convention is used throughout.
 """
 
 #________ IMPORT ________#
@@ -23,7 +23,7 @@ def rfft(
     alpha : float = None
 ):
     """
-    Tranform real time series to frequency domain.
+    Tranform real time series to frequency domain (engineering phase convention).
 
     Input
     -----
@@ -63,7 +63,7 @@ def rfft(
     if (alpha is not None): u_t = u_t * tukey(npts, alpha)
 
     #__ Perform FFT __
-    u_f = np.conj(np.fft.rfft(u_t, n=nfft, axis=-1))
+    u_f = np.fft.rfft(u_t, n=nfft, axis=-1)
 
     #__ Calculate frequency vector __
     f = np.fft.rfftfreq(n=nfft, d=dt)
@@ -79,7 +79,7 @@ def irfft(
     npts : int = None
 ):
     """
-    Transform complex spectrum to real time series.
+    Transform complex spectrum to real time series (engineering phase convention).
 
     Input
     -----
@@ -111,7 +111,7 @@ def irfft(
     """
 
     #__ Perform inverse FFT __
-    u_t = np.fft.irfft(np.conj(u_f), n=nfft, axis=-1)
+    u_t = np.fft.irfft(u_f, n=nfft, axis=-1)
 
     #__ Truncate padding __
     if (npts is not None): u_t = u_t[..., :npts]
@@ -222,7 +222,7 @@ def _apply_shift(
 
     #__ Calculate phase shift __
     w           = 2 * np.pi * f
-    phase_shift = np.exp(- 1j * shift[...,None] * w)
+    phase_shift = np.exp(1j * shift[...,None] * w)
 
     #__ Apply phase shift __
     ushift_f = u_f[None,...] * phase_shift
