@@ -432,6 +432,63 @@
 \[P_n^m(x) = (-1)^m \frac{(1-x^2)^{m/2}}{2^n n!} \frac{d^{n+m}}{dx^{n+m}} (x^2 - 1)^n\]</div>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="topophone2.utils.math.density_params">
+<span class="sig-prename descclassname"><span class="pre">topophone2.utils.math.</span></span><span class="sig-name descname"><span class="pre">density_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/utils/math.html#density_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.utils.math.density_params" title="Link to this definition">#</a></dt>
+<dd><p>Construct summary quantities for density functions (point, normal, skewnormal) in cylindrical/spherical coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Input<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Location vector [s.m-1]
+(model, direction)</p></li>
+<li><p><strong>sigma</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> (optional)) – Scale vector [s.m-1]
+(model, direction)</p></li>
+<li><p><strong>corr</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> (optional)) – Correlation matrix off-diagonal (upper-triangle order)
+(model, direction pair)</p></li>
+<li><p><strong>alpha</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> (optional)) – Shape vector [s.m-1]
+(model, direction)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Output<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>wd</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Skewness-direction vector [s.m-1]
+(model, direction)</p></li>
+<li><p><strong>mean</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Mean vector [s.m-1]
+(model, direction)</p></li>
+<li><p><strong>xi_circ</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Location vector in cylindrical/spherical coordinates [s.m-1, deg from North[, deg from horizontal]]
+(model, direction)</p></li>
+<li><p><strong>mean_circ</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Mean vector in cylindrical/spherical coordinates [s.m-1, deg from North[, deg from horizontal]]
+(model, direction)</p></li>
+<li><p><strong>wd_circ</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Skewness-direction vector in cylindrical/spherical coordinates about xi [s.m-1, deg from North[, deg from horizontal]]
+(model, direction)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="topophone2.utils.math.harmonic2D_density">
+<span class="sig-prename descclassname"><span class="pre">topophone2.utils.math.</span></span><span class="sig-name descname"><span class="pre">harmonic2D_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">az</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/utils/math.html#harmonic2D_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.utils.math.harmonic2D_density" title="Link to this definition">#</a></dt>
+<dd><p>Azimuthal density of a 2D noise field from its cylindrical-harmonic coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Input<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>az</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Azimuthal angles [deg, clockwise from North]
+(angle,)</p></li>
+<li><p><strong>a</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Cosine coefficients
+([model,] order)</p></li>
+<li><p><strong>b</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Sine coefficients
+([model,] order)</p></li>
+<li><p><strong>a0</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code> (default <code class="docutils literal notranslate"><span class="pre">1.0</span></code>)) – Zeroth-order coefficient</p></li>
+</ul>
+</dd>
+<dt class="field-even">Output<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>rho</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Normalised azimuthal density [rad-1]
+(model, angle)</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
@@ -483,6 +540,8 @@
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.utils.math.bessel_function"><code class="docutils literal notranslate"><span class="pre">bessel_function()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.utils.math.legendre_polynomial"><code class="docutils literal notranslate"><span class="pre">legendre_polynomial()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.utils.math.density_params"><code class="docutils literal notranslate"><span class="pre">density_params()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.utils.math.harmonic2D_density"><code class="docutils literal notranslate"><span class="pre">harmonic2D_density()</span></code></a></li>
 </ul>
   </nav></div>
 
