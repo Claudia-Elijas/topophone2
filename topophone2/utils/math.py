@@ -15,7 +15,7 @@
 import numpy as np
 
 #__ Harmonic functions __
-from scipy.special import jv, jvp, spherical_jn, lpmv
+from scipy.special import jv, jvp, spherical_jn, lpmv, log_ndtr
 
 
 #__ Bessel functions __
@@ -224,6 +224,80 @@ def density_params(
     #__ Return outputs __
     return wd, mean, xi_circ, mean_circ, wd_circ
 
+#__ Density functions __
+def density_function(
+    s     : tuple,
+    xi    : np.ndarray,
+    sigma : np.ndarray,
+    corr  : np.ndarray = None,
+    alpha : np.ndarray = None
+) -> np.ndarray:
+    """
+    Evaluate the normal or skew-normal probability density on a slowness grid.
+
+    Input
+    -----
+    s : ``tuple`` of ``numpy.ndarray``
+        Slowness grid from ``np.meshgrid`` [s.m-1], one array per direction
+        (*grid) each
+
+    xi : ``numpy.ndarray``
+        Location vector [s.m-1]
+        (model, direction)
+
+    sigma : ``numpy.ndarray``
+        Scale vector [s.m-1]
+        (model, direction)
+
+    corr : ``numpy.ndarray`` (optional)
+        Correlation matrix off-diagonal (upper-triangle order)
+        (model, direction pair)
+
+    alpha : ``numpy.ndarray`` (optional)
+        Shape vector [dimensionless]
+        (model, direction)
+
+    Output
+    ------
+    p : ``numpy.ndarray``
+        Probability density [(s.m-1)^-N_dir]
+        (model, *grid)
+    """
+
+    #__ Dimensions __
+    S          = np.stack(s, axis=-1)
+    grid_shape = S.shape[:-1]
+    N_model, N_dir = xi.shape
+    expand     = (N_model,) + (1,)*len(grid_shape)
+
+    #__ Correlation matrix (Omega_z) __
+    Omega_z = np.tile(np.eye(N_dir), (N_model, 1, 1))
+    if corr is not None:
+        iu = np.triu_indices(N_dir, k=1)
+        Omega_z[:, iu[0], iu[1]] = Omega_z[:, iu[1], iu[0]] = corr
+
+    #__ Positive-definiteness check __
+    sign, logdet_Oz = np.linalg.slogdet(Omega_z)
+    valid = sign > 0
+    Omega_z[~valid] = np.eye(N_dir)
+
+    #__ Standardised offsets z = (s - xi) / sigma __
+    z = (S[None] - xi.reshape(expand + (N_dir,))) / sigma.reshape(expand + (N_dir,))
+
+    #__ Normal log-density: phi(z; Omega_z) / prod(sigma) __
+    quad     = np.einsum('m...i,mij,m...j->m...', z, np.linalg.inv(Omega_z), z)
+    log_norm = -0.5*(N_dir*np.log(2*np.pi) + logdet_Oz) - np.log(sigma).sum(axis=-1)
+    log_p    = -0.5*quad + log_norm.reshape(expand)
+
+    #__ Skew-normal factor: 2 Phi(alpha^T z), in log space for stability __
+    if alpha is not None:
+        log_p += np.log(2.0) + log_ndtr(np.einsum('m...i,mi->m...', z, alpha))
+
+    #__ Return output __
+    p = np.exp(log_p)
+    p[~valid] = np.nan
+    return p
+
 #__ Cylindrical/spherical harmonics __
 def harmonic2D_density(
     az : np.ndarray,
@@ -248,8 +322,9 @@ def harmonic2D_density(
         Sine coefficients
         ([model,] order)
 
-    a0 : ``float`` (default ``1.0``)
+    a0 : ``numpy.ndarray`` (default ``1.0``)
         Zeroth-order coefficient
+        ([model,])
 
     Output
     ------
@@ -260,6 +335,7 @@ def harmonic2D_density(
 
     #__ Shapes __
     a = np.atleast_2d(a) ; b = np.atleast_2d(b)
+    a0 = np.atleast_1d(a0)
     M = a.shape[-1]
 
     #__ Compass angle __
@@ -269,7 +345,7 @@ def harmonic2D_density(
     m     = np.arange(1, M+1)
     cos_m = np.cos(m[:,None] * theta[None,:])        # (order, angle)
     sin_m = np.sin(m[:,None] * theta[None,:])
-    rho   = (a0 + 2.0 * (a @ cos_m + b @ sin_m)) / (2*np.pi*a0)
+    rho   = (a0[:,None] + 2.0 * (a @ cos_m + b @ sin_m)) / (2*np.pi*a0[:,None])
 
     #__ Return output __
     return rho
