@@ -410,7 +410,7 @@
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
@@ -418,11 +418,19 @@
 Hello from topophone2!
 </pre></div></div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not installed. Falling back to cpu.
+</pre></div></div>
+</div>
 <section id="1.2.1-Read-inversion-results">
 <h2>1.2.1 Read inversion results<a class="headerlink" href="#1.2.1-Read-inversion-results" title="Link to this heading">#</a></h2>
 <p>Inversion results calculated in Example 1.1 (triad, 15db), also other geometries…</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Load results __</span>
@@ -505,7 +513,7 @@ Hello from topophone2!
 <section id="1.2.3-Compare">
 <h2>1.2.3 Compare<a class="headerlink" href="#1.2.3-Compare" title="Link to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Store as arrays __</span>
@@ -514,15 +522,15 @@ Hello from topophone2!
 <span class="n">D_quad_15dB</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">D_mean</span><span class="p">[</span><span class="s1">'quad_15dB'</span><span class="p">],</span>  <span class="n">D_bw</span><span class="p">[</span><span class="s1">'quad_15dB'</span><span class="p">],</span>  <span class="n">D_noise</span><span class="p">[</span><span class="s1">'quad_15dB'</span><span class="p">],</span>  <span class="n">D_snr</span><span class="p">[</span><span class="s1">'quad_15dB'</span><span class="p">]])</span>
 
 <span class="c1">#__ Calculate relative information gain with noise level increased by 15dB __</span>
-<span class="n">rel_IG_noisy</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">I_gain_triad_0dB</span> <span class="o">-</span> <span class="n">I_gain_triad_15dB</span><span class="p">)</span> <span class="o">/</span> <span class="n">I_gain_triad_15dB</span>
+<span class="n">rel_IG_noisy</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">D_triad_0dB</span> <span class="o">-</span> <span class="n">D_triad_15dB</span><span class="p">)</span> <span class="o">/</span> <span class="n">D_triad_15dB</span>
 
 <span class="c1">#__ Calculate relative information gain for extra receiver added __</span>
-<span class="n">rel_IG_rec</span>   <span class="o">=</span> <span class="mi">100</span><span class="o">*</span> <span class="p">(</span><span class="n">I_gain_quad_15dB</span> <span class="o">-</span> <span class="n">I_gain_triad_15dB</span><span class="p">)</span> <span class="o">/</span> <span class="n">I_gain_triad_15dB</span>
+<span class="n">rel_IG_rec</span>   <span class="o">=</span> <span class="mi">100</span><span class="o">*</span> <span class="p">(</span><span class="n">D_quad_15dB</span> <span class="o">-</span> <span class="n">D_triad_15dB</span><span class="p">)</span> <span class="o">/</span> <span class="n">D_triad_15dB</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Create figure and axes __</span>
@@ -555,11 +563,28 @@ Hello from topophone2!
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/tmp/ipykernel_6946/2612426561.py:27: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  fig.show()
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_example_1_example_1.2_13_0.png" src="../../_images/examples_example_1_example_1.2_13_0.png" />
+<img alt="../../_images/examples_example_1_example_1.2_13_1.png" src="../../_images/examples_example_1_example_1.2_13_1.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
 </div>
 </div>
 </section>
