@@ -841,7 +841,7 @@
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[77]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#________ CREATE FIGURE ________#</span>
@@ -879,6 +879,7 @@
 <span class="n">ax_in</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s1">'white'</span><span class="p">)</span>
 <span class="n">ax_in</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">'equal'</span><span class="p">)</span>
 
+<span class="c1">#__ Labels __</span>
 <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">xlab</span><span class="p">,</span> <span class="n">ylab</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span>
     <span class="p">[</span>
         <span class="sa">r</span><span class="s2">"Sound speed [km$\,$s$^{-1}$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Easting [km]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Slowness (east) [s$\,$km$^{-1}$]"</span><span class="p">,</span>
@@ -888,7 +889,7 @@
     <span class="p">[</span>
         <span class="sa">r</span><span class="s2">"Depth [km]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Northing [km]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Slowness (north) [s$\,$km$^{-1}$]"</span><span class="p">,</span>
         <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="sa">r</span><span class="s2">"Energy density [Pa$^2$$\,$Hz$^{-1}$$\,$/$\,\degree$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"P(SNR &gt; thresh.) [%]"</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="sa">r</span><span class="s2">"Energy density\n[mPa$^2$$\,$Hz$^{-1}$$\,$/$\,\degree$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"P(SNR &gt; thresh.) [%]"</span><span class="p">,</span> <span class="kc">None</span>
     <span class="p">]</span>
 <span class="p">):</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">xlab</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlab</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">small</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
@@ -1188,8 +1189,332 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Read data __</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'./data/hukkakero/IS37_hukkakero_2016-08-19.npz'</span><span class="p">)</span>
+<span class="n">u_t</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">'u_t'</span><span class="p">]</span>  <span class="c1"># Waveform data     [Pa] (receiver, time)</span>
+<span class="n">t</span>   <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">'t'</span><span class="p">]</span>    <span class="c1"># Lapse time vector [s]  (time,)</span>
+<span class="n">x</span>   <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">'x'</span><span class="p">]</span>    <span class="c1"># Receiver location [m]  (receiver, direction)</span>
+
+<span class="c1">#__ Select signal and noise windows __</span>
+<span class="n">T_w</span>   <span class="o">=</span> <span class="mf">20.0</span>                                   <span class="c1"># Window half-width [s]</span>
+<span class="n">t_w_s</span> <span class="o">=</span> <span class="mi">1360</span>                                   <span class="c1"># Signal-window central time [s]</span>
+<span class="n">t_w_n</span> <span class="o">=</span> <span class="p">[</span><span class="mi">750</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mi">850</span><span class="p">,</span> <span class="mi">900</span><span class="p">,</span> <span class="mi">950</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1050</span><span class="p">]</span>  <span class="c1"># Noise-window central times [s]</span>
+
+<span class="c1">#__ Masks __</span>
+<span class="n">win_s</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">t_w_s</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">T_w</span><span class="p">)</span>  <span class="c1"># Signal window mask (time,)</span>
+<span class="n">win_n</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">t_w_ni</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">T_w</span><span class="p">)</span>     <span class="c1"># Noise window mask (time,)</span>
+    <span class="k">for</span> <span class="n">t_w_ni</span> <span class="ow">in</span> <span class="n">t_w_n</span>
+<span class="p">]</span>
+
+<span class="c1">#__ Read results __</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">"./models/hukkakero/model-samples_iteration-30000.txt"</span><span class="p">)</span>
+
+<span class="c1">#__ Unpack results __</span>
+<span class="n">w_s</span>   <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">xi</span>    <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">3</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+<span class="n">corr</span>  <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">5</span><span class="p">]</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">6</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span>
+<span class="n">w_n1</span>  <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">8</span><span class="p">]</span>
+<span class="n">w_n2</span>  <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">9</span><span class="p">]</span>
+<span class="n">a</span>     <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">10</span><span class="p">:</span><span class="mi">12</span><span class="p">]</span>
+<span class="n">b</span>     <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">12</span><span class="p">:</span><span class="mi">14</span><span class="p">]</span>
+
+<span class="c1">#__ Rotate results __</span>
+<span class="n">wd</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">xi_circ</span><span class="p">,</span> <span class="n">mean_circ</span><span class="p">,</span> <span class="n">sigma_circ</span><span class="p">,</span> <span class="n">wd_circ</span> <span class="o">=</span> <span class="n">density_params</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">corr</span><span class="p">[:,</span><span class="kc">None</span><span class="p">],</span> <span class="n">alpha</span><span class="p">)</span>
+<span class="c1"># p = density_function(xi, sigma, corr, alpha)</span>
+
+<span class="c1">#__ Noise field __</span>
+<span class="n">baz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="mi">360</span><span class="p">)</span>
+<span class="n">rho</span> <span class="o">=</span> <span class="n">harmonic2D_density</span><span class="p">(</span><span class="n">baz</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">rho</span> <span class="o">=</span> <span class="n">rho</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">rho</span><span class="p">)]</span>
+
+<span class="c1">#__ Marginal statistics __</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">MarginalStats</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="n">stats_circ</span> <span class="o">=</span> <span class="n">MarginalStats</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">xi_circ</span><span class="p">,</span> <span class="n">sigma_circ</span><span class="p">,</span> <span class="n">wd_circ</span><span class="p">)))</span>
+<span class="n">p_ws</span><span class="p">,</span> <span class="n">ws_vec</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">probability_density</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">p_wn1</span><span class="p">,</span> <span class="n">wn1_vec</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">probability_density</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">p_wn2</span><span class="p">,</span> <span class="n">wn2_vec</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">probability_density</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">ws_05</span><span class="p">,</span> <span class="n">ws_95</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">credible_interval</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">wn1_05</span><span class="p">,</span> <span class="n">wn1_95</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">credible_interval</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="p">[</span><span class="mi">8</span><span class="p">])</span>
+<span class="n">wn2_05</span><span class="p">,</span> <span class="n">wn2_95</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">credible_interval</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="p">[</span><span class="mi">9</span><span class="p">])</span>
+
+<span class="c1">#__ 2D kernel density on a grid __</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kde_2d</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">npts</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Input</span>
+<span class="sd">    -----</span>
+<span class="sd">    samples : ``numpy.ndarray``</span>
+<span class="sd">        (sample, 2)</span>
+
+<span class="sd">    bounds : ``numpy.ndarray`` (optional)</span>
+<span class="sd">        [[lo0, hi0], [lo1, hi1]]; sample range padded by `pad` if None</span>
+
+<span class="sd">    Output</span>
+<span class="sd">    ------</span>
+<span class="sd">    density : ``numpy.ndarray``</span>
+<span class="sd">        (npts, npts), indexed [dim0, dim1]</span>
+
+<span class="sd">    vecs : ``tuple`` of ``numpy.ndarray``</span>
+<span class="sd">        Grid vectors for each dimension</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">bounds</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">samples</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">samples</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">bounds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">lo</span> <span class="o">-</span> <span class="n">pad</span><span class="o">*</span><span class="p">(</span><span class="n">hi</span><span class="o">-</span><span class="n">lo</span><span class="p">),</span> <span class="n">hi</span> <span class="o">+</span> <span class="n">pad</span><span class="o">*</span><span class="p">(</span><span class="n">hi</span><span class="o">-</span><span class="n">lo</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">v0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">*</span><span class="n">bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">npts</span><span class="p">)</span>
+    <span class="n">v1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">*</span><span class="n">bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">npts</span><span class="p">)</span>
+    <span class="n">g0</span><span class="p">,</span> <span class="n">g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">v0</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s1">'ij'</span><span class="p">)</span>
+    <span class="n">density</span> <span class="o">=</span> <span class="n">gaussian_kde</span><span class="p">(</span><span class="n">samples</span><span class="o">.</span><span class="n">T</span><span class="p">)(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">g0</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">g1</span><span class="o">.</span><span class="n">ravel</span><span class="p">()]))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">npts</span><span class="p">,</span> <span class="n">npts</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">density</span><span class="p">,</span> <span class="p">(</span><span class="n">v0</span><span class="p">,</span> <span class="n">v1</span><span class="p">)</span>
+<span class="n">density</span><span class="p">,</span> <span class="p">(</span><span class="n">v0</span><span class="p">,</span> <span class="n">v1</span><span class="p">)</span> <span class="o">=</span> <span class="n">kde_2d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">xi_circ</span><span class="p">[:,[</span><span class="mi">1</span><span class="p">]],</span><span class="n">wd_circ</span><span class="p">[:,[</span><span class="mi">1</span><span class="p">]])))</span>
+
+<span class="c1">#__ Read: Signal + noise __</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="s2">"./data/hukkakero/signal_topophone2.txt"</span><span class="p">)</span>
+<span class="n">freq_Hz</span>   <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Frequency vector         [Hz]       (frequency)</span>
+<span class="n">x</span>         <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Receiver position        [m]        (receiver, direction)</span>
+<span class="n">Gamma_obs</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># Array-covariance matrix  [Pa2.Hz-1] (frequency, receiver, receiver)</span>
+<span class="n">N_obs</span>     <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>  <span class="c1"># Independent observations</span>
+<span class="n">freq</span>      <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">freq_Hz</span>
+
+<span class="c1">#__ Beamforming __</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">slowness_grid</span><span class="p">(</span><span class="n">p_bounds</span><span class="p">,</span> <span class="n">dp</span><span class="p">):</span>
+    <span class="n">vecs</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">p_min</span><span class="p">,</span> <span class="n">p_max</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">p_max</span><span class="o">-</span><span class="n">p_min</span><span class="p">)</span><span class="o">/</span><span class="n">dp</span><span class="p">))</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">p_min</span><span class="p">,</span> <span class="n">p_max</span><span class="p">)</span> <span class="ow">in</span> <span class="n">p_bounds</span><span class="p">]</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="o">*</span><span class="n">vecs</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s1">'ij'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">g</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">grid</span><span class="p">],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span> <span class="n">vecs</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">bartlett_power</span><span class="p">(</span>
+    <span class="n">Gamma</span>        <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">x</span>            <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">freq</span>         <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">p_bounds</span>     <span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+    <span class="n">dp</span>           <span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">normalise</span>    <span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">exclude_diag</span> <span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">chunk</span>        <span class="p">:</span> <span class="nb">int</span>  <span class="o">=</span> <span class="mi">4096</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Bartlett (conventional, delay-and-sum) beam power from an array-covariance matrix.</span>
+
+<span class="sd">    Assumes Gamma[f, j, k] = E[u_j u_k^*] with NumPy's FFT sign convention, for which a</span>
+<span class="sd">    plane wave of slowness p has u_j ~ exp(-i w p.x_j). The steering vector is</span>
+<span class="sd">    a_j(p) = exp(-i w p.x_j) and B(p) = a^H Gamma a / N^2.</span>
+
+<span class="sd">    Input</span>
+<span class="sd">    -----</span>
+<span class="sd">    Gamma : ``numpy.ndarray``</span>
+<span class="sd">        Array-covariance matrix [Pa2.Hz-1]</span>
+<span class="sd">        (frequency, receiver, receiver)</span>
+
+<span class="sd">    x : ``numpy.ndarray``</span>
+<span class="sd">        Receiver position [m]</span>
+<span class="sd">        (receiver, direction)</span>
+
+<span class="sd">    freq : ``numpy.ndarray``</span>
+<span class="sd">        Angular frequency [rad.s-1]</span>
+<span class="sd">        (frequency,)</span>
+
+<span class="sd">    p_bounds : ``list``</span>
+<span class="sd">        (Minimum, maximum) slowness to search in each direction [s.m-1]</span>
+
+<span class="sd">    dp : ``float``</span>
+<span class="sd">        Slowness search interval [s.m-1]</span>
+
+<span class="sd">    normalise : ``bool`` (default ``False``)</span>
+<span class="sd">        Divide by the mean auto-power, so B lies in [0, 1] (comparable across frequencies)</span>
+
+<span class="sd">    exclude_diag : ``bool`` (default ``False``)</span>
+<span class="sd">        Use cross-terms only (j != k), removing the incoherent-noise floor</span>
+
+<span class="sd">    Output</span>
+<span class="sd">    ------</span>
+<span class="sd">    B : ``numpy.ndarray``</span>
+<span class="sd">        Beam power [Pa2.Hz-1, or dimensionless if normalised]</span>
+<span class="sd">        (frequency, *slowness grid)</span>
+
+<span class="sd">    vecs : ``list`` of ``numpy.ndarray``</span>
+<span class="sd">        Slowness vector in each direction [s.m-1]</span>
+<span class="sd">    """</span>
+
+    <span class="c1">#__ Slowness grid and travel times __</span>
+    <span class="n">p</span><span class="p">,</span> <span class="n">vecs</span> <span class="o">=</span> <span class="n">slowness_grid</span><span class="p">(</span><span class="n">p_bounds</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>              <span class="c1"># (slowness, direction)</span>
+    <span class="n">tau</span>     <span class="o">=</span> <span class="n">p</span> <span class="o">@</span> <span class="n">x</span><span class="o">.</span><span class="n">T</span>                                  <span class="c1"># (slowness, receiver)</span>
+    <span class="n">N</span>       <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1">#__ Optionally drop the auto-power terms __</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">Gamma</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">exclude_diag</span><span class="p">:</span>
+        <span class="n">G</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="c1">#__ Beam power, chunked over slowness to bound memory __</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">freq</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)))</span>
+    <span class="k">for</span> <span class="n">s0</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">chunk</span><span class="p">):</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">freq</span><span class="p">[:,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">tau</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="n">s0</span><span class="p">:</span><span class="n">s0</span><span class="o">+</span><span class="n">chunk</span><span class="p">,:])</span>   <span class="c1"># (freq, slowness, receiver)</span>
+        <span class="n">B</span><span class="p">[:,</span> <span class="n">s0</span><span class="p">:</span><span class="n">s0</span><span class="o">+</span><span class="n">chunk</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'fsj,fjk,fsk-&gt;fs'</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">conj</span><span class="p">(),</span> <span class="n">G</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">real</span>
+
+    <span class="c1">#__ Normalise __</span>
+    <span class="k">if</span> <span class="n">exclude_diag</span><span class="p">:</span> <span class="n">B</span> <span class="o">/=</span> <span class="n">N</span><span class="o">*</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>            <span class="n">B</span> <span class="o">/=</span> <span class="n">N</span><span class="o">**</span><span class="mi">2</span>
+    <span class="k">if</span> <span class="n">normalise</span><span class="p">:</span>
+        <span class="n">auto</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">Gamma</span><span class="p">,</span> <span class="n">axis1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis2</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">real</span> <span class="o">/</span> <span class="n">N</span>             <span class="c1"># mean auto-power (frequency,)</span>
+        <span class="n">B</span> <span class="o">/=</span> <span class="n">auto</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span>
+
+    <span class="c1">#__ Return output __</span>
+    <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">freq</span><span class="p">),</span> <span class="o">*</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vecs</span><span class="p">]),</span> <span class="n">vecs</span>
+<span class="n">B</span><span class="p">,</span> <span class="p">(</span><span class="n">px</span><span class="p">,</span> <span class="n">py</span><span class="p">)</span> <span class="o">=</span> <span class="n">bartlett_power</span><span class="p">(</span>
+    <span class="n">Gamma_obs</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span>                        <span class="c1"># freq in rad/s, as you've defined it</span>
+    <span class="n">p_bounds</span><span class="o">=</span><span class="p">[(</span><span class="o">-</span><span class="mf">4.5e-3</span><span class="p">,</span> <span class="mf">4.5e-3</span><span class="p">)]</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">dp</span><span class="o">=</span><span class="mf">2e-5</span><span class="p">,</span>
+    <span class="n">normalise</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+<span class="n">B_band</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#________ CREATE FIGURE ________#</span>
+
+<span class="c1">#__ Figure __</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span>
+    <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mf">6.5</span><span class="p">,</span><span class="mf">3.25</span><span class="p">),</span>
+    <span class="n">facecolor</span><span class="o">=</span><span class="s1">'white'</span><span class="p">,</span>
+    <span class="n">layout</span><span class="o">=</span><span class="s1">'constrained'</span>
+<span class="p">)</span>
+
+<span class="c1">#__ Axes __</span>
+<span class="n">gs</span> <span class="o">=</span> <span class="n">GridSpec</span><span class="p">(</span>
+    <span class="n">figure</span> <span class="o">=</span> <span class="n">fig</span><span class="p">,</span>
+    <span class="n">nrows</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="n">ncols</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="p">)</span>
+<span class="n">axs</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">'equal'</span><span class="p">),</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]),</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]),</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">'equal'</span><span class="p">),</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">'equal'</span><span class="p">),</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="p">]</span>
+
+<span class="c1">#__ Labels __</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">xlab</span><span class="p">,</span> <span class="n">ylab</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span>
+    <span class="p">[</span>
+    <span class="p">],</span>
+    <span class="p">[</span>
+    <span class="p">]</span>
+<span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">xlab</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlab</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">small</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ylab</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylab</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">small</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+
+<span class="c1">#__ Ticks __</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">xlims</span><span class="p">,</span> <span class="n">ylims</span><span class="p">,</span> <span class="n">xticks</span><span class="p">,</span> <span class="n">yticks</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span>
+    <span class="p">[</span>
+    <span class="p">],</span>
+    <span class="p">[</span>
+    <span class="p">],</span>
+    <span class="p">[</span>
+    <span class="p">],</span>
+    <span class="p">[</span>
+    <span class="p">]</span>
+<span class="p">):</span>
+    <span class="k">if</span> <span class="n">xlims</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">*</span><span class="n">xlims</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ylims</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">*</span><span class="n">ylims</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">xticks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">MultipleLocator</span><span class="p">(</span><span class="n">xticks</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_minor_locator</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">MultipleLocator</span><span class="p">(</span><span class="n">xticks</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+    <span class="k">if</span> <span class="n">yticks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">MultipleLocator</span><span class="p">(</span><span class="n">yticks</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_minor_locator</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">MultipleLocator</span><span class="p">(</span><span class="n">yticks</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="n">small</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">'gainsboro'</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="c1">#________ PLOT: RECEIVER GEOMETRY ________#</span>
+
+<span class="c1">#________ PLOT: WAVEFORM ________#</span>
+
+<span class="c1">#__ Plot waveform __</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">u_t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">'gainsboro'</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">#__ Plot signal __</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">win_s</span><span class="p">],</span> <span class="n">u_t</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">win_s</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Signal window"</span><span class="p">)</span>
+
+<span class="c1">#__ PLot noise __</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">win_ni</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">win_n</span><span class="p">):</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">win_ni</span><span class="p">],</span> <span class="n">u_t</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">win_ni</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Noise window"</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">"_nolegend_"</span><span class="p">)</span>
+
+<span class="c1">#________ PLOT: SNR ________#</span>
+
+<span class="c1">#__ Signal __</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">ws_vec</span><span class="p">,</span> <span class="n">p_ws</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span>
+<span class="n">in_ci</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">ws_vec</span><span class="o">&gt;=</span><span class="n">ws_05</span><span class="p">,</span> <span class="n">ws_vec</span><span class="o">&lt;=</span><span class="n">ws_95</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">ws_vec</span><span class="p">[</span><span class="n">in_ci</span><span class="p">],</span> <span class="n">p_ws</span><span class="p">[</span><span class="n">in_ci</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">#__ Self-noise __</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">wn1_vec</span><span class="p">,</span> <span class="n">p_wn1</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span>
+<span class="n">in_ci</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">wn1_vec</span><span class="o">&gt;=</span><span class="n">wn1_05</span><span class="p">,</span> <span class="n">wn1_vec</span><span class="o">&lt;=</span><span class="n">wn1_95</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">wn1_vec</span><span class="p">[</span><span class="n">in_ci</span><span class="p">],</span> <span class="n">p_wn1</span><span class="p">[</span><span class="n">in_ci</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">#__ Environament noise __</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">wn2_vec</span><span class="p">,</span> <span class="n">p_wn2</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span>
+<span class="n">in_ci</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">wn2_vec</span><span class="o">&gt;=</span><span class="n">wn2_05</span><span class="p">,</span> <span class="n">wn2_vec</span><span class="o">&lt;=</span><span class="n">wn2_95</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">wn2_vec</span><span class="p">[</span><span class="n">in_ci</span><span class="p">],</span> <span class="n">p_wn2</span><span class="p">[</span><span class="n">in_ci</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">#________ PLOT: BEAMFORMING &amp; SIGNAL ________#</span>
+
+<span class="c1">#__ Beamforming __</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span>
+    <span class="mf">1e3</span><span class="o">*</span><span class="n">px</span><span class="p">,</span> <span class="mf">1e3</span><span class="o">*</span><span class="n">py</span><span class="p">,</span> <span class="n">B_band</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s1">'cmc.grayC_r'</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span>
+
+<span class="c1">#________ PLOT: SIGNAL MARGINAL ________#</span>
+
+<span class="c1">#__ Cross-plot __</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">v0</span><span class="o">-</span><span class="mi">180</span><span class="p">)</span><span class="o">%</span><span class="k">360</span>-110, v1, density,
+    <span class="n">cmap</span><span class="o">=</span><span class="n">cmap0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span>
+
+<span class="c1">#________ PLOT: NOISE FIELD ________#</span>
+
+<span class="c1">#__ Show figure __</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/tmp/ipykernel_2956/1876386110.py:126: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  fig.show()
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/examples_figs_JASA-EL_7_1.png" src="../_images/examples_figs_JASA-EL_7_1.png" />
 </div>
 </div>
 </section>
