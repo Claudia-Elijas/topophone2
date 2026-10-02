@@ -167,7 +167,7 @@ def density_params(
     #__ [l],[p] direction
 
     #__ Instantiate outputs __
-    wd, mean, xi_circ, mean_circ, wd_circ = [None]*5
+    wd, mean, xi_circ, mean_circ, sigma_circ, wd_circ = [None]*6
 
     #__ Construct correlation matrix __
     if corr is not None:
@@ -218,20 +218,22 @@ def density_params(
             e_theta = np.stack([-st*sp, -st*cp, ct], axis=1)
 
         #__ Scale vector linearised about xi __
-        dr   = np.sum(sigma * e_r, axis=1)
-        dphi = np.degrees(np.sum(sigma * e_phi, axis=1) / (r * ct))
-        if (N_dir == 2): sigma_circ = np.stack([dr, dphi], axis=1)
-        else:
-            dtheta  = np.degrees(np.sum(sigma * e_theta, axis=1) / r)
-            sigma_circ = np.stack([dr, dphi, dtheta], axis=1)
+        if (sigma is not None):
+            dr   = np.sum(sigma * e_r, axis=1)
+            dphi = np.degrees(np.sum(sigma * e_phi, axis=1) / (r * ct))
+            if (N_dir == 2): sigma_circ = np.stack([dr, dphi], axis=1)
+            else:
+                dtheta  = np.degrees(np.sum(sigma * e_theta, axis=1) / r)
+                sigma_circ = np.stack([dr, dphi, dtheta], axis=1)
 
         #__ Skewness-direction as linearised changes in xi __
-        dr   = np.sum(wd * e_r, axis=1)
-        dphi = np.degrees(np.sum(wd * e_phi, axis=1) / (r * ct))
-        if (N_dir == 2): wd_circ = np.stack([dr, dphi], axis=1)
-        else:
-            dtheta  = np.degrees(np.sum(wd * e_theta, axis=1) / r)
-            wd_circ = np.stack([dr, dphi, dtheta], axis=1)
+        if (alpha is not None):
+            dr   = np.sum(wd * e_r, axis=1)
+            dphi = np.degrees(np.sum(wd * e_phi, axis=1) / (r * ct))
+            if (N_dir == 2): wd_circ = np.stack([dr, dphi], axis=1)
+            else:
+                dtheta  = np.degrees(np.sum(wd * e_theta, axis=1) / r)
+                wd_circ = np.stack([dr, dphi, dtheta], axis=1)
 
     #__ Return outputs __
     return wd, mean, xi_circ, mean_circ, sigma_circ, wd_circ
