@@ -841,7 +841,7 @@
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[74]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[77]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#________ CREATE FIGURE ________#</span>
@@ -949,16 +949,16 @@
 <span class="c1">#__ Water column __</span>
 <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fill_betweenx</span><span class="p">(</span>
     <span class="mf">1e-3</span><span class="o">*</span><span class="n">z</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="o">*</span><span class="n">c_z</span><span class="p">,</span>
-    <span class="n">facecolor</span><span class="o">=</span><span class="s1">'none'</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">'grey'</span><span class="p">,</span>
-    <span class="n">hatch</span><span class="o">=</span><span class="s1">'---'</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.83</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mf">0.9</span>
+    <span class="n">facecolor</span><span class="o">=</span><span class="s1">'none'</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">'0.7'</span><span class="p">,</span>
+    <span class="n">hatch</span><span class="o">=</span><span class="s1">'---'</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mf">0.9</span>
 <span class="p">)</span>
 <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mf">1e-3</span><span class="o">*</span><span class="n">c_z</span><span class="p">,</span> <span class="mf">1e-3</span><span class="o">*</span><span class="n">z</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="c1">#__ Sediment column __</span>
 <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fill_betweenx</span><span class="p">(</span>
     <span class="mf">1e-3</span><span class="o">*</span><span class="n">z_sed</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="o">*</span><span class="n">c_sed</span><span class="p">,</span>
-    <span class="n">facecolor</span><span class="o">=</span><span class="s1">'none'</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span>
-    <span class="n">hatch</span><span class="o">=</span><span class="s1">'ooo'</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mf">0.9</span>
+    <span class="n">facecolor</span><span class="o">=</span><span class="s1">'none'</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">'0.7'</span><span class="p">,</span>
+    <span class="n">hatch</span><span class="o">=</span><span class="s1">'ooo'</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mf">0.9</span>
 <span class="p">)</span>
 <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mf">1e-3</span><span class="o">*</span><span class="n">c_sed</span><span class="p">,</span> <span class="mf">1e-3</span><span class="o">*</span><span class="n">z_sed</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
@@ -1161,6 +1161,7 @@
 
 <span class="c1">#__ Show figure __</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">'./data/figures/Figure_1.pdf'</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">'tight'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1169,7 +1170,7 @@
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/tmp/ipykernel_2956/2834350592.py:317: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+/tmp/ipykernel_2956/1991453286.py:317: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
   fig.show()
 </pre></div></div>
 </div>
