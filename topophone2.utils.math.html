@@ -445,7 +445,7 @@
 (model, direction)</p></li>
 <li><p><strong>corr</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> (optional)) – Correlation matrix off-diagonal (upper-triangle order)
 (model, direction pair)</p></li>
-<li><p><strong>alpha</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> (optional)) – Shape vector [s.m-1]
+<li><p><strong>alpha</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> (optional)) – Shape vector [dimensionless]
 (model, direction)</p></li>
 </ul>
 </dd>
@@ -459,9 +459,11 @@
 (model, direction)</p></li>
 <li><p><strong>mean_circ</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Mean vector in cylindrical/spherical coordinates [s.m-1, deg from North[, deg from horizontal]]
 (model, direction)</p></li>
-<li><p><strong>sigma_circ</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Scale vector in cylindrical/spherical coordinates about xi [s.m-1, deg from North[, deg from horizontal]]
+<li><p><strong>sigma_circ</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Standard deviation along the local radial, azimuthal[, elevation] directions at the mean,
+from the covariance (Omega - 2/pi wd wd^T for the skew-normal) [s.m-1, deg[, deg]]
 (model, direction)</p></li>
-<li><p><strong>wd_circ</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Skewness-direction vector in cylindrical/spherical coordinates about xi [s.m-1, deg from North[, deg from horizontal]]
+<li><p><strong>wd_circ</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Skewness-direction vector resolved along the local radial, azimuthal[, elevation] directions
+at the mean; azimuthal component positive clockwise [s.m-1, deg[, deg]]
 (model, direction)</p></li>
 </ul>
 </dd>

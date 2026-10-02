@@ -350,8 +350,8 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+  <div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Import: Numerical __</span>
@@ -385,10 +385,26 @@
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Hello from topophone2!
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not installed. Falling back to cpu.
+</pre></div></div>
+</div>
 <section id="Synthetic-data">
 <h1>Synthetic data<a class="headerlink" href="#Synthetic-data" title="Link to this heading">#</a></h1>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Read array geometry __</span>
@@ -478,8 +494,8 @@
 
 <span class="c1">#__ Noise field __</span>
 <span class="n">baz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="mi">360</span><span class="p">)</span>
-<span class="n">rho</span> <span class="o">=</span> <span class="n">harmonic2D_density</span><span class="p">(</span><span class="n">baz</span><span class="p">,</span> <span class="n">a</span><span class="p">[:,</span><span class="kc">None</span><span class="p">],</span> <span class="n">b</span><span class="p">[:,</span><span class="kc">None</span><span class="p">])</span>
-<span class="n">rho_true</span> <span class="o">=</span> <span class="n">harmonic2D_density</span><span class="p">(</span><span class="n">baz</span><span class="p">,</span> <span class="n">m_true</span><span class="p">[</span><span class="mi">7</span><span class="p">][</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">],</span> <span class="n">m_true</span><span class="p">[</span><span class="mi">8</span><span class="p">][</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">])</span>
+<span class="n">rho</span> <span class="o">=</span> <span class="n">harmonic2D_density</span><span class="p">((</span><span class="n">baz</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span><span class="p">,</span> <span class="n">a</span><span class="p">[:,</span><span class="kc">None</span><span class="p">],</span> <span class="n">b</span><span class="p">[:,</span><span class="kc">None</span><span class="p">])</span>
+<span class="n">rho_true</span> <span class="o">=</span> <span class="n">harmonic2D_density</span><span class="p">((</span><span class="n">baz</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span><span class="p">,</span> <span class="n">m_true</span><span class="p">[</span><span class="mi">7</span><span class="p">][</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">],</span> <span class="n">m_true</span><span class="p">[</span><span class="mi">8</span><span class="p">][</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">])</span>
 
 <span class="c1">#__ Calculate density functions __</span>
 <span class="n">density</span> <span class="o">=</span> <span class="n">density_function</span><span class="p">((</span><span class="n">gx</span><span class="p">,</span><span class="n">gy</span><span class="p">),</span> <span class="n">xi</span><span class="p">[:</span><span class="mi">1000</span><span class="p">],</span> <span class="n">sigma</span><span class="p">[:</span><span class="mi">1000</span><span class="p">],</span> <span class="n">corr</span><span class="p">[:</span><span class="mi">1000</span><span class="p">,</span><span class="kc">None</span><span class="p">])</span>
@@ -841,7 +857,7 @@
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#________ CREATE FIGURE ________#</span>
@@ -889,7 +905,7 @@
     <span class="p">[</span>
         <span class="sa">r</span><span class="s2">"Depth [km]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Northing [km]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Slowness (north) [s$\,$km$^{-1}$]"</span><span class="p">,</span>
         <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="sa">r</span><span class="s2">"Energy density\n[mPa$^2$$\,$Hz$^{-1}$$\,$/$\,\degree$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"P(SNR &gt; thresh.) [%]"</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="s2">"Energy density</span><span class="se">\n</span><span class="s2">"</span><span class="o">+</span><span class="sa">r</span><span class="s2">"[mPa$^2$$\,$Hz$^{-1}$$\,$/$\,\degree$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"P(SNR &gt; thresh.) [%]"</span><span class="p">,</span> <span class="kc">None</span>
     <span class="p">]</span>
 <span class="p">):</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">xlab</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlab</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">small</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
@@ -1038,7 +1054,7 @@
 
 <span class="c1">#__ True __</span>
 <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span>
-    <span class="mf">1e3</span><span class="o">*</span><span class="n">gx</span><span class="p">,</span> <span class="mf">1e3</span><span class="o">*</span><span class="n">gy</span><span class="p">,</span> <span class="n">density_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">],</span>
+    <span class="mf">1e3</span><span class="o">*</span><span class="n">gx</span><span class="p">,</span> <span class="mf">1e3</span><span class="o">*</span><span class="n">gy</span><span class="p">,</span> <span class="n">density_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],</span>
     <span class="n">colors</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="s1">'--'</span><span class="p">,</span>
     <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span>
 <span class="p">)</span>
@@ -1053,7 +1069,7 @@
 <span class="c1">#__ Estimates __</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
     <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span>
-        <span class="mf">1e3</span><span class="o">*</span><span class="n">gx</span><span class="p">,</span> <span class="mf">1e3</span><span class="o">*</span><span class="n">gy</span><span class="p">,</span> <span class="n">density</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">],</span>
+        <span class="mf">1e3</span><span class="o">*</span><span class="n">gx</span><span class="p">,</span> <span class="mf">1e3</span><span class="o">*</span><span class="n">gy</span><span class="p">,</span> <span class="n">density</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],</span>
         <span class="n">colors</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
         <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span>
     <span class="p">)</span>
@@ -1162,7 +1178,7 @@
 
 <span class="c1">#__ Show figure __</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">'./data/figures/Figure_1.pdf'</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">'tight'</span><span class="p">)</span>
+<span class="c1"># fig.savefig('./data/figures/Figure_1.pdf', dpi=300, bbox_inches='tight')</span>
 </pre></div>
 </div>
 </div>
@@ -1171,7 +1187,7 @@
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/tmp/ipykernel_2956/1991453286.py:317: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+/tmp/ipykernel_11693/111514458.py:318: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
   fig.show()
 </pre></div></div>
 </div>
@@ -1186,7 +1202,7 @@
 <section id="Real-data">
 <h1>Real data<a class="headerlink" href="#Real-data" title="Link to this heading">#</a></h1>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Read data __</span>
@@ -1218,17 +1234,16 @@
 <span class="n">alpha</span> <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">6</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span>
 <span class="n">w_n1</span>  <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">8</span><span class="p">]</span>
 <span class="n">w_n2</span>  <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">9</span><span class="p">]</span>
-<span class="n">a</span>     <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">10</span><span class="p">:</span><span class="mi">12</span><span class="p">]</span>
-<span class="n">b</span>     <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">12</span><span class="p">:</span><span class="mi">14</span><span class="p">]</span>
+<span class="n">s0</span>    <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">10</span><span class="p">]</span>
+<span class="n">a</span>     <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">11</span><span class="p">:</span><span class="mi">13</span><span class="p">]</span>
+<span class="n">b</span>     <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">13</span><span class="p">:</span><span class="mi">15</span><span class="p">]</span>
 
 <span class="c1">#__ Rotate results __</span>
 <span class="n">wd</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">xi_circ</span><span class="p">,</span> <span class="n">mean_circ</span><span class="p">,</span> <span class="n">sigma_circ</span><span class="p">,</span> <span class="n">wd_circ</span> <span class="o">=</span> <span class="n">density_params</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">corr</span><span class="p">[:,</span><span class="kc">None</span><span class="p">],</span> <span class="n">alpha</span><span class="p">)</span>
-<span class="c1"># p = density_function(xi, sigma, corr, alpha)</span>
 
 <span class="c1">#__ Noise field __</span>
 <span class="n">baz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="mi">360</span><span class="p">)</span>
-<span class="n">rho</span> <span class="o">=</span> <span class="n">harmonic2D_density</span><span class="p">(</span><span class="n">baz</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
-<span class="n">rho</span> <span class="o">=</span> <span class="n">rho</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">rho</span><span class="p">)]</span>
+<span class="n">rho</span> <span class="o">=</span> <span class="n">harmonic2D_density</span><span class="p">((</span><span class="n">baz</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
 
 <span class="c1">#__ Marginal statistics __</span>
 <span class="n">stats</span> <span class="o">=</span> <span class="n">MarginalStats</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
@@ -1366,11 +1381,27 @@
     <span class="n">normalise</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 <span class="n">B_band</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#__ Density function __</span>
+<span class="n">N_g</span> <span class="o">=</span> <span class="mi">150</span>                                                   <span class="c1"># points per axis</span>
+<span class="n">k</span>   <span class="o">=</span> <span class="mf">5.0</span>                                                   <span class="c1"># padding, in units of the scale</span>
+<span class="n">pad</span> <span class="o">=</span> <span class="n">k</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">sigma</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">lo</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">pad</span>
+<span class="n">hi</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">pad</span>
+<span class="n">qx</span><span class="p">,</span> <span class="n">qy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">lo</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">hi</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">N_g</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">lo</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">hi</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">N_g</span><span class="p">)</span>
+<span class="n">gx</span><span class="p">,</span> <span class="n">gy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s1">'ij'</span><span class="p">)</span>
+<span class="n">N_m</span><span class="p">,</span> <span class="n">chunk</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">100</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span>
+    <span class="n">density_function</span><span class="p">((</span><span class="n">gx</span><span class="p">,</span> <span class="n">gy</span><span class="p">),</span> <span class="n">xi</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">chunk</span><span class="p">],</span> <span class="n">sigma</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">chunk</span><span class="p">],</span>
+                     <span class="n">corr</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">chunk</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">alpha</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">chunk</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N_m</span><span class="p">,</span> <span class="n">chunk</span><span class="p">)</span>
+<span class="p">])</span>
+<span class="n">p</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#________ CREATE FIGURE ________#</span>
@@ -1400,8 +1431,12 @@
 <span class="c1">#__ Labels __</span>
 <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">xlab</span><span class="p">,</span> <span class="n">ylab</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span>
     <span class="p">[</span>
+        <span class="sa">r</span><span class="s2">"Easting [km]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Lapse time [s]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Energy [dB]"</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">"Slowness (east) [s$\,$km$^{-1}$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Backazimuth deviation [$\degree$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Backazimuth [$\degree$]"</span>
     <span class="p">],</span>
     <span class="p">[</span>
+        <span class="sa">r</span><span class="s2">"Northing [km]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Pressure [Pa]"</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">"Slowness (north) [s$\,$km$^{-1}$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Backazimuth skew [$\degree$]"</span><span class="p">,</span> <span class="s2">"Energy density</span><span class="se">\n</span><span class="s2">"</span><span class="o">+</span><span class="sa">r</span><span class="s2">"[mPa$^2$$\,$Hz$^{-1}$/$\degree$]"</span>
     <span class="p">]</span>
 <span class="p">):</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">xlab</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlab</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">small</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
@@ -1410,12 +1445,20 @@
 <span class="c1">#__ Ticks __</span>
 <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">xlims</span><span class="p">,</span> <span class="n">ylims</span><span class="p">,</span> <span class="n">xticks</span><span class="p">,</span> <span class="n">yticks</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span>
     <span class="p">[</span>
+        <span class="p">(</span><span class="o">-</span><span class="mf">1.2</span><span class="p">,</span><span class="mf">1.2</span><span class="p">),</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="p">(</span><span class="o">-</span><span class="mi">52</span><span class="p">,</span><span class="o">-</span><span class="mi">30</span><span class="p">),</span>
+        <span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">14</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">360</span><span class="p">)</span>
     <span class="p">],</span>
     <span class="p">[</span>
+        <span class="p">(</span><span class="o">-</span><span class="mf">1.2</span><span class="p">,</span><span class="mf">1.2</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span><span class="mf">0.25</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">2.2</span><span class="p">),</span>
+        <span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">14</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.15</span><span class="p">)</span>
     <span class="p">],</span>
     <span class="p">[</span>
+        <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.1</span><span class="p">),</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="mi">50</span><span class="p">),</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">15</span><span class="p">)</span>
     <span class="p">],</span>
     <span class="p">[</span>
+        <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.1</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.05</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
     <span class="p">]</span>
 <span class="p">):</span>
     <span class="k">if</span> <span class="n">xlims</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1434,6 +1477,20 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">'gainsboro'</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
 <span class="c1">#________ PLOT: RECEIVER GEOMETRY ________#</span>
+
+<span class="c1">#__ Plot receivers __</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+    <span class="mf">1e-3</span><span class="o">*</span><span class="n">x</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="mf">1e-3</span><span class="o">*</span><span class="n">x</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span>
+    <span class="n">c</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">'^'</span><span class="p">,</span>
+    <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span>
+
+<span class="c1">#__ Plot reference line __</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axline</span><span class="p">(</span>
+    <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mi">110</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mi">110</span><span class="p">))),</span>
+    <span class="n">ls</span><span class="o">=</span><span class="s1">':'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'gray'</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span>
 
 <span class="c1">#________ PLOT: WAVEFORM ________#</span>
 
@@ -1485,16 +1542,51 @@
     <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span>
 <span class="p">)</span>
 
+<span class="c1">#__ Signal __</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span>
+        <span class="mf">1e3</span><span class="o">*</span><span class="n">gx</span><span class="p">,</span> <span class="mf">1e3</span><span class="o">*</span><span class="n">gy</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
+        <span class="n">colors</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+        <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span>
+    <span class="p">)</span>
+
+<span class="c1">#__ Noise __</span>
+<span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">baz</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">baz</span><span class="p">))</span>
+<span class="n">rs0</span> <span class="o">=</span> <span class="mf">1e3</span> <span class="o">*</span> <span class="n">s0</span><span class="p">[:</span><span class="mi">1000</span><span class="p">]</span>                                         <span class="c1"># [s/km]</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">cx</span><span class="p">,</span> <span class="n">rs0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">cy</span><span class="p">,</span> <span class="n">rs0</span><span class="p">),</span>
+    <span class="n">color</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span>
+<span class="p">)</span>
+
+<span class="c1">#__ Plot reference line __</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">axline</span><span class="p">(</span>
+    <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mi">110</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mi">110</span><span class="p">))),</span>
+    <span class="n">ls</span><span class="o">=</span><span class="s1">':'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'gray'</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span>
+
 <span class="c1">#________ PLOT: SIGNAL MARGINAL ________#</span>
 
 <span class="c1">#__ Cross-plot __</span>
 <span class="n">axs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span>
-    <span class="p">(</span><span class="n">v0</span><span class="o">-</span><span class="mi">180</span><span class="p">)</span><span class="o">%</span><span class="k">360</span>-110, v1, density,
+    <span class="p">(</span><span class="n">v0</span><span class="o">-</span><span class="mi">180</span><span class="p">)</span><span class="o">%</span><span class="k">360</span>-110, v1, density.T,
     <span class="n">cmap</span><span class="o">=</span><span class="n">cmap0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
     <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span>
 <span class="p">)</span>
 
+<span class="c1">#__ Reference axes __</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
 <span class="c1">#________ PLOT: NOISE FIELD ________#</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">baz</span><span class="p">,</span> <span class="mf">1e6</span><span class="o">*</span><span class="n">rho</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">w_n2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+        <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span>
+    <span class="p">)</span>
 
 <span class="c1">#__ Show figure __</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -1506,7 +1598,7 @@
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/tmp/ipykernel_2956/1876386110.py:126: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+/tmp/ipykernel_11693/1321708679.py:186: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
   fig.show()
 </pre></div></div>
 </div>
@@ -1515,6 +1607,34 @@
 </div>
 <div class="output_area docutils container">
 <img alt="../_images/examples_figs_JASA-EL_7_1.png" src="../_images/examples_figs_JASA-EL_7_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">v0</span><span class="o">-</span><span class="mi">180</span><span class="p">)</span><span class="o">%</span><span class="k">360</span>-110, v1, density.T,
+    <span class="n">cmap</span><span class="o">=</span><span class="n">cmap0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.contour.QuadContourSet at 0x77bc21457810&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/examples_figs_JASA-EL_8_1.png" src="../_images/examples_figs_JASA-EL_8_1.png" />
 </div>
 </div>
 </section>
