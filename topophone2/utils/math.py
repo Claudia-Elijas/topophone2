@@ -153,6 +153,10 @@ def density_params(
         Mean vector in cylindrical/spherical coordinates [s.m-1, deg from North[, deg from horizontal]]
         (model, direction)
 
+    sigma_circ : ``numpy.ndarray``
+        Scale vector in cylindrical/spherical coordinates about xi [s.m-1, deg from North[, deg from horizontal]]
+        (model, direction)
+
     wd_circ : ``numpy.ndarray``
         Skewness-direction vector in cylindrical/spherical coordinates about xi [s.m-1, deg from North[, deg from horizontal]]
         (model, direction)
@@ -200,7 +204,7 @@ def density_params(
     mean_circ = to_circ(mean)
 
     #__ Local orthonormal basis at xi __
-    if alpha is not None:
+    if (sigma is not None) or (alpha is not None):
         r     = xi_circ[:,0]
         phi   = np.radians(xi_circ[:,1])
         theta = np.radians(xi_circ[:,2]) if (N_dir == 3) else np.zeros(N_model)
@@ -213,6 +217,14 @@ def density_params(
             e_phi   = np.stack([cp, -sp, np.zeros(N_model)], axis=1)
             e_theta = np.stack([-st*sp, -st*cp, ct], axis=1)
 
+        #__ Scale vector linearised about xi __
+        dr   = np.sum(sigma * e_r, axis=1)
+        dphi = np.degrees(np.sum(sigma * e_phi, axis=1) / (r * ct))
+        if (N_dir == 2): sigma_circ = np.stack([dr, dphi], axis=1)
+        else:
+            dtheta  = np.degrees(np.sum(sigma * e_theta, axis=1) / r)
+            sigma_circ = np.stack([dr, dphi, dtheta], axis=1)
+
         #__ Skewness-direction as linearised changes in xi __
         dr   = np.sum(wd * e_r, axis=1)
         dphi = np.degrees(np.sum(wd * e_phi, axis=1) / (r * ct))
@@ -222,7 +234,7 @@ def density_params(
             wd_circ = np.stack([dr, dphi, dtheta], axis=1)
 
     #__ Return outputs __
-    return wd, mean, xi_circ, mean_circ, wd_circ
+    return wd, mean, xi_circ, mean_circ, sigma_circ, wd_circ
 
 #__ Density functions __
 def density_function(
