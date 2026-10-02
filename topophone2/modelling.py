@@ -1003,11 +1003,11 @@ class ArrayCovarianceModel():
             if (sig == 'skewnormal'): return 3*self.N_dir + self.N_corr
             if (sig == 'isoselfnoise'):  return 0
             raise ValueError(f"Unknown signal type '{sig}'.")
-        sig, n = sig['sig'], 0
+        name, n = sig['sig'], 0
         if ('s' not in sig): n += 1
         if not (('a' in sig) and ('b' in sig)):
-            if   (sig == 'noise2D'): n += 2 * self._max_order_2D
-            elif (sig == 'noise3D'): n += self._n_a_3D + self._n_b_3D
+            if   (name == 'noise2D'): n += 2 * self._max_order_2D
+            elif (name == 'noise3D'): n += self._n_a_3D + self._n_b_3D
         return n
 
     #__ Unpack model vector __
