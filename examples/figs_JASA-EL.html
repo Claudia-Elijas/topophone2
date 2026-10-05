@@ -350,8 +350,8 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+  <div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Import: Numerical __</span>
@@ -390,10 +390,26 @@
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Hello from topophone2!
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not installed. Falling back to cpu.
+</pre></div></div>
+</div>
 <section id="Synthetic-data">
 <h1>Synthetic data<a class="headerlink" href="#Synthetic-data" title="Link to this heading">#</a></h1>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[64]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Read array geometry __</span>
@@ -846,7 +862,7 @@
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[59]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#________ CREATE FIGURE ________#</span>
@@ -903,7 +919,7 @@
         <span class="s2">"Energy density</span><span class="se">\n</span><span class="s2">"</span><span class="o">+</span><span class="sa">r</span><span class="s2">"[mPa$^2$$\,$Hz$^{-1}$$\,$/$\,\degree$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Probability [%]"</span><span class="p">,</span> <span class="kc">None</span>
     <span class="p">]</span>
 <span class="p">):</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">'right'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">small</span><span class="p">)</span>
+    <span class="c1"># if (title is not None): ax.set_title(title, loc='right', fontsize=small)</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">xlab</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlab</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">small</span><span class="p">)</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">ylab</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylab</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">small</span><span class="p">)</span>
 
@@ -1184,7 +1200,7 @@
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/tmp/ipykernel_1734/1438958137.py:326: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+/tmp/ipykernel_18345/2100937477.py:326: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
   fig.show()
 </pre></div></div>
 </div>
@@ -1199,7 +1215,7 @@
 <section id="Real-data">
 <h1>Real data<a class="headerlink" href="#Real-data" title="Link to this heading">#</a></h1>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[60]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Read data __</span>
@@ -1399,7 +1415,7 @@
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[63]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#________ CREATE FIGURE ________#</span>
@@ -1442,7 +1458,7 @@
         <span class="sa">r</span><span class="s2">"Slowness (N) [s$\,$km$^{-1}$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Backazimuth skew [$\degree$]"</span><span class="p">,</span> <span class="s2">"Energy density</span><span class="se">\n</span><span class="s2">"</span><span class="o">+</span><span class="sa">r</span><span class="s2">"[mPa$^2$$\,$Hz$^{-1}$/$\degree$]"</span>
     <span class="p">]</span>
 <span class="p">):</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">'right'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">small</span><span class="p">)</span>
+    <span class="c1"># if (title is not None): ax.set_title(title, loc='right', fontsize=small)</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">xlab</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>  <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlab</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">small</span><span class="p">)</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">ylab</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>  <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylab</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">small</span><span class="p">)</span>
 
@@ -1668,7 +1684,7 @@
     <span class="p">)</span>
 
 <span class="c1">#__ Spacing __</span>
-<span class="c1"># fig.get_layout_engine().set(h_pad=0.01, hspace=0.0)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">get_layout_engine</span><span class="p">()</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">h_pad</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
 
 <span class="c1">#__ Show figure __</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -1681,7 +1697,7 @@
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/tmp/ipykernel_1734/3155790702.py:270: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+/tmp/ipykernel_18345/3162688827.py:270: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
   fig.show()
 </pre></div></div>
 </div>
