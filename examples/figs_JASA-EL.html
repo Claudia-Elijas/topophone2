@@ -351,8 +351,8 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+  <div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Import: Numerical __</span>
@@ -391,6 +391,22 @@
 <span class="n">theme0_light</span> <span class="o">=</span> <span class="n">lighten</span><span class="p">(</span><span class="n">theme</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Hello from topophone2!
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not installed. Falling back to cpu.
+</pre></div></div>
 </div>
 <section id="Synthetic-data">
 <h1>Synthetic data<a class="headerlink" href="#Synthetic-data" title="Link to this heading">#</a></h1>
@@ -568,14 +584,14 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#________ CREATE FIGURE ________#</span>
 
 <span class="c1">#__ Figure __</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span>
-    <span class="n">figsize</span>   <span class="o">=</span> <span class="p">(</span><span class="mf">6.5</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">),</span>
+    <span class="n">figsize</span>   <span class="o">=</span> <span class="p">(</span><span class="mf">6.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
     <span class="n">facecolor</span> <span class="o">=</span> <span class="s1">'white'</span><span class="p">,</span>
     <span class="n">layout</span>    <span class="o">=</span> <span class="s1">'constrained'</span>
 <span class="p">)</span>
@@ -607,7 +623,6 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
 <span class="n">ax_in</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">'equal'</span><span class="p">)</span>
 
 <span class="c1">#__ Labels __</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">r</span><span class="s2">"Hydroacoustic Wavefield Decomposition of Synthetic Abyssal T-phase Event (5$\,$Hz)"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">large</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">xlab</span><span class="p">,</span> <span class="n">ylab</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span>
     <span class="p">[</span>
         <span class="sa">r</span><span class="s2">"Sound-speed profile"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Geometry"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Signal direction"</span><span class="p">,</span>
@@ -615,12 +630,12 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
         <span class="sa">r</span><span class="s2">"Noise direction"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"P$\,$(SNR$\,$&gt;$\,$thresh.)"</span><span class="p">,</span> <span class="kc">None</span>
     <span class="p">],</span>
     <span class="p">[</span>
-        <span class="sa">r</span><span class="s2">"Sound speed [km$\,$s$^{-1}$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Easting [km]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Slowness (east) [s$\,$km$^{-1}$]"</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">"Sound speed [km$\,$s$^{-1}$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Easting [km]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Slowness (E) [s$\,$km$^{-1}$]"</span><span class="p">,</span>
         <span class="sa">r</span><span class="s2">"Backazimuth [$\degree$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Beamwidth [$\degree$]"</span><span class="p">,</span>
         <span class="sa">r</span><span class="s2">"Backazimuth [$\degree$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"SNR threshold [dB]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Information gain [%]"</span>
     <span class="p">],</span>
     <span class="p">[</span>
-        <span class="sa">r</span><span class="s2">"Depth [km]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Northing [km]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Slowness (north) [s$\,$km$^{-1}$]"</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">"Depth [km]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Northing [km]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Slowness (N) [s$\,$km$^{-1}$]"</span><span class="p">,</span>
         <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
         <span class="s2">"Energy density</span><span class="se">\n</span><span class="s2">"</span><span class="o">+</span><span class="sa">r</span><span class="s2">"[mPa$^2$$\,$Hz$^{-1}$$\,$/$\,\degree$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Probability [%]"</span><span class="p">,</span> <span class="kc">None</span>
     <span class="p">]</span>
@@ -632,12 +647,12 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
 <span class="c1">#__ Ticks __</span>
 <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">xlims</span><span class="p">,</span> <span class="n">ylims</span><span class="p">,</span> <span class="n">xticks</span><span class="p">,</span> <span class="n">yticks</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span>
     <span class="p">[</span>
-        <span class="p">(</span><span class="mf">1.4</span><span class="p">,</span><span class="mf">2.45</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">125</span><span class="p">,</span><span class="mi">680</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.51</span><span class="p">,</span><span class="o">-</span><span class="mf">0.43</span><span class="p">),</span>
+        <span class="p">(</span><span class="mf">1.4</span><span class="p">,</span><span class="mf">2.45</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">125</span><span class="p">,</span><span class="mi">680</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.51</span><span class="p">,</span><span class="o">-</span><span class="mf">0.42</span><span class="p">),</span>
         <span class="p">(</span><span class="mf">104.3</span><span class="p">,</span><span class="mf">105.6</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.8</span><span class="p">,</span><span class="mf">3.1</span><span class="p">),</span>
         <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">360</span><span class="p">),</span> <span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="mi">17</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
     <span class="p">],</span>
     <span class="p">[</span>
-        <span class="p">(</span><span class="mf">6.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">900</span><span class="p">,</span><span class="mi">150</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.08</span><span class="p">,</span><span class="mf">0.19</span><span class="p">),</span>
+        <span class="p">(</span><span class="mf">6.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">900</span><span class="p">,</span><span class="mi">150</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.08</span><span class="p">,</span><span class="mf">0.20</span><span class="p">),</span>
         <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">2.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">2.7</span><span class="p">),</span>
         <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.25</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">105</span><span class="p">),</span> <span class="kc">None</span>
     <span class="p">],</span>
@@ -720,7 +735,7 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
 <span class="c1">#__ Plot source energy __</span>
 <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span>
     <span class="mf">1e-3</span><span class="o">*</span><span class="n">Xs</span><span class="p">,</span> <span class="mf">1e-3</span><span class="o">*</span><span class="n">Ys</span><span class="p">,</span> <span class="n">E_src</span><span class="p">,</span>
-    <span class="n">levels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.02</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap0</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="s1">'max'</span><span class="p">,</span>
+    <span class="n">levels</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">'cmc.lajolla'</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="s1">'max'</span><span class="p">,</span>
     <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span>
 <span class="p">)</span>
 
@@ -867,7 +882,7 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
 
 <span class="c1">#__ Labels __</span>
 <span class="n">y</span>      <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s2">"$\mathbf{\xi}$"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$\Omega$"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$\left(a_1, b_1\right)$"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"SNR"</span><span class="p">]</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s2">"$\mathbf{\xi}$"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$\mathbf{\Omega}$"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$\left(a_1, b_1\right)$"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"SNR"</span><span class="p">]</span>
 <span class="n">axs</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
 
 <span class="c1">#__ Extra receiver __</span>
@@ -897,7 +912,7 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
 
 <span class="c1">#__ Show figure __</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">'./data/figures/Figure_1.pdf'</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">'tight'</span><span class="p">)</span>
+<span class="c1"># fig.savefig('./data/figures/Figure_1.pdf', dpi=300, bbox_inches='tight')</span>
 </pre></div>
 </div>
 </div>
@@ -906,7 +921,7 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/tmp/ipykernel_18345/2100937477.py:326: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+/tmp/ipykernel_1319/3620431491.py:325: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
   fig.show()
 </pre></div></div>
 </div>
@@ -921,7 +936,7 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
 <section id="Real-data">
 <h1>Real data<a class="headerlink" href="#Real-data" title="Link to this heading">#</a></h1>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Read data __</span>
@@ -1098,7 +1113,7 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
 <span class="n">B</span><span class="p">,</span> <span class="p">(</span><span class="n">px</span><span class="p">,</span> <span class="n">py</span><span class="p">)</span> <span class="o">=</span> <span class="n">bartlett_power</span><span class="p">(</span>
     <span class="n">Gamma_obs</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span>                        <span class="c1"># freq in rad/s, as you've defined it</span>
     <span class="n">p_bounds</span><span class="o">=</span><span class="p">[(</span><span class="o">-</span><span class="mf">4.5e-3</span><span class="p">,</span> <span class="mf">4.5e-3</span><span class="p">)]</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">dp</span><span class="o">=</span><span class="mf">2e-5</span><span class="p">,</span>
-    <span class="n">normalise</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">normalise</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">)</span>
 <span class="n">B_band</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
@@ -1121,7 +1136,7 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[77]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#________ CREATE FIGURE ________#</span>
@@ -1149,7 +1164,6 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
 <span class="p">]</span>
 
 <span class="c1">#__ Labels __</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">r</span><span class="s2">"Infrasonic Wavefield Decomposition of Hukkakero Blast Event (0.5$\,$Hz)"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">large</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">xlab</span><span class="p">,</span> <span class="n">ylab</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span>
     <span class="p">[</span>
         <span class="sa">r</span><span class="s2">"IS37 array"</span><span class="p">,</span> <span class="s2">"19 Aug. 2016 (0.25</span><span class="se">\u2013</span><span class="s2">2.00"</span><span class="o">+</span><span class="sa">r</span><span class="s2">"$\,$Hz)"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Wavefield components"</span><span class="p">,</span>
@@ -1216,30 +1230,30 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
 <span class="p">)</span>
 
 <span class="c1">#__ Plot reference line __</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axline</span><span class="p">(</span>
-    <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mi">110</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mi">110</span><span class="p">))),</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mi">110</span><span class="p">))),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mi">110</span><span class="p">))),</span>
     <span class="n">ls</span><span class="o">=</span><span class="s1">':'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'gray'</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
     <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span>
 <span class="p">)</span>
 
 <span class="c1">#__ Arrowhead and label at the right end of the reference line __</span>
-<span class="n">az</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mi">110</span><span class="p">)</span>
-<span class="n">d</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">az</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">az</span><span class="p">)])</span>        <span class="c1"># unit vector along the line (east, north)</span>
-<span class="n">xmax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">tip</span>  <span class="o">=</span> <span class="n">d</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.97</span> <span class="o">*</span> <span class="n">xmax</span> <span class="o">/</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>                <span class="c1"># point on the line just inside the right edge</span>
-<span class="n">tail</span> <span class="o">=</span> <span class="n">tip</span> <span class="o">-</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">d</span>                          <span class="c1"># short tail so mostly the head shows</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
-    <span class="s1">''</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">tip</span><span class="p">,</span> <span class="n">xytext</span><span class="o">=</span><span class="n">tail</span><span class="p">,</span>
-    <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s1">'-&gt;'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
-                    <span class="n">mutation_scale</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">shrinkA</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">shrinkB</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
-    <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span>
-<span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
-    <span class="s1">'Source'</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">tip</span><span class="p">,</span>
-    <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">),</span> <span class="n">textcoords</span><span class="o">=</span><span class="s1">'offset points'</span><span class="p">,</span>
-    <span class="n">color</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">small</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">'right'</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">'top'</span><span class="p">,</span>
-    <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span>
-<span class="p">)</span>
+<span class="c1"># az = np.radians(110)</span>
+<span class="c1"># d  = np.array([np.sin(az), np.cos(az)])        # unit vector along the line (east, north)</span>
+<span class="c1"># xmax = axs[0].get_xlim()[1]</span>
+<span class="c1"># tip  = d * (0.97 * xmax / d[0])                # point on the line just inside the right edge</span>
+<span class="c1"># tail = tip - 0.05 * d                          # short tail so mostly the head shows</span>
+<span class="c1"># axs[0].annotate(</span>
+<span class="c1">#     '', xy=tip, xytext=tail,</span>
+<span class="c1">#     arrowprops=dict(arrowstyle='-&gt;', color=theme[0], lw=2.0,</span>
+<span class="c1">#                     mutation_scale=15, shrinkA=0, shrinkB=0),</span>
+<span class="c1">#     zorder=3</span>
+<span class="c1"># )</span>
+<span class="c1"># axs[0].annotate(</span>
+<span class="c1">#     'Source', xy=tip,</span>
+<span class="c1">#     xytext=(0, -6), textcoords='offset points',</span>
+<span class="c1">#     color=theme[0], fontsize=small, ha='right', va='top',</span>
+<span class="c1">#     zorder=3</span>
+<span class="c1"># )</span>
 
 <span class="c1">#________ PLOT: WAVEFORM ________#</span>
 
@@ -1310,19 +1324,32 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
 <span class="c1">#     cmap='cmc.grayC_r', vmin=0.1, vmax=0.8, levels=8,</span>
 <span class="c1">#     zorder=1</span>
 <span class="c1"># )</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span>
-    <span class="mf">1e3</span><span class="o">*</span><span class="n">px</span><span class="p">,</span> <span class="mf">1e3</span><span class="o">*</span><span class="n">py</span><span class="p">,</span> <span class="n">B_band</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
-    <span class="n">levels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">1.0</span><span class="o">+</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">),</span>
-    <span class="n">colors</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.5</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">1.0</span><span class="o">+</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">),</span>
+<span class="c1"># axs[3].contour(</span>
+<span class="c1">#     1e3*px, 1e3*py, B_band.T,</span>
+<span class="c1">#     levels=np.arange(0.1,1.0+0.1,0.1),</span>
+<span class="c1">#     colors='k', linewidths=0.5+np.arange(0.1,1.0+0.1,0.1),</span>
+<span class="c1">#     zorder=5</span>
+<span class="c1"># )</span>
+<span class="n">levels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">80</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">220</span><span class="p">]</span>
+<span class="n">cs</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span>
+    <span class="mf">1e3</span><span class="o">*</span><span class="n">px</span><span class="p">,</span> <span class="mf">1e3</span><span class="o">*</span><span class="n">py</span><span class="p">,</span> <span class="mf">1e6</span><span class="o">*</span><span class="n">B_band</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+    <span class="n">levels</span><span class="o">=</span><span class="n">levels</span><span class="p">,</span>
+    <span class="n">colors</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">],</span>
     <span class="n">zorder</span><span class="o">=</span><span class="mi">5</span>
 <span class="p">)</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span>
+    <span class="n">cs</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">levels</span><span class="p">,</span>
+    <span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inline_spacing</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">fmt</span><span class="o">=</span><span class="s1">'</span><span class="si">%.0f</span><span class="s1">'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">small</span><span class="o">-</span><span class="mi">1</span>
+<span class="p">)</span>
+<span class="k">for</span> <span class="n">lab</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span> <span class="n">lab</span><span class="o">.</span><span class="n">set_zorder</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
 
 <span class="c1">#__ Signal __</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
     <span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span>
         <span class="mf">1e3</span><span class="o">*</span><span class="n">gx</span><span class="p">,</span> <span class="mf">1e3</span><span class="o">*</span><span class="n">gy</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
         <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="n">theme0_light</span><span class="p">,</span><span class="n">theme</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
-        <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span>
+        <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span>
     <span class="p">)</span>
 
 <span class="c1">#__ Noise __</span>
@@ -1331,7 +1358,7 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
 <span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
     <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">cx</span><span class="p">,</span> <span class="n">rs0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">cy</span><span class="p">,</span> <span class="n">rs0</span><span class="p">),</span>
     <span class="n">color</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
-    <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span>
+    <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span>
 <span class="p">)</span>
 <span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set_rasterization_zorder</span><span class="p">(</span><span class="mf">3.5</span><span class="p">)</span>
 
@@ -1344,11 +1371,25 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
 
 <span class="c1">#________ PLOT: SIGNAL MARGINAL ________#</span>
 
-<span class="c1">#__ Cross-plot __</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span>
-    <span class="p">(</span><span class="n">v0</span><span class="o">-</span><span class="mi">180</span><span class="p">)</span><span class="o">%</span><span class="k">360</span>-110, v1, density.T,
-    <span class="n">cmap</span><span class="o">=</span><span class="n">cmap0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-    <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span>
+<span class="c1">#__ Plot samples __</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">xi_circ</span><span class="p">[:,[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">wd_circ</span><span class="p">[:,[</span><span class="mi">1</span><span class="p">]]))</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">samples</span><span class="p">[:,</span><span class="mi">0</span><span class="p">][::</span><span class="mi">10</span><span class="p">]</span> <span class="o">-</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span> <span class="o">-</span> <span class="mi">110</span><span class="p">,</span> <span class="n">samples</span><span class="p">[:,</span><span class="mi">1</span><span class="p">][::</span><span class="mi">10</span><span class="p">],</span>
+    <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">zorder</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">rasterized</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="c1">#__ Density threshold enclosing the highest-density 90% of mass __</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">hdr_level</span><span class="p">(</span><span class="n">density</span><span class="p">,</span> <span class="n">mass</span><span class="o">=</span><span class="mf">0.9</span><span class="p">):</span>
+    <span class="n">d</span>     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">density</span><span class="o">.</span><span class="n">ravel</span><span class="p">())[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>    <span class="c1"># cells from highest to lowest density</span>
+    <span class="n">cum</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="n">d</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>            <span class="c1"># fraction of mass above each level</span>
+    <span class="k">return</span> <span class="n">d</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">cum</span><span class="p">,</span> <span class="n">mass</span><span class="p">)]</span>
+<span class="n">x_plot</span> <span class="o">=</span> <span class="p">(</span><span class="n">v0</span> <span class="o">-</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span> <span class="o">-</span> <span class="mi">110</span>      <span class="c1"># same transform as the contourf</span>
+<span class="n">t90</span>    <span class="o">=</span> <span class="n">hdr_level</span><span class="p">(</span><span class="n">density</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span>
+    <span class="n">x_plot</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">density</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="n">t90</span><span class="p">],</span>
+    <span class="n">colors</span><span class="o">=</span><span class="s1">'0.7'</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="s1">'-'</span><span class="p">,</span>
+    <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span>
 <span class="p">)</span>
 
 <span class="c1">#__ Reference axes __</span>
@@ -1394,7 +1435,7 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
 
 <span class="c1">#__ Show figure __</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="c1"># fig.savefig('./data/figures/Figure_2.pdf', dpi=300, bbox_inches='tight')</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">'./data/figures/Figure_2.pdf'</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">'tight'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1403,7 +1444,7 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/tmp/ipykernel_18345/3162688827.py:270: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+/tmp/ipykernel_1319/3161986535.py:296: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
   fig.show()
 </pre></div></div>
 </div>
@@ -1415,7 +1456,7 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[83]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#________ BEAMFORMING COMPARISON ________#</span>
@@ -1458,10 +1499,10 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
 <span class="p">)</span>
 <span class="n">B_band</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axs</span><span class="o">.</span><span class="n">flatten</span><span class="p">():</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span>
     <span class="mf">1e3</span><span class="o">*</span><span class="n">px</span><span class="p">,</span> <span class="mf">1e3</span><span class="o">*</span><span class="n">py</span><span class="p">,</span> <span class="n">B_band</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
     <span class="n">levels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">1.0</span><span class="o">+</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">),</span>
-    <span class="n">colors</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.5</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">1.0</span><span class="o">+</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">),</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s1">'cmc.grayC_r'</span><span class="p">,</span>
     <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span>
 <span class="p">)</span>
 
@@ -1543,7 +1584,7 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/tmp/ipykernel_1440/3670040389.py:117: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+/tmp/ipykernel_1319/1805287694.py:117: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
   fig.show()
 </pre></div></div>
 </div>
