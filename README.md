@@ -50,3 +50,78 @@ You can find several examples at https://claudia-elijas.github.io/topophone2/exa
 ## Documentation
 
 The API documentation can be found at https://claudia-elijas.github.io/topophone2/ 
+
+
+## How to cite
+
+If you use **topophone2** in your research, please cite the following paper:
+
+> Smith, J.-A., & Elijas Parra, C. (in prep.). Probabilistic wavefield
+> decomposition from array covariance.
+
+<details>
+<summary>BibTeX</summary>
+
+```bibtex
+@unpublished{smith_topophone2,
+  author = {Smith, Jack-Andrew and Elijas Parra, Claudia},
+  title  = {Probabilistic wavefield decomposition from array covariance},
+  note   = {In preparation}
+}
+```
+
+</details>
+
+**topophone2** is built on the following open-source packages, which should
+also be cited if used in your research:
+
+**GeoPVI**
+
+> Zhao, X., & Curtis, A. (2026). GeoPVI: a Python package for geoscientific
+> inversion using parametric variational inference. *Geophysical Journal
+> International*, 245(3), ggag138.
+> [doi:10.1093/gji/ggag138](https://doi.org/10.1093/gji/ggag138)
+
+<details>
+<summary>BibTeX</summary>
+
+```bibtex
+@article{zhao_geopvi_2026,
+  author  = {Zhao, Xuebin and Curtis, Andrew},
+  title   = {{GeoPVI}: a {Python} package for geoscientific inversion
+             using parametric variational inference},
+  journal = {Geophysical Journal International},
+  volume  = {245},
+  number  = {3},
+  pages   = {ggag138},
+  month   = jun,
+  year    = {2026},
+  doi     = {10.1093/gji/ggag138}
+}
+```
+
+</details>
+
+**harmonic**
+
+> McEwen, J. D., Wallis, C. G. R., Price, M. A., & Docherty, M. M. (2021).
+> Machine learning assisted Bayesian model comparison: learnt harmonic mean
+> estimator. *arXiv preprint* arXiv:2111.12720.
+> [doi:10.48550/arXiv.2111.12720](https://doi.org/10.48550/arXiv.2111.12720)
+
+<details>
+<summary>BibTeX</summary>
+
+```bibtex
+@article{mcewen_harmonic_2021,
+  author  = {McEwen, J. D. and Wallis, C. G. R. and
+             Price, M. A. and Docherty, M. M.},
+  title   = {Machine learning assisted {Bayesian} model comparison:
+             learnt harmonic mean estimator},
+  journal = {arXiv preprint arXiv:2111.12720},
+  year    = {2021},
+  doi     = {10.48550/arXiv.2111.12720}
+}
+```
+
+</details>
