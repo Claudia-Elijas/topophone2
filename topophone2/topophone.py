@@ -1,5 +1,7 @@
 """
-    The ``topophone2.topophone`` module provides the ``decompose`` function,
+.. container:: module-intro
+
+    The ``topophone2.topophone`` module provides the :func:`decompose` function,
     which performs the decomposition of an observed array-covariance matrix
     into its constituent signal components
     using a variational inference approach.
@@ -48,8 +50,8 @@ def decompose(
     
     Function to perform the decomposition of an observed array-covariance matrix into its constituent signal components using a variational inference approach.
     
-    Inputs
-    ------
+    Input
+    -----
 
     Gamma_obs : ``numpy.ndarray``
         Observed array-covariance matrix

@@ -56,7 +56,8 @@ a.reference,
 
 /* Control the logo size */
 .navbar-brand img {
-    width: 70% !important;
+    width: auto !important;
+    height: 1.8rem !important;
 }
 
 /* Sphinx gallery */
@@ -1013,3 +1014,169 @@ dl.field-list dd ul > li > p > strong:first-child {
 
 .bd-main .bd-content .bd-article-container { max-width: 75em;}
 
+
+
+/* ---------------- Home page (index.rst) ---------------- */
+
+/* RST containers also get Bootstrap's `.container` class from the theme, which
+   resets horizontal padding and width, hence the `div.docutils` selectors and
+   `!important` on padding below. */
+
+/* "What is a topophone?" banner */
+div.docutils.topophone-banner {
+    max-width: none;
+    margin: 1em 0 2em 0;
+    padding: 1.3em 2.2em !important;
+    background-color: #d99f232a;
+    border: 1px solid var(--pst-color-secondary);
+    border-radius: 5px;
+    box-shadow: 3px 3px 0px var(--pst-color-secondary);
+}
+
+div.docutils.topophone-banner > :last-child {
+    margin-bottom: 0;
+}
+
+/* Opening paragraph, slightly larger */
+.lead {
+    font-size: 1.15em;
+}
+
+/* Responsive card grid (approach steps, applications/features) */
+div.docutils.home-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.2em;
+    max-width: none;
+    margin: 1.2em 0 1.5em 0;
+    padding: 0 !important;
+}
+
+div.docutils.home-grid.steps {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+div.docutils.home-card {
+    max-width: none;
+    padding: 1.1em 1.6em !important;
+    background-color: var(--pst-color-surface);
+    border: 1px solid var(--pst-color-border);
+    border-top: 4px solid var(--pst-color-primary);
+    border-radius: 5px;
+}
+
+.home-card > p.rubric,
+.project-banner-item > p.rubric {
+    margin-top: 0;
+    font-size: 1.1em;
+    color: var(--pst-color-primary);
+}
+
+.home-card > :last-child,
+.project-banner-item > :last-child {
+    margin-bottom: 0;
+}
+
+/* Project information banner at the bottom of the page */
+div.docutils.project-banner {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5em 3em;
+    max-width: none;
+    margin: 1em 0 2em 0;
+    padding: 1.4em 2.2em !important;
+    background-color: var(--pst-color-note-bg, #3b96ad1d);
+    border: 1px solid var(--pst-color-primary);
+    border-radius: 5px;
+    box-shadow: 3px 3px 0px var(--pst-color-primary);
+}
+
+div.docutils.project-banner-item {
+    max-width: none;
+    margin: 0;
+    padding: 0 !important;
+}
+
+/* "How to cite" cards */
+div.docutils.cite-card {
+    max-width: none;
+    margin: 1em 0 1.5em 0;
+    padding: 1.1em 1.6em !important;
+    background-color: var(--pst-color-surface);
+    border: 1px solid var(--pst-color-border);
+    border-left: 4px solid var(--pst-color-primary);
+    border-radius: 5px;
+}
+
+/* Main topophone2 reference: highlighted like the project banner */
+div.docutils.cite-card.cite-main {
+    background-color: var(--pst-color-note-bg, #3b96ad1d);
+    border: 1px solid var(--pst-color-primary);
+    border-left-width: 4px;
+    box-shadow: 3px 3px 0px var(--pst-color-primary);
+    font-size: 1.05em;
+}
+
+div.docutils.cite-card > p.rubric {
+    margin-top: 0;
+    font-family: var(--pst-font-family-monospace, monospace);
+    font-size: 1.05em;
+    color: var(--pst-color-primary);
+}
+
+div.docutils.cite-card > :last-child {
+    margin-bottom: 0;
+}
+
+/* Dependency citations side by side */
+div.docutils.cite-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.2em;
+    max-width: none;
+    margin: 1em 0 1.5em 0;
+    padding: 0 !important;
+}
+
+div.docutils.cite-grid > div.cite-card {
+    margin: 0;
+}
+
+/* Collapsible BibTeX entry */
+div.cite-card details {
+    margin-top: 0.8em;
+}
+
+div.cite-card details > summary {
+    display: inline-block;
+    cursor: pointer;
+    padding: 0.15em 0.8em;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: var(--pst-color-primary);
+    border: 1px solid var(--pst-color-primary);
+    border-radius: 999px;
+    list-style: none;
+}
+
+div.cite-card details > summary::-webkit-details-marker {
+    display: none;
+}
+
+div.cite-card details > summary::before {
+    content: "\25B8\00a0";
+}
+
+div.cite-card details[open] > summary::before {
+    content: "\25BE\00a0";
+}
+
+div.cite-card details > summary:hover {
+    background-color: var(--pst-color-primary);
+    color: #fff;
+}
+
+div.cite-card details div.highlight {
+    margin-top: 0.6em;
+    font-size: 0.85em;
+}

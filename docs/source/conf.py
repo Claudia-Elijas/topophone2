@@ -81,3 +81,12 @@ html_theme = 'pydata_sphinx_theme'
 html_title = 'topophone2'
 html_static_path = ['_static']
 html_css_files = ['custom.css']
+
+# Show a home icon (instead of the project name) in the top-left corner of the
+# navigation bar, linking back to the home page.
+html_logo = '_static/home.svg'
+html_theme_options = {
+    'logo': {
+        'alt_text': 'topophone2 home page',
+    },
+}

@@ -103,8 +103,7 @@ def parse_config(path_to_config_file):
     N_samples = config["inversion"].getint("N_samples", fallback=None)
 
     inversion_outpath = config.get("save_out", "inversion_outpath", fallback=None) 
-    model_outpath = config.get("save_out", "model_outpath")
-    loss_outpath = config.get("save_out", "loss_outpath", fallback=None)
+    calc_likelihood = config["inversion"].getboolean("calc_likelihood", fallback=False)
 
     # compose other variables ==========================================
 
@@ -140,8 +139,7 @@ def parse_config(path_to_config_file):
                 save_intermediate_result = save_intermediate_result,
                 verbose = verbose,
                 N_samples = N_samples,
-                model_outpath = model_outpath,
-                loss_outpath = loss_outpath
+                calc_likelihood = calc_likelihood
             )
 
     return args
