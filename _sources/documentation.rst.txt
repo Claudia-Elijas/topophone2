@@ -17,6 +17,11 @@ The API documentation for the topophone2 package is available in the following s
 
 
 .. toctree::
+   :maxdepth: 2
+
+   topophone2.topophone
+
+.. toctree::
    :maxdepth: 1
 
    topophone2.utils

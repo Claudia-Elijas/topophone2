@@ -8,13 +8,8 @@
    ]
   },
   {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": []
-  },
-  {
    "cell_type": "code",
-   "execution_count": 1,
+   "execution_count": null,
    "metadata": {},
    "outputs": [
     {
@@ -31,7 +26,11 @@
     "\n",
     "#__ Import: Topophone2 __\n",
     "from topophone2.modelling import ArrayCovarianceModel\n",
-    "from topophone2.utils.read import convert_to_txt"
+    "from topophone2.utils.read import convert_to_txt\n",
+    "\n",
+    "#__ Disable: Warnings __\n",
+    "import warnings\n",
+    "warnings.filterwarnings(\"ignore\", category=UserWarning)"
    ]
   },
   {

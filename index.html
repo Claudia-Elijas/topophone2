@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Home &#8212; topophone2</title>
+    <title>Topophone2 &#8212; topophone2</title>
   
   
   
@@ -30,7 +30,7 @@
 <link href="_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=1e20763f" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=7e27919d" />
   
   <!-- So that users can add custom icons -->
   <script defer src="_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
@@ -117,8 +117,14 @@
   
   
   
+    
+    
+      
+    
+    
+    <img src="_static/home.svg" class="logo__image only-light" alt="topophone2 home page"/>
+    <img src="_static/home.svg" class="logo__image only-dark pst-js-only" alt="topophone2 home page"/>
   
-    <p class="title logo__title">topophone2</p>
   
 </a></div>
     
@@ -325,44 +331,231 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="home">
-<h1>Home<a class="headerlink" href="#home" title="Link to this heading">#</a></h1>
-<p>[problem]</p>
-<p>[solution]</p>
-<p>[applications]</p>
-<p><strong>Features:</strong></p>
+  <div class="toctree-wrapper compound">
+</div>
+<section id="topophone2">
+<h1>Topophone2<a class="headerlink" href="#topophone2" title="Link to this heading">#</a></h1>
+<div class="lead docutils container">
+<p><code class="docutils literal notranslate"><span class="pre">topophone2</span></code> is a Python package for probabilistic wavefield decomposition
+using receiver arrays. Given the array covariance matrix (cross-spectrum)
+derived from recordings made by a set of receivers, it estimates
+the mixture of incoming wavefields that produced the recorded signal: inluding
+plane waves, directionally distributed arrivals, propagating environental noise and sensor self-noise.</p>
+<p>For every component, it estimates the full posterior probability distribution
+(not just a single best-fit value) of the parameters that define the signal’s
+energy distribution, such as the direction of arrival, slowness and directional
+spread. It also quantifies how well the data constrain each component, and
+compare competing models through Bayesian evidence.</p>
+</div>
+<div class="topophone-banner docutils container">
+<p><strong>Topophone1</strong> The original topophone was an acoustic instrument
+patented in in 1880 by Alfred M. Mayer, with the purpose of finding the
+direction of a sound source,
+such as a ship’s fog horn. It used a pair of ear trumpets set apart from
+each other: the listener turned the device until the sound in both ears was
+balanced.</p>
+</div>
+<section id="the-problem">
+<h2>The problem<a class="headerlink" href="#the-problem" title="Link to this heading">#</a></h2>
+<p>Arrays of receivers (e.g., seismometers, hydrophones or microbarometers) often record several
+wavefields at once in the real world. Coherent signals from distinct sources overlap and energy
+is spread over a range of directions. Many array-processing methods assume
+(a) a far-field point source and (b) incoherent noise. In practice, however,
+(a) the energy is often distributed over a range of directions, and
+(b) ambient environmental noise propagates coherently across the array. Distributed wavefields
+cause a loss of coherence between sensors, which can bias the results of
+conventional methods. Nevertheless, a parametrisation of the energy
+distribution over slowness can be obtained from the inter-sensor covariance,
+given an analytical model of this coherence loss, such as a plane wave or a
+normal or angular-harmonic distribution. This is a nonlinear, non-unique and often
+ill-conditioned inverse problem, therefor linearised asymptotic uncertainty estimates
+are often biased. These estimates are important for loction and monitoring decisions.
+Therefore, a nonlinear probabilistic approach is needed to properly quantify the uncertainty
+in the inferred parameters.</p>
+<p><code class="docutils literal notranslate"><span class="pre">topophone2</span></code> therefore provides a probabilistic framework for decomposing the
+array covariance into a mixture of parameterised signal components and for
+quantifying the uncertainty in the inferred parameters.</p>
+</section>
+<section id="the-approach">
+<h2>The approach<a class="headerlink" href="#the-approach" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">topophone2</span></code> treats decomposition as a Bayesian inverse problem, in three steps:</p>
+<div class="home-grid steps docutils container">
+<div class="home-card docutils container">
+<p class="rubric">1. Forward model</p>
+<p><a class="reference internal" href="topophone2.modelling.html#topophone2.modelling.ArrayCovarianceModel" title="topophone2.modelling.ArrayCovarianceModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArrayCovarianceModel</span></code></a> predicts the array
+covariance for a given receiver geometry and frequency band, as a
+superposition of parameterised, incoherently distributed energy sources.
+Each source type is described analytically by its characteristic
+function.</p>
+</div>
+<div class="home-card docutils container">
+<p class="rubric">2. Likelihood</p>
+<p>The predicted and observed array-covariance matrices are compared, using an
+exact complex Wishart likelihood. Uniform priors bound every parameter.</p>
+</div>
+<div class="home-card docutils container">
+<p class="rubric">3. Variational inference</p>
+<p>Normalising flows (built on
+<a class="reference external" href="https://github.com/XuebinZhaoZXB/GeoPVI">GeoPVI</a>) learn an
+approximation to the posterior. Samples drawn from it can be summarised
+using marginal statistics such as means, credible intervals and information gain.
+Bayes factor can be used to compare different models.</p>
+</div>
+</div>
+<p>The whole workflow runs from a single call to
+<code class="xref py py-func docutils literal notranslate"><span class="pre">topophone2.topophone.decompose()</span></code>.</p>
+</section>
+<section id="functionality">
+<h2>Functionality<a class="headerlink" href="#functionality" title="Link to this heading">#</a></h2>
+<div class="home-grid docutils container">
+<div class="home-card docutils container">
+<p class="rubric">Applications</p>
+<p><code class="docutils literal notranslate"><span class="pre">topophone2</span></code> works with any array of receivers whose array-covariance matrix
+can be estimated. Typical uses include:</p>
 <ul class="simple">
-<li><p>Provides</p></li>
-<li><p>Probabilistic …</p></li>
+<li><p>direction-of-arrival estimation, with uncertainties;</p></li>
+<li><p>estimating signal-to-noise ratios;</p></li>
+<li><p>characterising directional spreading of energy, such as scattered or
+multipath arrivals;</p></li>
+<li><p>quantifying the directionality of ambient noise fields;</p></li>
+<li><p>comparing competing source models through Bayesian evidence.</p></li>
 </ul>
-<p>The code is available on <a class="reference external" href="https://github.com/Claudia-Elijas/topophone2">topophone2 GitHub repository</a>.</p>
-<p><strong>What is a topophone?</strong></p>
-<p>A topophone is a device that converts sound into electrical signals. It is used in various applications, such as telecommunication, audio recording, and sound analysis.
-The topophone2 package provides tools for processing and analyzing sound data, making it easier for researchers and engineers to work with acoustic signals.</p>
-<section id="contents">
-<h2>Contents<a class="headerlink" href="#contents" title="Link to this heading">#</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="setup.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="documentation.html">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</div>
+<div class="home-card docutils container">
+<p class="rubric">Features</p>
+<ul class="simple">
+<li><p>Analytical array-covariance forward models for point sources (plane
+waves), normally and skew-normally distributed energy in slowness,
+isotropic noise (2D or 3D), anisotropic noise fields expanded in
+cylindrical or spherical harmonics, and user-defined characteristic
+functions.</p></li>
+<li><p>Exact gradients of the forward model, for efficient gradient-based
+optimisation.</p></li>
+<li><p>Probabilistic inversion by normalising-flow variational inference, with
+optional mean-field approximation.</p></li>
+<li><p>Optional joint inversion with a noise-only covariance to constrain
+environmental noise and sensor self-noise.</p></li>
+<li><p>Posterior analysis tools: marginal densities, credible intervals,
+information content and evidence (via <a class="reference external" href="https://github.com/astro-informatics/harmonic">harmonic</a>).</p></li>
+<li><p>Utilities for signal processing (FFT, windowing, Slepian tapers, sample
+covariance estimation, beamforming) and for reading and writing input
+data and configuration files.</p></li>
 </ul>
+</div>
+</div>
+</section>
+<section id="quick-start">
+<h2>Quick start<a class="headerlink" href="#quick-start" title="Link to this heading">#</a></h2>
+<p>After <a class="reference internal" href="setup.html"><span class="doc">installing</span></a> the package, a decomposition looks like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">topophone2.utils.read</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_txt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">topophone2.topophone</span><span class="w"> </span><span class="kn">import</span> <span class="n">decompose</span>
+
+<span class="c1"># Observed array covariance, receiver positions and frequencies</span>
+<span class="n">freq</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">Gamma_obs</span><span class="p">,</span> <span class="n">N_obs</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="s2">"data_input.txt"</span><span class="p">)</span>
+
+<span class="n">decompose</span><span class="p">(</span>
+    <span class="n">Gamma_obs</span>    <span class="o">=</span> <span class="n">Gamma_obs</span><span class="p">,</span>
+    <span class="n">N_obs</span>        <span class="o">=</span> <span class="n">N_obs</span><span class="p">,</span>
+    <span class="n">x</span>            <span class="o">=</span> <span class="n">x</span><span class="p">,</span>
+    <span class="n">freq</span>         <span class="o">=</span> <span class="n">freq</span><span class="p">,</span>
+    <span class="n">sigs</span>         <span class="o">=</span> <span class="p">[</span><span class="s2">"point"</span><span class="p">,</span> <span class="s2">"normal"</span><span class="p">],</span>   <span class="c1"># signal components to fit</span>
+    <span class="n">prior_bounds</span> <span class="o">=</span> <span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">),</span>        <span class="c1"># uniform prior bounds per parameter</span>
+    <span class="n">N_flow</span>       <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">1e-2</span><span class="p">,</span>
+    <span class="n">N_iterations</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">,</span>
+    <span class="n">N_montecarlo</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">N_samples</span>    <span class="o">=</span> <span class="mi">5000</span><span class="p">,</span>
+    <span class="n">outpath</span>      <span class="o">=</span> <span class="s2">"results"</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Where to go next:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="examples.html"><span class="doc">Examples</span></a>: complete worked examples, from preparing input data to
+real-data applications.</p></li>
+<li><p><a class="reference internal" href="documentation.html"><span class="doc">Documentation</span></a>: the API reference for every module, class and
+function.</p></li>
+<li><p><a class="reference external" href="https://github.com/Claudia-Elijas/topophone2">GitHub repository</a>: the
+source code.</p></li>
+</ul>
+</section>
+<section id="how-to-cite">
+<h2>How to cite<a class="headerlink" href="#how-to-cite" title="Link to this heading">#</a></h2>
+<p>If you use <code class="docutils literal notranslate"><span class="pre">topophone2</span></code> in your research, please cite the following paper:</p>
+<div class="cite-card cite-main docutils container">
+<p class="rubric">topophone2</p>
+<p>Smith, J.-A., &amp; Elijas Parra, C. (in prep.). Probabilistic wavefield
+decomposition from array covariance.</p>
+<details><summary>BibTeX</summary><div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@unpublished</span><span class="p">{</span><span class="nl">smith_topophone2</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Smith, Jack-Andrew and Elijas Parra, Claudia}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="s">{Probabilistic wavefield decomposition from array covariance}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">note</span><span class="w">   </span><span class="p">=</span><span class="w"> </span><span class="s">{In preparation}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</details></div>
+<p><code class="docutils literal notranslate"><span class="pre">topophone2</span></code> is built on the following open-source packages, which should
+also be cited if used in your research:</p>
+<div class="cite-grid docutils container">
+<div class="cite-card docutils container">
+<p class="rubric">GeoPVI</p>
+<p>Zhao, X., &amp; Curtis, A. (2026). GeoPVI: a Python package for
+geoscientific inversion using parametric variational inference.
+<em>Geophysical Journal International</em>, 245(3), ggag138.
+<a class="reference external" href="https://doi.org/10.1093/gji/ggag138">doi:10.1093/gji/ggag138</a></p>
+<details><summary>BibTeX</summary><div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">zhao_geopvi_2026</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="s">{Zhao, Xuebin and Curtis, Andrew}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w">   </span><span class="p">=</span><span class="w"> </span><span class="s">{{GeoPVI}: a {Python} package for geoscientific inversion</span>
+<span class="s">             using parametric variational inference}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Geophysical Journal International}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">volume</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="s">{245}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">number</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="s">{3}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w">   </span><span class="p">=</span><span class="w"> </span><span class="s">{ggag138}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">month</span><span class="w">   </span><span class="p">=</span><span class="w"> </span><span class="nv">jun</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="s">{2026}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">doi</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{10.1093/gji/ggag138}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</details></div>
+<div class="cite-card docutils container">
+<p class="rubric">harmonic</p>
+<p>McEwen, J. D., Wallis, C. G. R., Price, M. A., &amp; Docherty, M. M. (2021).
+Machine learning assisted Bayesian model comparison: learnt harmonic
+mean estimator. <em>arXiv preprint</em> arXiv:2111.12720.
+<a class="reference external" href="https://doi.org/10.48550/arXiv.2111.12720">doi:10.48550/arXiv.2111.12720</a></p>
+<details><summary>BibTeX</summary><div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">mcewen_harmonic_2021</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="s">{McEwen, J. D. and Wallis, C. G. R. and</span>
+<span class="s">             Price, M. A. and Docherty, M. M.}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w">   </span><span class="p">=</span><span class="w"> </span><span class="s">{Machine learning assisted {Bayesian} model comparison:</span>
+<span class="s">             learnt harmonic mean estimator}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{arXiv preprint arXiv:2111.12720}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="s">{2021}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">doi</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{10.48550/arXiv.2111.12720}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</details></div>
 </div>
 </section>
 <section id="project-information">
-<h2>Project Information<a class="headerlink" href="#project-information" title="Link to this heading">#</a></h2>
-<p><strong>Funding</strong></p>
-<p>This project has received funding from the NERC Edinburgh Earth Ecology and
-Environment Doctoral Training Partnership grant NE/S007407/1.</p>
-<p><strong>Collaborators</strong></p>
-<p>This project has been developed with the</p>
-<p><strong>Contacts</strong></p>
+<h2>Project information<a class="headerlink" href="#project-information" title="Link to this heading">#</a></h2>
+<div class="project-banner docutils container">
+<div class="project-banner-item docutils container">
+<p class="rubric">Funding</p>
+<p>This project has received funding from the NERC Edinburgh Earth Ecology
+and Environment Doctoral Training Partnership grant NE/S007407/1.</p>
+</div>
+<div class="project-banner-item docutils container">
+<p class="rubric">Contacts</p>
 <p>For any questions, suggestions or collaborations, please contact:</p>
 <ul class="simple">
-<li><p>Lead developer: Jack-Andrew Smith (<a class="reference external" href="mailto:email&#37;&#52;&#48;gmail&#46;com">email<span>&#64;</span>gmail<span>&#46;</span>com</a>)</p></li>
-<li><p>Code curator and site maintainer: Claudia Elijas Parra (<a class="reference external" href="mailto:claudia&#46;elijas&#46;parra&#37;&#52;&#48;gmail&#46;com">claudia<span>&#46;</span>elijas<span>&#46;</span>parra<span>&#64;</span>gmail<span>&#46;</span>com</a>)</p></li>
+<li><p>Lead developer: Jack-Andrew Smith (<a class="reference external" href="mailto:jack&#46;andrew&#46;smith53&#37;&#52;&#48;gmail&#46;com">jack<span>&#46;</span>andrew<span>&#46;</span>smith53<span>&#64;</span>gmail<span>&#46;</span>com</a>)</p></li>
+<li><p>Code curator and site maintainer: Claudia Elijas Parra
+(<a class="reference external" href="mailto:claudia&#46;elijas&#46;parra&#37;&#52;&#48;gmail&#46;com">claudia<span>&#46;</span>elijas<span>&#46;</span>parra<span>&#64;</span>gmail<span>&#46;</span>com</a>)</p></li>
 </ul>
+</div>
+</div>
 </section>
 </section>
 
@@ -404,8 +597,12 @@ Environment Doctoral Training Partnership grant NE/S007407/1.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contents">Contents</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#project-information">Project Information</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-problem">The problem</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-approach">The approach</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functionality">Functionality</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick start</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-cite">How to cite</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#project-information">Project information</a></li>
 </ul>
   </nav></div>
 

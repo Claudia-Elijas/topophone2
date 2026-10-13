@@ -29,7 +29,7 @@
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=1e20763f" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=7e27919d" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
@@ -115,8 +115,14 @@
   
   
   
+    
+    
+      
+    
+    
+    <img src="../../../_static/home.svg" class="logo__image only-light" alt="topophone2 home page"/>
+    <img src="../../../_static/home.svg" class="logo__image only-dark pst-js-only" alt="topophone2 home page"/>
   
-    <p class="title logo__title">topophone2</p>
   
 </a></div>
     
@@ -454,8 +460,7 @@
     <span class="n">N_samples</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"inversion"</span><span class="p">]</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s2">"N_samples"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
     <span class="n">inversion_outpath</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"save_out"</span><span class="p">,</span> <span class="s2">"inversion_outpath"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> 
-    <span class="n">model_outpath</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"save_out"</span><span class="p">,</span> <span class="s2">"model_outpath"</span><span class="p">)</span>
-    <span class="n">loss_outpath</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"save_out"</span><span class="p">,</span> <span class="s2">"loss_outpath"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">calc_likelihood</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"inversion"</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s2">"calc_likelihood"</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="c1"># compose other variables ==========================================</span>
 
@@ -491,8 +496,7 @@
                 <span class="n">save_intermediate_result</span> <span class="o">=</span> <span class="n">save_intermediate_result</span><span class="p">,</span>
                 <span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span><span class="p">,</span>
                 <span class="n">N_samples</span> <span class="o">=</span> <span class="n">N_samples</span><span class="p">,</span>
-                <span class="n">model_outpath</span> <span class="o">=</span> <span class="n">model_outpath</span><span class="p">,</span>
-                <span class="n">loss_outpath</span> <span class="o">=</span> <span class="n">loss_outpath</span>
+                <span class="n">calc_likelihood</span> <span class="o">=</span> <span class="n">calc_likelihood</span>
             <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">args</span></div>

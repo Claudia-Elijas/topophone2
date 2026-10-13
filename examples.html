@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/nbsphinx-gallery.css?v=26227f6e" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=1e20763f" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=7e27919d" />
   
   <!-- So that users can add custom icons -->
   <script defer src="_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
@@ -119,8 +119,14 @@
   
   
   
+    
+    
+      
+    
+    
+    <img src="_static/home.svg" class="logo__image only-light" alt="topophone2 home page"/>
+    <img src="_static/home.svg" class="logo__image only-dark pst-js-only" alt="topophone2 home page"/>
   
-    <p class="title logo__title">topophone2</p>
   
 </a></div>
     
@@ -321,6 +327,7 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="examples/example_3/example_3.1.html">3.1 Creating Synthetic Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/example_3/example_3.2.html">3.2 Reading the <code class="docutils literal notranslate"><span class="pre">config.ini</span></code> file</a></li>
 </ul>
 </div>
 </nav></div>
@@ -381,8 +388,11 @@
   <section id="examples">
 <h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h1>
 <p>Here are some examples of how to use the topophone2 package:</p>
-<section id="converting-to-suitable-input-data-for-topophone2">
-<h2>1. Converting to suitable input data for topophone2<a class="headerlink" href="#converting-to-suitable-input-data-for-topophone2" title="Link to this heading">#</a></h2>
+<section id="hydroacoustics-example">
+<h2>1. Hydroacoustics example<a class="headerlink" href="#hydroacoustics-example" title="Link to this heading">#</a></h2>
+<p>In this example, we demonstrate how to carry out probabilistic wavefield decomposition on a synthetic abyssal T-phase.
+We use the posteriors to estimate information gain for an extra sensor and increased noise level.
+We use the posterios to discriminate between a point-source and a distributed-source model.</p>
 <div class="toctree-wrapper compound">
 <div class="nbsphinx-gallery">
 <a class="reference internal" href="examples/example_1/example_1.1.html">
@@ -390,7 +400,7 @@
   <div>1.1 Array-Covariance Inversion</div>
 </a>
 <a class="reference internal" href="examples/example_1/example_1.2.html">
-  <div><img alt="" src="./_images/examples_example_1_example_1.2_13_1.png"></div>
+  <div><img alt="" src="./_images/examples_example_1_example_1.2_12_0.png"></div>
   <div>1.2 Information Gain</div>
 </a>
 <a class="reference internal" href="examples/example_1/example_1.3.html">
@@ -400,12 +410,16 @@
 </div>
 </div>
 </section>
-<section id="hydroacustics-controlled-planar-wave-modeling">
-<h2>1. Hydroacustics: controlled planar wave modeling<a class="headerlink" href="#hydroacustics-controlled-planar-wave-modeling" title="Link to this heading">#</a></h2>
+<section id="infrasound-example">
+<h2>2. Infrasound example<a class="headerlink" href="#infrasound-example" title="Link to this heading">#</a></h2>
+<p>In this example, we demonstrate how to carry out probabilistic wavefield decomposition on a thermospheric infrasound return of an explosion event.
+We show how to create a sample covariance matrix from a time series.
+We inverted for a skew-normal, environmental noise and sensor self-noise component.
+We test the hypothesis that the signal is skewed back towards the source with respect to its bulk deviation.</p>
 <div class="toctree-wrapper compound">
 <div class="nbsphinx-gallery">
 <a class="reference internal" href="examples/example_2/example_2.1.html">
-  <div><img alt="" src="./_images/examples_example_2_example_2.1_7_0.png"></div>
+  <div><img alt="" src="./_images/examples_example_2_example_2.1_6_0.png"></div>
   <div>2.1 Estimate Array Covariance from Time Series</div>
 </a>
 <a class="reference internal" href="examples/example_2/example_2.2.html">
@@ -415,13 +429,19 @@
 </div>
 </div>
 </section>
-<section id="real-data-application">
-<h2>3. Real data application<a class="headerlink" href="#real-data-application" title="Link to this heading">#</a></h2>
+<section id="synthetic-testing">
+<h2>3. Synthetic testing<a class="headerlink" href="#synthetic-testing" title="Link to this heading">#</a></h2>
+<p>We show how to generate data for a synthetic wavefield.
+It also demonstrates how to populate and read the configuration file with the existing code functionality.</p>
 <div class="toctree-wrapper compound">
 <div class="nbsphinx-gallery">
 <a class="reference internal" href="examples/example_3/example_3.1.html">
   <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
   <div>3.1 Creating Synthetic Data</div>
+</a>
+<a class="reference internal" href="examples/example_3/example_3.2.html">
+  <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>3.2 Reading the config.ini file</div>
 </a>
 </div>
 </div>
@@ -475,9 +495,9 @@
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#converting-to-suitable-input-data-for-topophone2">1. Converting to suitable input data for topophone2</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hydroacustics-controlled-planar-wave-modeling">1. Hydroacustics: controlled planar wave modeling</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#real-data-application">3. Real data application</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hydroacoustics-example">1. Hydroacoustics example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#infrasound-example">2. Infrasound example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#synthetic-testing">3. Synthetic testing</a></li>
 </ul>
   </nav></div>
 

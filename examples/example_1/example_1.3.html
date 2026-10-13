@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=1e20763f" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=7e27919d" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
@@ -121,8 +121,14 @@
   
   
   
+    
+    
+      
+    
+    
+    <img src="../../_static/home.svg" class="logo__image only-light" alt="topophone2 home page"/>
+    <img src="../../_static/home.svg" class="logo__image only-dark pst-js-only" alt="topophone2 home page"/>
   
-    <p class="title logo__title">topophone2</p>
   
 </a></div>
     
@@ -323,6 +329,7 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../example_3/example_3.1.html">3.1 Creating Synthetic Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example_3/example_3.2.html">3.2 Reading the <code class="docutils literal notranslate"><span class="pre">config.ini</span></code> file</a></li>
 </ul>
 </div>
 </nav></div>
@@ -385,8 +392,8 @@
                   
   <section id="1.3-Model-Selection">
 <h1>1.3 Model Selection<a class="headerlink" href="#1.3-Model-Selection" title="Link to this heading">#</a></h1>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Import: Numerical __</span>
@@ -417,21 +424,17 @@
 <span class="c1">#__ Set up: File paths __</span>
 <span class="n">data_dir</span>  <span class="o">=</span> <span class="s1">'../data/TRIAD_15DB'</span>
 <span class="n">model_dir</span> <span class="o">=</span> <span class="s1">'../models/ALT'</span>
+
+<span class="c1">#__ Disable: Warnings __</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Hello from topophone2!
-</pre></div></div>
 </div>
 <section id="1.3.1-Create-alternative-characteristic-function">
 <h2>1.3.1 Create alternative characteristic function<a class="headerlink" href="#1.3.1-Create-alternative-characteristic-function" title="Link to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Apparent velocity beamwidth only __</span>
@@ -512,7 +515,7 @@ Hello from topophone2!
 <h2>1.3.2 Calculate posterior pdf under alternative parameterisation<a class="headerlink" href="#1.3.2-Calculate-posterior-pdf-under-alternative-parameterisation" title="Link to this heading">#</a></h2>
 <p>Read in data from Example 1.1…</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Read: Signal + noise __</span>
@@ -536,7 +539,7 @@ Hello from topophone2!
 </div>
 <p>Set inversion parameters…</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Signals present __</span>
@@ -574,7 +577,7 @@ Hello from topophone2!
 </div>
 <p>Use <code class="docutils literal notranslate"><span class="pre">topophone2.topophone.decompose</span></code> helper function to run full workflow…</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Perform inversion __</span>
@@ -612,20 +615,20 @@ Hello from topophone2!
 <div class="highlight"><pre>
 ----------------------------------------
 
-Iteration:     0,       Loss:   76895.90
-The elapsed time is: 0.12 s
-Iteration:  5000,       Loss:   14484.70
-The elapsed time is: 47.83 s
-Iteration: 10000,       Loss:   14311.33
-The elapsed time is: 98.68 s
-Iteration: 15000,       Loss:   14307.31
-The elapsed time is: 157.56 s
-Iteration: 20000,       Loss:   14307.33
-The elapsed time is: 217.82 s
-Iteration: 25000,       Loss:   14307.38
-The elapsed time is: 273.52 s
-Iteration: 30000,       Loss:   14307.46
-The elapsed time is: 329.01 s
+Iteration:     0,       Loss: 1381304.35
+The elapsed time is: 0.18 s
+Iteration:  5000,       Loss:   14517.61
+The elapsed time is: 72.60 s
+Iteration: 10000,       Loss:   14315.29
+The elapsed time is: 143.60 s
+Iteration: 15000,       Loss:   14310.57
+The elapsed time is: 218.55 s
+Iteration: 20000,       Loss:   14311.10
+The elapsed time is: 295.01 s
+Iteration: 25000,       Loss:   14310.55
+The elapsed time is: 356.79 s
+Iteration: 30000,       Loss:   14310.54
+The elapsed time is: 432.25 s
 ----------------------------------------
 
 Finish training!
@@ -636,7 +639,7 @@ Finish training!
 <h2>1.3.3 Calculate Bayes’ factor between null and alternative parameterisations<a class="headerlink" href="#1.3.3-Calculate-Bayes'-factor-between-null-and-alternative-parameterisations" title="Link to this heading">#</a></h2>
 <p>First, load results from Example 1.1.1…</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Read results __</span>
@@ -649,7 +652,7 @@ Finish training!
 </div>
 <p>Then calculate the evidence</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Instantiate stats objects __</span>
@@ -664,7 +667,7 @@ Finish training!
 </div>
 <p>The Bayes’ factor is the ratio of evidence…</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Calculate Bayes' factor __</span>
@@ -679,7 +682,7 @@ Finish training!
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-The Bayes&#39; factor is (461.6 +/- 1.1) nats.
+The Bayes&#39; factor is (464.8 +/- 0.3) nats.
 </pre></div></div>
 </div>
 <p>This result can be compared to the thresholds given by Kass &amp; Raftery [1995]…</p>
