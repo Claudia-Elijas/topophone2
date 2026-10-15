@@ -1,7 +1,7 @@
 """
 .. container:: module-intro
 
-    The ``topophone2.utils.read`` module provides functions to read the data and parese the configuration file.
+    The ``topophone2.utils.read`` module provides functions to read the data and parse the configuration file.
 
     The main function is :func:`parse_config`, which reads the configuration file and returns a dictionary of variables.
 
@@ -217,7 +217,7 @@ def sigs_input(signals, dim , signal_noise , a , b , s , max_order , sensor_self
 # ________FUNC read txt input ________
 def read_txt(input_file, verbose=False, order='C'):
     """
-    Read the frequency, x, and Gamma_obs arrays from a text file.
+    Read a Topophone2 data file.
 
     Input
     -----
@@ -234,19 +234,19 @@ def read_txt(input_file, verbose=False, order='C'):
     Output
     ------
     frequency : ``numpy.ndarray``
-        Frequency array
-        (N_freq,)
+        Frequency vector [Hz]
+        (frequency,)
 
     x : ``numpy.ndarray``
-        Receiver positions array
-        (N_rec, dims)
+        Receiver positions [m]
+        (receiver, direction)
 
     Gamma_obs : ``numpy.ndarray``
-        Transfer function array
-        (N_freq, N_rec, N_rec)
+        Sample-covariance matrix
+        (frequency, receiver, receiver)
 
     N_obs : ``int``
-        Number of observations
+        Number of independent samples
     """
 
     if verbose: print(f"\nReading data from: {input_file} ............................\n")
@@ -336,27 +336,27 @@ def read_txt(input_file, verbose=False, order='C'):
 # ________FUNC convert arrays to txt input file________
 def convert_to_txt(frequency, x, Gamma_obs, output_path, N_obs, out_order='C'):
     """
-    Convert the frequency, x, and Gamma_obs arrays to the suitable input text file for Topophone2.
+    Write to a Topophone2 data file.
 
     Input
     -----
     frequency : ``numpy.ndarray``
-        Frequency array [Hz]
-        (N_freq,)
+        Frequency vector [Hz]
+        (frequency,)
 
     x : ``numpy.ndarray``
-        Receiver positions array
-        (N_rec, dims)
+        Receiver position [m]
+        (receiver, direction)
 
     Gamma_obs : ``numpy.ndarray``
-        Array-covariance matrix
-        (N_freq, N_rec, N_rec)
+        Sample-covariance matrix
+        (frequency, receiver, receiver)
 
     output_path : ``str``
         Path to the output text file (``_topophone2.txt`` is appended)
 
     N_obs : ``int``
-        Number of observations
+        Number of independent samples
 
     out_order : ``str`` (default ``'C'``)
         Order in which Gamma_obs is flattened. ``'C'`` means receiver q varies fastest,
@@ -374,8 +374,8 @@ def convert_to_txt(frequency, x, Gamma_obs, output_path, N_obs, out_order='C'):
             (YPSN y1,y2,...)
             (ZPSN z1,z2,...)
             CO,QUAD
-            re111, im111
-            re112, im112
+            Re111, Im111
+            Re112, Im112
             ...
     """
 

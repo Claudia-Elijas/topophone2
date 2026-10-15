@@ -1,7 +1,7 @@
 """
 .. container:: module-intro
 
-    The ``topophone2.utils.dsp`` module provides utilities for digital signal processing. Note that the engineering phase convention is used throughout.
+    The ``topophone2.utils.dsp`` module provides utilities for digital signal processing.
 """
 
 #________ IMPORT ________#

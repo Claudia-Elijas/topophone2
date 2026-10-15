@@ -3,11 +3,8 @@
 .. container:: module-intro 
 
     
-    The ``topophone2.inversion`` module provides functionality for inversion by variational inference.
-    It contains classes and functions to perform variational Bayesian inference
-    by normalising flows, inverting observed array covariance for the
-    parameterised incoherently-distributed wavefield energy.
-
+    The ``topophone2.inversion`` module provides functionality for inversion for incoherently distributed wavefield parameters.
+    It contains classes and functions to perform variational Bayesian inference by normalising flows and for posterior analysis.
 
 """
 
@@ -87,7 +84,7 @@ class Uniform():
     ):
 
         '''
-        Function to calculate the log-prior for a uniform distribution.
+        Calculate the log-prior for a uniform distribution.
 
         Input
         -----
@@ -134,31 +131,30 @@ class Posterior():
     Input
     -----
     Gamma_obs : ``numpy.ndarray``
-        Observed array-covariance matrix
+        Sample-covariance matrix
         (frequency, receiver, receiver)
     
     N_obs : ``int``
         Number of independent samples used to estimate observed expectation
 
     array_covariance_model : ``Callable``
-        Array covariance model (:class:`ArrayCovarianceModel`)
+        Forward modeller (:class:`ArrayCovarianceModel`)
 
     prior : ``Callable``
-        Prior distribution (:class:`Uniform`)
+        Prior pdf (:class:`Uniform`)
 
     Gamma_obs_noise : ``numpy.ndarray`` (optional)
-        Observed noise-only array-covariance matrix
+        Noise-only sample-covariance matrix
         (frequency, receiver, receiver)
 
     N_obs_noise : ``int`` (optional)
         Number of independent samples used to estimate observed noise-only expectation
 
     kappa : ``float`` (default ``1e5``)
-        Strength of the quadratic penalty on negative azimuthal density for free
-        cylindrical-harmonic noise signals (``0`` disables the penalty)
+        Strength of the quadratic penalty on negative angular density for cylindrical-harmonic distribution
 
     N_theta : ``int`` (default ``361``)
-        Number of azimuths at which positivity of the azimuthal density is evaluated
+        Number of azimuths at which positivity of the angular density is evaluated
 
 
     Attributes
@@ -172,22 +168,7 @@ class Posterior():
     forward : ``Callable``
         Function to predict array covariance from model vector
     kappa : ``float``
-        Strength of the positivity penalty
-
-
-    Note
-    ----
-    The positivity penalty restricts the support of the prior to physically valid
-    (non-negative) azimuthal densities,
-
-    .. math::
-
-        2\pi\rho(\theta) = 1 + 2\sum_{m=1}^{M} \left[a_m \cos(m\theta) + b_m \sin(m\theta)\right] \geq 0,
-
-    and is applied in :meth:`log_posterior` rather than :meth:`log_likelihood`, so that
-    likelihood-based quantities (e.g., evidence) are unaffected. The effective prior is
-    uniform over the valid region, so the log-evidence computed with the box volume must
-    be corrected by :math:`-\ln(\text{valid fraction})`.
+        Strength of the angular-density positivity penalty
   
     '''
 
@@ -367,7 +348,7 @@ class Posterior():
     def log_likelihood(self, m, grad=True):
         r"""
 
-        Function to calculate the log-likelihood of the observed array-covariance matrix given a model vector.
+        Calculate the log-likelihood of the sample-covariance matrix given a model vector.
 
         Input
         -----
@@ -381,7 +362,7 @@ class Posterior():
         Output
         ------
         lnp_dm : ``numpy.ndarray``
-            Log-likelihood of observed array-covariance matrix given model vector
+            Log-likelihood of sample-covariance matrix given model vector
             (model,)
 
         dlnp_dm : ``numpy.ndarray``
@@ -457,7 +438,7 @@ class Posterior():
 
         r'''
         
-        Function to calculate the log-posterior for a model vector given observed array-covariance matrix and prior distribution.
+        Calculate the log-posterior for a model vector given the sample-covariance matrix and prior distribution.
 
         Input
         -----
@@ -470,7 +451,6 @@ class Posterior():
         lnp_md : ``torch.Tensor``
             Log-posterior for model vector given observed array-covariance matrix and prior distribution
             (model,)
-        
         
         '''
 
@@ -488,226 +468,6 @@ class Posterior():
 
         #__ Return output __
         return lnp_md
-
-# #__ Posterior distribution __
-# class Posterior():
-#     r'''
-    
-#     Class to calculate log-posterior for array-covariance inversion.
-
-#     Methods 
-#     -------
-#     - :meth:`log_likelihood` : Calculate log-likelihood of data given model. 
-#     - :meth:`log_posterior` : Calculate log-posterior for model given data and prior. 
-
-#     Input
-#     -----
-#     Gamma_obs : ``numpy.ndarray``
-#         Observed array-covariance matrix
-#         (frequency, receiver, receiver)
-    
-#     N_obs : ``int``
-#         Number of independent samples used to estimate observed expectation
-
-#     array_covariance_model : ``Callable``
-#         Array covariance model (:class:`ArrayCovarianceModel`)
-
-#     prior : ``Callable``
-#         Prior distribution (:class:`Uniform`)
-
-#     Gamma_obs_noise : ``numpy.ndarray`` (optional)
-#         Observed noise-only array-covariance matrix
-#         (frequency, receiver, receiver)
-
-#     N_obs_noise : ``int`` (optional)
-#         Number of independent samples used to estimate observed noise-only expectation
-
-
-#     Attributes
-#     ----------
-#     N_obs : ``float``
-#         Number of independent samples used to estimate observed expectation
-#     N_obs_noise : ``float``
-#         Number of independent samples used to estimate observed noise-only expectation
-#     prior : ``Callable``
-#         Prior distribution
-#     forward : ``Callable``
-#         Function to predict array covariance from model vector
-  
-#     '''
-
-#     def __init__(
-#         self,
-#         Gamma_obs : np.ndarray,
-#         N_obs     : int,
-#         array_covariance_model : Callable,
-#         prior     : Callable,
-#         Gamma_obs_noise : Optional[np.ndarray] = None,
-#         N_obs_noise     : Optional[int]        = None
-#     ):
-        
-
-#         #__ Throw error if noise-only not calculated but noise ACM specified here, or warning if specified but not provided __
-#         self._invert_noise_only = (Gamma_obs_noise is not None)
-#         if self._invert_noise_only and not array_covariance_model._calc_noise_only:
-#             raise ValueError('Noise data provided, must specify `calc_noise_only` in ArrayCovarianceModel.')
-
-#         #__ Store arguments as attributes __
-#         self.N_obs       = float(N_obs)            # Number of independent samples used to estimate observed expectation
-#         if self._invert_noise_only:
-#             self.N_obs_noise = float(N_obs_noise)  # Number of independent samples used to estimate observed noise-only expectation
-#         self.prior       = prior                   # Prior distribution
-
-#         #__ Store required attributes from model __
-#         self.forward  = array_covariance_model.forward   # Function to predict array covariance from model vector
-#         self._iu0_rec = array_covariance_model._iu0_rec  # Upper-triangle index set for unique receiver pairs (including diagonal)
-#         self._iu1_rec = array_covariance_model._iu1_rec  # ^
-#         self._N_rec   = array_covariance_model.N_rec     # Number of receivers
-#         self._N_freq  = array_covariance_model.N_freq    # Number of frequency bins
-#         self._calc_noise_only = array_covariance_model._calc_noise_only  # Include an additional noise-only calculation
-#         self._unpack  = array_covariance_model._unpack   # Unpack model vector
-#         self._expand  = array_covariance_model.expand    # Unflatten array-covariance
-
-#         #__ Lower-triangle index set for unique receiver pairs (excluding diagonal) __
-#         self._il0_rec, self._il1_rec = np.tril_indices(self._N_rec, k=-1)
-
-#         #__ Check Hermitian symmetry of observation __
-#         def check_hermitian(Gamma_obs, var_name):
-#             if not np.allclose(Gamma_obs,
-#                             np.conj(np.swapaxes(Gamma_obs, -1, -2))):
-#                 raise ValueError(f"{var_name} is not Hermitian.")
-#         check_hermitian(Gamma_obs, 'Gamma_obs')
-#         if self._invert_noise_only: check_hermitian(Gamma_obs_noise, 'Gamma_obs_noise')
-
-#         #__ Scaled Gamma_obs (A in Goodman [1963]) __
-#         self._A = self.N_obs * Gamma_obs  # (frequency, receiver, receiver)
-#         if self._invert_noise_only: self._A_noise = self.N_obs_noise * Gamma_obs_noise
-
-#         #__ Cholesky factorisation of A __
-#         self._L_A = self._safe_cholesky(self._A, 'Gamma_obs')
-#         if self._invert_noise_only: self._L_A_noise = self._safe_cholesky(self._A_noise, 'Gamma_obs_noise')
-
-#     #__ Safe Cholesky decomposition __
-#     @staticmethod
-#     def _safe_cholesky(A, var_name):
-#         try: L_A = np.linalg.cholesky(A)
-#         except np.linalg.LinAlgError as err:
-#             raise ValueError(f"{var_name} is not positive definite.") from err
-#         return L_A
-
-#     #__ Calculate log-likelihood helper __
-#     def _lnp_dm_and_grad(self, Gamma, dGamma, A, N_obs, grad, var_name):
-
-#         #__ Cholesky decomposition of predicted array-covariance matrix __
-#         L = self._safe_cholesky(Gamma, var_name)  # (model, freq, s)
-
-#         #__ Log-determinant of Gamma __
-#         diag   = np.real(np.diagonal(L, axis1=-2, axis2=-1))  # (model, freq, receiver)
-#         logdet = 2.0 * np.sum(np.log(diag), axis=-1)          # (model, freq)
-
-#         #__ Inverse of Gamma __
-#         Gamma_inv = np.linalg.inv(Gamma)  # (model, freq, receiver, receiver)
-
-#         #__ tr(Gamma^-1 A) __
-#         tr = np.real(np.sum(Gamma_inv * np.conj(A)[None,...], axis=(-2, -1)))  # (model, freq)
-
-#         #__ Sum over independent frequency bins __
-#         lnp_dm = np.sum(-N_obs * logdet - tr, axis=-1)   # (model)
-#         if not grad: return lnp_dm, None
-
-#         #__ Calculate gradient (model, parameter) __
-#         B            = A[None, ...] - N_obs * Gamma
-#         G            = Gamma_inv @ B @ Gamma_inv
-#         dlnp_dm = np.real(np.einsum('mfij,mfjik->mk', G, dGamma, optimize=True))
-
-#         #__ Return output __
-#         return lnp_dm, dlnp_dm
-
-#     #__ Calculate log-likelihood __
-#     def log_likelihood(self, m, grad=True):
-#         r"""
-
-#         Function to calculate the log-likelihood of the observed array-covariance matrix given a model vector.
-
-#         Input
-#         -----
-#         m : ``numpy.ndarray``
-#             Model vector
-#             (model, parameter)
-
-#         grad : ``bool`` (default: ``True``)
-#             If ``True``, calculate gradient of log-likelihood wrt. model parameters
-
-#         Output
-#         ------
-#         lnp_dm : ``numpy.ndarray``
-#             Log-likelihood of observed array-covariance matrix given model vector
-#             (model,)
-
-#         dlnp_dm : ``numpy.ndarray``
-#             Gradient of log-likelihood wrt. model parameters
-#             (model, parameter)
-
-#         """
-
-#         #__ Extract model shape (model, parameter) __
-#         if not isinstance(m, np.ndarray):
-#             m = m.detach().numpy()
-#         m = np.atleast_2d(m)
-#         N_model, N_param = m.shape
-
-#         #__ Synthesise array-covariance matrix __
-#         if self._calc_noise_only: cov, dcov, cov_noise, dcov_noise = self.forward(m, grad=grad)  # (model, frequency, receiver pair, [parameter])
-#         else: cov, dcov = self.forward(m, grad=grad)  # (model, frequency, receiver pair, [parameter])
-#         Gamma, dGamma = self._expand(cov, dcov if grad else None)
-#         if self._invert_noise_only: Gamma_noise, dGamma_noise = self._expand(cov_noise, dcov_noise if grad else None)
-
-#         #__ Calculate likelihood __
-#         lnp_dm, dlnp_dm = self._lnp_dm_and_grad(Gamma, dGamma, self._A, self.N_obs, grad, 'Gamma')
-#         if self._invert_noise_only:
-#             lnp_dm_noise, dlnp_dm_noise = self._lnp_dm_and_grad(Gamma_noise, dGamma_noise, self._A_noise, self.N_obs_noise, grad, 'Gamma_noise')
-#             lnp_dm += lnp_dm_noise
-#             if (dlnp_dm is not None): dlnp_dm += dlnp_dm_noise
-
-#         #__ Return output __
-#         return lnp_dm, dlnp_dm
-
-#     #__ Calculate log-posterior __
-#     def log_posterior(
-#         self,
-#         m : np.ndarray
-#     ):
-
-#         r'''
-        
-#         Function to calculate the log-posterior for a model vector given observed array-covariance matrix and prior distribution.
-
-#         Input
-#         -----
-#         m : ``numpy.ndarray``
-#             Model vector
-#             (model, parameter)
-
-#         Output
-#         ------
-#         lnp_md : ``torch.Tensor``
-#             Log-posterior for model vector given observed array-covariance matrix and prior distribution
-#             (model,)
-        
-        
-#         '''
-
-#         #__ Calculate log-likelihood __
-#         lnp_dm = ForwardModel.apply(m, self.log_likelihood)
-
-#         #__ Calculate log-prior __
-#         lnp_m = self.prior.log_prior(m)
-
-#         #__ Calculate log-posterior __
-#         lnp_md = lnp_m + lnp_dm
-
-#         #__ Return output __
-#         return lnp_md
 
 #________ NORMALISING FLOWS MODEL ________#
 
@@ -767,7 +527,7 @@ class LinearFlowsModel():
     def def_flow_model(self):
 
         '''
-        Function to define a normalising flows model for variational inference.
+        Define a normalising flows model for variational inference.
         '''
 
         #__ Initialise flow __
@@ -799,7 +559,7 @@ class LinearFlowsModel():
     #__ Get flow parameters __
     def get_flow_param(self):
         '''
-        Function to get the parameters of the normalising flows model for variational inference.
+        Get the parameters of the normalising flows model for variational inference.
         '''
         flow = self.variational.flows[-2]
         mus = flow.u.detach().numpy()
@@ -821,40 +581,42 @@ class Inference():
 
     Methods
     -------
-    - :meth:`invert` : Perform variational inference to invert observed array covariance for model parameters.
-    - :meth:`save` : Save the results of the inversion.
-    - :meth:`load` : Load the results of the inversion.
-    - :meth:`sample` : Sample from the posterior distribution of model parameters.
-    - :meth:`unpack` : Unpack the model vector into its constituent parameters.
-    - :meth:`get_lnELBO` : Function to return logarithmic evidence lower bound.
+    - :meth:`invert` : Optimise variational distribution to approximate posterior pdf
+    - :meth:`save` : Save the results of the inversion
+    - :meth:`load` : Load the results of the inversion
+    - :meth:`sample` : Sample from the posterior distribution of model parameters
+    - :meth:`unpack` : Unpack the model vector into its constituent parameters
+    - :meth:`get_lnELBO` : Function to return logarithmic evidence lower bound
 
     Input
     -----
     flow_model : ``Callable``
-        The normalising flows model to use for variational inference (e.g., ``LinearFlowsModel``).
+        The normalising flows model to use for variational inference (:class:`LinearFlowsModel`)
+
     posterior : ``Callable``
-        The posterior distribution to infer (e.g., ``Posterior``).
+        Posterior pdf calculator (:class:`Posterior`)
+
     learning_rate : ``float``
-        The learning rate for the optimiser.
+        The learning rate for the optimiser
+
     outpath : ``str``
-        The path to save the results.
+        The path to save the results
     
     Attributes
     ----------
     flow_model : ``Callable``
-        The normalising flows model to use for variational inference (e.g., ``LinearFlowsModel``).
+        The normalising flows model to use for variational inference
     inversion : ``Callable``
-        The variational inference object that performs the inversion.
+        The variational inference object that performs the inversion
     optimiser : ``torch.optim.Optimizer``
-        The optimiser used for variational inference.
+        The optimiser used for variational inference
     learning_rate : ``float``
-        The learning rate for the optimiser.
+        The learning rate for the optimiser
     loss_his : ``list``
-        The history of the loss function during the inversion.
+        The history of the loss function during the inversion
     outpath : ``str``
-        The path to save the results.
+        The path to save the results
     
-
     '''
 
     #__ Initialise class __
@@ -871,22 +633,24 @@ class Inference():
     def invert(self, N_iterations, N_montecarlo, N_out=0, save_intermediate_result=False, verbose=False):
 
         '''
-        Function to perform variational inference to invert observed array covariance for model parameters.
+        Optimise variational distribution to approximate posterior pdf.
 
         Input
         -----
         N_iterations : ``int``
-            Number of iterations to run the inversion.
+            Number of iterations to run the inversion
+
         N_montecarlo : ``int``
-            Number of samples to estimate ELBO and gradient estimate.
+            Number of samples to estimate ELBO and gradient estimate
+
         N_out : ``int`` (default: ``0``)
-            Number of samples to output for intermediate results.
+            Number of samples to output for intermediate results
 
         save_intermediate_result : ``bool`` (default: ``False``)
-            If ``True``, save intermediate results during the inversion.
+            If ``True``, save intermediate results during the inversion
 
         verbose : ``bool`` (default: ``False``)
-            If ``True``, print progress during the inversion.
+            If ``True``, print progress during the inversion
         '''
         if (N_out == 0):
             N_out = 1
@@ -906,7 +670,7 @@ class Inference():
     #__ Save flows __
     def save(self):
         '''
-        Function to save the current flow model.
+        Save the current flow model.
         '''
         iteration = len(self.loss_his)
         self.flow_model.variational.eval()
@@ -928,12 +692,12 @@ class Inference():
     #__ Load checkpoint __
     def load(self, iteration):
         '''
-        Function to load a checkpoint from a previous iteration.
+        Load a checkpoint from a previous iteration.
 
         Input
         -----
         iteration : ``int``
-            The iteration number of the checkpoint to load.
+            The iteration number of the checkpoint to load
         '''
         model_fname = f"{self.outpath}/model_iteration-{iteration:05d}.pt"
         checkpoint  = torch.load(model_fname, weights_only=False)
@@ -943,12 +707,12 @@ class Inference():
     #__ Sample posterior __
     def sample(self, N_samples):
         '''
-        Function to sample current normalising flows model.
+        Sample current normalising flows model.
 
         Input
         -----
         N_samples : ``int``
-            Number of samples to draw from the posterior distribution.
+            Number of samples to draw from the posterior distribution
 
         Output
         ------
@@ -965,7 +729,7 @@ class Inference():
     #__ Unpack model vector __
     def unpack(self, m):
         '''
-        Function to unpack the model vector.
+        Unpack the model vector.
 
         Input
         -----
@@ -982,12 +746,12 @@ class Inference():
     #__ Return ELBO __
     def get_lnELBO(self):
         '''
-        Function to return logarithmic evidence lower bound.
+        Return logarithmic evidence lower bound.
 
         Output
         ------
         lnELBO : ``numpy.ndarray``
-            Log-ELBO.
+            Log-ELBO
             (iteration,)
         '''
 
@@ -1001,7 +765,46 @@ class Inference():
 
 #__ Class for marginal statistics __
 class MarginalStats():
-    ''''''
+    '''
+    
+    Class for posterior analysis.
+
+    Methods
+    -------
+    - :meth:`calc_evidence` : Calculate evidence using the learnt harmonic mean estimator.
+    - :meth:`calc_information` : Calculate the information gain relative to a bounded uniform prior.
+    - :meth:`marginal_mean` : Calculate the marginal means.
+    - :meth:`credible_interval` : Calculate the credible interval.
+    - :meth:`probability_density` : Calculate marginal probability density estimate.
+
+    Input
+    -----
+    m : ``np.ndarray``
+        Ensemble of model samples distributed according to posterior pdf
+        (sample, parameter)
+
+    lnp_dm : ``np.ndarray`` (optional)
+        Log-likelihood of model samples
+        (sample,)
+
+    posterior : ``Callable``
+        Posterior pdf calculator (:class:`Posterior`)
+
+    prior_bounds : ``Tuple[np.ndarray,np.ndarray]``
+        Lower and upper bounds of uniform prior
+        (parameter,)
+
+
+    Attributes
+    ----------
+    m : ``np.ndarray``
+        Ensemble of model samples distributed according to posterior pdf
+    lnp_dm : ``np.ndarray``
+        Log-likelihood of model samples
+    Vi : ``np.ndarray``
+        Length of each side of prior hyper-volume
+
+    '''
 
     #__ Initialise class __
     def __init__(self, m, lnp_dm=None, posterior=None, prior_bounds=None):
@@ -1020,23 +823,23 @@ class MarginalStats():
     #__ Calculate evidence __
     def calc_evidence(self, nchains=10, temperature=0.8):
         '''
-        Function to calculate evidence using the learnt harmonic mean estimator [McEwan et al., 2021, ArXiv].
+        Calculate evidence using the learnt harmonic mean estimator [McEwan et al., 2021, ArXiv].
         
         Input
         -----
         nchains : ``int`` (default ``10``)
-            Number of data sets to split model chain into.
+            Number of data sets to split model chain into
 
         temperature : ``float`` (default ``0.8``)
-            Temperature of learnt model.
+            Temperature of learnt model
 
         Output
         ------
         lnp_d : ``float``
-            Log-evidence.
+            Log-evidence
 
         lnp_d_err : ``Tuple[float,float]``
-            Error bounds on estimate.
+            Error bounds on estimate
         '''
 
         #__ Reshape model vector __
@@ -1078,14 +881,14 @@ class MarginalStats():
         Input
         -----
         idx : ``list``
-            List of indices in subset.
+            List of indices in subset
 
         thin : ``int`` (optional)
-            Thin model samples for KDE estimation.
+            Thin model samples for KDE estimation
 
         Output
         ------
-        ???
+        KDE, model slices
         '''
 
         #__ Thin model selection __
@@ -1106,10 +909,10 @@ class MarginalStats():
         Input
         -----
         idx : ``list`` (optional)
-            List of indices in subset.
+            List of indices in subset
 
         thin : ``int`` (default ``2``)
-            Thin model samples for KDE estimation.
+            Thin model samples for KDE estimation
 
         Output
         ------
@@ -1149,10 +952,10 @@ class MarginalStats():
         Input
         -----
         idx : ``list``
-            List of indices in subset.
+            List of indices in subset
 
         harmonic : ``bool`` (default ``False``)
-            Perform harmonic averaging, rather than arithmetic.
+            Perform harmonic averaging, rather than arithmetic
 
         Output
         ------
@@ -1179,19 +982,19 @@ class MarginalStats():
         Input
         -----
         inner_pc : ``float`` (default ``95.0``)
-            Interval percentage [%].
+            Interval percentage [%]
 
         idx : ``list`` (optional)
-            List of indices in subset.
+            List of indices in subset
 
         Output
         ------
         ci_lo : ``np.ndarray``
-            Lower bound of credible interval.
+            Lower bound of credible interval
             (parameter,)
 
         ci_hi : ``np.ndarray``
-            Upper bound of credible interval.
+            Upper bound of credible interval
             (parameter,)
         '''
 
@@ -1216,27 +1019,27 @@ class MarginalStats():
         Input
         -----
         i : ``int``
-            Model parameter index.
+            Model parameter index
 
         npts : ``int`` (default ``500``)
-            Number of points in KDE vector.
+            Number of points in KDE vector
 
         bounds : ``Tuple[float,float]`` (optional)
-            Bounds of KDE vector.
+            Bounds of KDE vector
 
         thin : ``int`` (optional)
-            Thin model samples for KDE estimation.
+            Thin model samples for KDE estimation
 
         cumulative : ``str`` (optional)
-            If specified, calculate cumulative distribution in ``'forward'`` or ``'reverse'`` direction.
+            If specified, calculate cumulative distribution in ``'forward'`` or ``'reverse'`` direction
         
         Output
         ------
         density : ``np.ndarray``
-            Density function.
+            Density function
 
         vec : ``np.ndarray``
-            Density function vector.
+            Density function vector
         '''
 
         #__ Fit KDE __

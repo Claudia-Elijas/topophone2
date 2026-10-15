@@ -1,11 +1,7 @@
 """
 .. container:: module-intro
 
-    The ``topophone2.utils.math`` module provides mathematical convenience functions:
-
-        :func:`bessel_function` - Computes the Bessel function of the first kind or the spherical Bessel function.
-
-        :func:`legendre_polynomial` - Computes the associated Legendre polynomial.
+    The ``topophone2.utils.math`` module provides mathematical convenience functions.
 
 """
 
@@ -26,6 +22,8 @@ def bessel_function(
     derivative : bool = False
 ):
     r"""
+
+    Calculate Bessel function (derivative).
     
     Input
     -----
@@ -45,13 +43,6 @@ def bessel_function(
     ------
     ``numpy.ndarray``
         Function output
-
-
-    .. math::
-
-        J_n(x) = \sum_{m=0}^{\infty} \frac{(-1)^m}{m! \Gamma(m+n+1)} \left(\frac{x}{2}\right)^{2m+n}
-
-
 
     """
 
@@ -76,7 +67,7 @@ def legendre_polynomial(
 ):
     r"""
     
-    Function to compute the associated Legendre polynomial $P_n^m(x)$ using ``scipy.special.lpmv``.
+    Function to compute the associated Legendre polynomial :math:`P_n^m\left(x\right)`.
 
     Input
     -----
@@ -84,19 +75,18 @@ def legendre_polynomial(
         Argument to polynomial
 
     degree : ``int``
-        Degree of polynomial ($n$)
+        Degree of polynomial (n)
 
     order : ``int``
-        Order of polynomial ($m$)
+        Order of polynomial (m)
 
     condon_shortley : ``bool`` (default ``False``)
         Include the Condon-Shortley phase $(-1)^m$
 
-
-    .. math::
-
-        P_n^m(x) = (-1)^m \frac{(1-x^2)^{m/2}}{2^n n!} \frac{d^{n+m}}{dx^{n+m}} (x^2 - 1)^n
-
+    Output
+    ------
+    ``numpy.ndarray``
+        Polynomial
 
     """
 
@@ -106,137 +96,6 @@ def legendre_polynomial(
 
     #__ Return output __
     return prefactor * lpmv(order, degree, argument)
-
-# #__ Density function parameters __
-# def density_params(
-#     xi    : np.ndarray,
-#     sigma : np.ndarray = None,
-#     corr  : np.ndarray = None,
-#     alpha : np.ndarray = None
-# ):
-#     """
-#     Construct summary quantities for density functions (point, normal, skewnormal) in cylindrical/spherical coordinates.
-
-#     Input
-#     -----
-#     xi : ``numpy.ndarray``
-#         Location vector [s.m-1]
-#         (model, direction)
-
-#     sigma : ``numpy.ndarray`` (optional)
-#         Scale vector [s.m-1]
-#         (model, direction)
-
-#     corr : ``numpy.ndarray`` (optional)
-#         Correlation matrix off-diagonal (upper-triangle order)
-#         (model, direction pair)
-
-#     alpha : ``numpy.ndarray`` (optional)
-#         Shape vector
-#         (model, direction)
-
-#     Output
-#     ------
-#     wd : ``numpy.ndarray``
-#         Skewness-direction vector [s.m-1]
-#         (model, direction)
-
-#     mean : ``numpy.ndarray``
-#         Mean vector [s.m-1]
-#         (model, direction)
-
-#     xi_circ : ``numpy.ndarray``
-#         Location vector in cylindrical/spherical coordinates [s.m-1, deg from North[, deg from horizontal]]
-#         (model, direction)
-
-#     mean_circ : ``numpy.ndarray``
-#         Mean vector in cylindrical/spherical coordinates [s.m-1, deg from North[, deg from horizontal]]
-#         (model, direction)
-
-#     sigma_circ : ``numpy.ndarray``
-#         Scale vector in cylindrical/spherical coordinates about xi [s.m-1, deg from North[, deg from horizontal]]
-#         (model, direction)
-
-#     wd_circ : ``numpy.ndarray``
-#         Skewness-direction vector in cylindrical/spherical coordinates about xi [s.m-1, deg from North[, deg from horizontal]]
-#         (model, direction)
-#     """
-
-#     #__ np.einsum subscripts __
-#     #__ [i] model
-#     #__ [l],[p] direction
-
-#     #__ Instantiate outputs __
-#     wd, mean, xi_circ, mean_circ, sigma_circ, wd_circ = [None]*6
-
-#     #__ Construct correlation matrix __
-#     if corr is not None:
-#         N_model, N_dir     = xi.shape
-#         _iu0_dir, _iu1_dir = np.triu_indices(N_dir, k=1)
-#         Omega_z = np.ones((N_model, N_dir, N_dir), dtype=float)
-#         Omega_z[:,_iu0_dir,_iu1_dir] = corr
-#         Omega_z[:,_iu1_dir,_iu0_dir] = corr
-
-#     #__ Calculate skewness direction vector __
-#     if alpha is not None:
-#         Oza   = np.einsum('ilp,ip->il', Omega_z, alpha, optimize=True)
-#         N     = 1.0 / np.sqrt(1.0 + np.einsum('il,il->i', alpha, Oza, optimize=True))
-#         delta = N[:,None] * Oza
-
-#         #__ Scale skewness-direction vector __
-#         wd = sigma * delta
-
-#     #__ Calculate mean __
-#     if alpha is not None:
-#         mean =   xi + wd * np.sqrt(2/np.pi)
-#     else: mean = xi
-
-#     #__ Cartesian -> cylindrical/spherical __
-#     def to_circ(v):
-#         r   = np.linalg.norm(v, axis=1)
-#         phi = np.degrees(np.arctan2(v[:,0], v[:,1])) % 360
-#         if (N_dir == 2): return np.stack([r, phi], axis=1)
-#         theta = np.degrees(np.arctan2(v[:,2], np.hypot(v[:,0], v[:,1])))
-#         return np.stack([r, phi, theta], axis=1)
-
-#     #__ Project to cylindrical/spherical coordinates __
-#     xi_circ   = to_circ(xi)
-#     mean_circ = to_circ(mean)
-
-#     #__ Local orthonormal basis at xi __
-#     if (sigma is not None) or (alpha is not None):
-#         r     = xi_circ[:,0]
-#         phi   = np.radians(xi_circ[:,1])
-#         theta = np.radians(xi_circ[:,2]) if (N_dir == 3) else np.zeros(N_model)
-#         ct, st, cp, sp = np.cos(theta), np.sin(theta), np.cos(phi), np.sin(phi)
-#         if (N_dir == 2):
-#             e_r   = np.stack([sp, cp], axis=1)
-#             e_phi = np.stack([cp, -sp], axis=1)
-#         else:
-#             e_r     = np.stack([ct*sp, ct*cp, st], axis=1)
-#             e_phi   = np.stack([cp, -sp, np.zeros(N_model)], axis=1)
-#             e_theta = np.stack([-st*sp, -st*cp, ct], axis=1)
-
-#         #__ Scale vector linearised about xi __
-#         if (sigma is not None):
-#             dr   = np.sum(sigma * e_r, axis=1)
-#             dphi = np.degrees(np.sum(sigma * e_phi, axis=1) / (r * ct))
-#             if (N_dir == 2): sigma_circ = np.stack([dr, dphi], axis=1)
-#             else:
-#                 dtheta  = np.degrees(np.sum(sigma * e_theta, axis=1) / r)
-#                 sigma_circ = np.stack([dr, dphi, dtheta], axis=1)
-
-#         #__ Skewness-direction as linearised changes in xi __
-#         if (alpha is not None):
-#             dr   = np.sum(wd * e_r, axis=1)
-#             dphi = np.degrees(np.sum(wd * e_phi, axis=1) / (r * ct))
-#             if (N_dir == 2): wd_circ = np.stack([dr, dphi], axis=1)
-#             else:
-#                 dtheta  = np.degrees(np.sum(wd * e_theta, axis=1) / r)
-#                 wd_circ = np.stack([dr, dphi, dtheta], axis=1)
-
-#     #__ Return outputs __
-#     return wd, mean, xi_circ, mean_circ, sigma_circ, wd_circ
 
 #__ Density function parameters __
 def density_params(
@@ -285,13 +144,11 @@ def density_params(
         (model, direction)
  
     sigma_circ : ``numpy.ndarray``
-        Standard deviation along the local radial, azimuthal[, elevation] directions at the location,
-        from the covariance (Omega - 2/pi wd wd^T for the skew-normal) [s.m-1, deg[, deg]]
+        Standard deviation along the local radial, azimuthal[, elevation] directions at the location [s.m-1, deg[, deg]]
         (model, direction)
  
     wd_circ : ``numpy.ndarray``
-        Skewness-direction vector resolved along the local radial, azimuthal[, elevation] directions
-        at the location; azimuthal component positive clockwise [s.m-1, deg[, deg]]
+        Skewness-direction vector along the local radial, azimuthal[, elevation] directions at the location [s.m-1, deg[, deg]]
         (model, direction)
     """
  
