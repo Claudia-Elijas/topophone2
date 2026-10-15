@@ -285,13 +285,13 @@ def density_params(
         (model, direction)
  
     sigma_circ : ``numpy.ndarray``
-        Standard deviation along the local radial, azimuthal[, elevation] directions at the mean,
+        Standard deviation along the local radial, azimuthal[, elevation] directions at the location,
         from the covariance (Omega - 2/pi wd wd^T for the skew-normal) [s.m-1, deg[, deg]]
         (model, direction)
  
     wd_circ : ``numpy.ndarray``
         Skewness-direction vector resolved along the local radial, azimuthal[, elevation] directions
-        at the mean; azimuthal component positive clockwise [s.m-1, deg[, deg]]
+        at the location; azimuthal component positive clockwise [s.m-1, deg[, deg]]
         (model, direction)
     """
  
