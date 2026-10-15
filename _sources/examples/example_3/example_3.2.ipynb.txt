@@ -4,25 +4,19 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# 3.2 Reading the ``config.ini`` file"
+    "# 3.2 Reading the Comfiguration File"
    ]
   },
   {
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "In this notebook we demonstrate how to... \n",
-    "\n",
-    "- populate a configuration file\n",
-    "- read the file\n",
-    "- access entries\n",
-    "\n",
-    "The only utility function we require is ``parse_config``, and we imported as shown below:"
+    "In this example we show how to populate a _Topophone2_ configuration file, which can be used to specify inputs to the inversion such that the whole module can be run at the command line if desired."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 1,
+   "execution_count": null,
    "metadata": {},
    "outputs": [
     {
@@ -49,7 +43,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "The configuration file ``config.ini`` [saved in path: \"../data/config_demo/config.ini\"] will look as shown below..."
+    "The configuration file ``../data/config_demo/config.ini`` is formatted similar to below. We suggest users copy and edit this file for their own use."
    ]
   },
   {
@@ -151,8 +145,15 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The file is read using ``utils.read.parse_config``."
+   ]
+  },
+  {
    "cell_type": "code",
-   "execution_count": 2,
+   "execution_count": null,
    "metadata": {},
    "outputs": [
     {
@@ -166,6 +167,7 @@
     }
    ],
    "source": [
+    "#__ Parse configuration file __\n",
     "args_dict = parse_config(\"../data/config_demo/config.ini\")"
    ]
   },
@@ -180,12 +182,12 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "The parser function returns a dictionary with keys that correspond to the arguments of the ``topophone2.topophone.decomposition`` function, which performs probabilistic wavefield decomposition from a single call. "
+    "The parser function provides all the keyword parameters for the ``topophone.decompose`` helper function in a dictionary."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 3,
+   "execution_count": null,
    "metadata": {},
    "outputs": [
     {
@@ -218,6 +220,7 @@
     }
    ],
    "source": [
+    "#__ Print parameters of configuration file __\n",
     "for key, value in args_dict.items():\n",
     "    print(f\"{key} \")"
    ]
@@ -226,12 +229,12 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "We can access a given key as shown below,"
+    "We can access a given key as such:"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": null,
    "metadata": {},
    "outputs": [
     {
@@ -243,6 +246,7 @@
     }
    ],
    "source": [
+    "#__ Print example of entry __\n",
     "N_obs = args_dict['N_obs'] ; print(f\"N_obs: {N_obs}\")"
    ]
   },
@@ -250,9 +254,9 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "## Feeding configuration entries into the ``decomposition`` function\n",
+    "## Feeding configuration entries into the ``topophone.decompose`` function\n",
     "\n",
-    "The keys returned by ``parse_config`` are in the same order as the arguments of ``decomposition``, we can simply input them as \n",
+    "The output of ``utils.read.parse_config`` can be used as the input to the helper function ``topophone.decompose``, which runs the entire _Topophone2_ workflow in a single call.\n",
     "\n",
     "```python \n",
     "\n",

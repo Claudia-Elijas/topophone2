@@ -329,7 +329,7 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../example_3/example_3.1.html">3.1 Creating Synthetic Data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../example_3/example_3.2.html">3.2 Reading the <code class="docutils literal notranslate"><span class="pre">config.ini</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example_3/example_3.2.html">3.2 Reading the Comfiguration File</a></li>
 </ul>
 </div>
 </nav></div>
@@ -392,8 +392,9 @@
                   
   <section id="1.3-Model-Selection">
 <h1>1.3 Model Selection<a class="headerlink" href="#1.3-Model-Selection" title="Link to this heading">#</a></h1>
+<p>In this example, we use the posterior pdf to discriminate between a point source and a distributed source.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Import: Numerical __</span>
@@ -403,22 +404,14 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">topophone2.topophone</span><span class="w"> </span><span class="kn">import</span> <span class="n">decompose</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">topophone2.inversion</span><span class="w"> </span><span class="kn">import</span> <span class="n">MarginalStats</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">topophone2.utils.read</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_txt</span>
-
-<span class="c1">#__ Import: Plotting __</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.tri</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tri</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.ticker</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ticker</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.gridspec</span><span class="w"> </span><span class="kn">import</span> <span class="n">GridSpec</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.lines</span><span class="w"> </span><span class="kn">import</span> <span class="n">Line2D</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.axes_grid1.inset_locator</span><span class="w"> </span><span class="kn">import</span> <span class="n">inset_axes</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">cmcrameri.cm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cmc</span>
-
-<span class="c1">#__ Set up: Plotting __</span>
-<span class="n">theme</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'#DC4424'</span><span class="p">,</span> <span class="s1">'#74A466'</span><span class="p">,</span> <span class="s1">'#24448C'</span><span class="p">,</span> <span class="s1">'#F8BC5C'</span><span class="p">]</span>
-<span class="n">small</span><span class="p">,</span> <span class="n">large</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">"font.sans-serif"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'Arial'</span><span class="p">]</span>
-
-<span class="c1">#__ Set up: Random seed __</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Set up: Random seed __</span>
 <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">2026</span><span class="p">)</span>
 
 <span class="c1">#__ Set up: File paths __</span>
@@ -433,6 +426,8 @@
 </div>
 <section id="1.3.1-Create-alternative-characteristic-function">
 <h2>1.3.1 Create alternative characteristic function<a class="headerlink" href="#1.3.1-Create-alternative-characteristic-function" title="Link to this heading">#</a></h2>
+<p>In Example 1.1, we considered a distributed source on the seafloor, which is distributed in azimuth relative to the hydrophone array. A point source would not be distributed in azimuth. It woud, however, be distributed in apparent slowness as it excites multiple modes of the water column. We therefore set up a forward model that follows a normal distribution in apparent slowness only, as opposed to the bivariate distribution in Example 1.1.</p>
+<p>First, we create a <code class="docutils literal notranslate"><span class="pre">dict</span></code>, which is keyed by the name of the forward modeller (<code class="docutils literal notranslate"><span class="pre">'radial2D'</span></code>) pointing towards a <code class="docutils literal notranslate"><span class="pre">tuple</span></code> of the number of parameters (<code class="docutils literal notranslate"><span class="pre">3</span></code> - the 2D mean and 1D scale) and the characteristic function <code class="docutils literal notranslate"><span class="pre">cf_radial2D</span></code>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
@@ -513,16 +508,16 @@
 </section>
 <section id="1.3.2-Calculate-posterior-pdf-under-alternative-parameterisation">
 <h2>1.3.2 Calculate posterior pdf under alternative parameterisation<a class="headerlink" href="#1.3.2-Calculate-posterior-pdf-under-alternative-parameterisation" title="Link to this heading">#</a></h2>
-<p>Read in data from Example 1.1…</p>
+<p>We use the same observations as Example 1.1.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Read: Signal + noise __</span>
 <span class="n">out</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">data_dir</span><span class="si">}</span><span class="s2">/TRIAD_FULL_15DB_topophone2.txt"</span><span class="p">)</span>
-<span class="n">freq_Hz</span>   <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Frequency vector         [Hz]        (frequency)</span>
-<span class="n">x</span>         <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Receiver position        [m]         (receiver, direction)</span>
-<span class="n">Gamma_obs</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># Array-covariance matrix  [uPa2.Hz-1] (frequency, receiver, receiver)</span>
+<span class="n">freq_Hz</span>   <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Frequency vector          [Hz]        (frequency)</span>
+<span class="n">x</span>         <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Receiver position         [m]         (receiver, direction)</span>
+<span class="n">Gamma_obs</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># Sample-covariance matrix  [uPa2.Hz-1] (frequency, receiver, receiver)</span>
 <span class="n">N_obs</span>     <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>  <span class="c1"># Independent observations</span>
 <span class="n">freq</span>      <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">freq_Hz</span>  <span class="c1"># Angular frequency vector [rad.s-1] (frequency)</span>
 
@@ -537,9 +532,9 @@
 </pre></div>
 </div>
 </div>
-<p>Set inversion parameters…</p>
+<p>In this example, the parameterisation is not a <code class="docutils literal notranslate"><span class="pre">'normal'</span></code> and <code class="docutils literal notranslate"><span class="pre">'noise2D'</span></code> component, but a <code class="docutils literal notranslate"><span class="pre">'radial2D'</span></code> and <code class="docutils literal notranslate"><span class="pre">'noise2D'</span></code> component. This is reflected in the list of signal types (<code class="docutils literal notranslate"><span class="pre">sigs</span></code>).</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Signals present __</span>
@@ -554,28 +549,29 @@
 
 <span class="c1">#__ Prior bounds __</span>
 <span class="n">lower</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>                  <span class="c1"># Lower bound</span>
-    <span class="mf">50.</span><span class="p">,</span>  <span class="o">-</span><span class="mf">5.0e-4</span><span class="p">,</span> <span class="mf">8.0e-5</span><span class="p">,</span> <span class="mf">1.0e-6</span><span class="p">,</span>  <span class="c1">#     'radial2D' parameters</span>
-    <span class="mf">50.</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8</span>                 <span class="c1">#     'noise2D' parameters</span>
+    <span class="mf">50.</span><span class="p">,</span>  <span class="o">-</span><span class="mf">5.0e-4</span><span class="p">,</span> <span class="mf">8.0e-5</span><span class="p">,</span> <span class="mf">1.0e-6</span><span class="p">,</span>  <span class="c1">#     'radial2D' parameters [energy, xi_x, xi_y, sigma_r]</span>
+    <span class="mf">50.</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8</span>                 <span class="c1">#     'noise2D' parameters  [energy, a_1, b_1]</span>
 <span class="p">])</span>
 <span class="n">upper</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>                  <span class="c1"># Upper bound</span>
-    <span class="mf">100.</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.2e-4</span><span class="p">,</span> <span class="mf">1.6e-4</span><span class="p">,</span> <span class="mf">5.0e-5</span><span class="p">,</span>  <span class="c1">#     'radial2D' parameters</span>
-    <span class="mf">100.</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.8</span>                 <span class="c1">#     'noise2D parameters</span>
+    <span class="mf">100.</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.2e-4</span><span class="p">,</span> <span class="mf">1.6e-4</span><span class="p">,</span> <span class="mf">5.0e-5</span><span class="p">,</span>
+    <span class="mf">100.</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.8</span>
 <span class="p">])</span>
 
 <span class="c1">#__ Number of flows __</span>
 <span class="n">N_flow</span> <span class="o">=</span> <span class="mi">8</span>
 
 <span class="c1">#__ Inversion parameters __</span>
-<span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">5e-4</span>                       <span class="c1"># Learning rate for the optimiser</span>
-<span class="n">N_iterations</span>  <span class="o">=</span> <span class="mi">30000</span>                      <span class="c1"># Number of iterations for optimiser</span>
-<span class="n">N_montecarlo</span>  <span class="o">=</span> <span class="mi">100</span>                        <span class="c1"># Number of samples to estimate ELBO</span>
+<span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">5e-4</span>   <span class="c1"># Learning rate for the optimiser</span>
+<span class="n">N_iterations</span>  <span class="o">=</span> <span class="mi">30000</span>  <span class="c1"># Number of iterations for optimiser</span>
+<span class="n">N_montecarlo</span>  <span class="o">=</span> <span class="mi">100</span>    <span class="c1"># Number of samples to estimate ELBO</span>
 
 <span class="c1">#__ Number of samples to draw __</span>
 <span class="n">N_samples</span> <span class="o">=</span> <span class="mi">20000</span>
 </pre></div>
 </div>
 </div>
-<p>Use <code class="docutils literal notranslate"><span class="pre">topophone2.topophone.decompose</span></code> helper function to run full workflow…</p>
+<p>Instead of instantiating all the inversion classes manually, as in Example 1.1, we use the <code class="docutils literal notranslate"><span class="pre">topophone.decompose</span></code> helper function to run full workflow.</p>
+<p>The custom characterisation function is included in the forward modeller by specifying the dictionary in the <code class="docutils literal notranslate"><span class="pre">custom_cf</span></code> option. Note that there is no limit to the number of custom characteristic functions a user can input.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
@@ -637,20 +633,21 @@ Finish training!
 </section>
 <section id="1.3.3-Calculate-Bayes'-factor-between-null-and-alternative-parameterisations">
 <h2>1.3.3 Calculate Bayes’ factor between null and alternative parameterisations<a class="headerlink" href="#1.3.3-Calculate-Bayes'-factor-between-null-and-alternative-parameterisations" title="Link to this heading">#</a></h2>
-<p>First, load results from Example 1.1.1…</p>
+<p>To compare the two hypotheses - distributed source (Example 1.1) and point source (exmple 1.3) - we calculate the Bayes factor, which is the ratio of their Bayesian evidence.</p>
+<p>First, we load the inversion results from Example 1.1.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Read results __</span>
 <span class="n">result1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'../models/TRIAD_15DB/inversion_results.npz'</span><span class="p">)</span>
-<span class="n">m1</span>      <span class="o">=</span> <span class="n">result1</span><span class="p">[</span><span class="s1">'m'</span><span class="p">]</span>
-<span class="n">lnp_dm1</span> <span class="o">=</span> <span class="n">result1</span><span class="p">[</span><span class="s1">'lnp_dm'</span><span class="p">]</span>
-<span class="n">bounds1</span> <span class="o">=</span> <span class="n">result1</span><span class="p">[</span><span class="s1">'prior_bounds'</span><span class="p">]</span>
+<span class="n">m1</span>      <span class="o">=</span> <span class="n">result1</span><span class="p">[</span><span class="s1">'m'</span><span class="p">]</span>             <span class="c1"># Model samples  (sample, parameter)</span>
+<span class="n">lnp_dm1</span> <span class="o">=</span> <span class="n">result1</span><span class="p">[</span><span class="s1">'lnp_dm'</span><span class="p">]</span>        <span class="c1"># Log-likelihood (sample,)</span>
+<span class="n">bounds1</span> <span class="o">=</span> <span class="n">result1</span><span class="p">[</span><span class="s1">'prior_bounds'</span><span class="p">]</span>  <span class="c1"># Prior bounds   (parameter,)</span>
 </pre></div>
 </div>
 </div>
-<p>Then calculate the evidence</p>
+<p>Second, we calculate the evidence using the <code class="docutils literal notranslate"><span class="pre">calc_evidence</span></code> method of the <code class="docutils literal notranslate"><span class="pre">inversion.MarginalStats</span></code> class.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
@@ -665,14 +662,14 @@ Finish training!
 </pre></div>
 </div>
 </div>
-<p>The Bayes’ factor is the ratio of evidence…</p>
+<p>Third, we calculate the ratio of the evidence.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Calculate Bayes' factor __</span>
 <span class="n">K</span>  <span class="o">=</span> <span class="n">lnp_d1</span> <span class="o">-</span> <span class="n">lnp_d0</span>
-<span class="n">dK</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dlnp_d0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dlnp_d0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">dK</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dlnp_d1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dlnp_d0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"The Bayes' factor is (</span><span class="si">{</span><span class="n">K</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> +/- </span><span class="si">{</span><span class="n">dK</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">) nats."</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -685,39 +682,7 @@ Finish training!
 The Bayes&#39; factor is (464.8 +/- 0.3) nats.
 </pre></div></div>
 </div>
-<p>This result can be compared to the thresholds given by Kass &amp; Raftery [1995]…</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(K\)</span></p></th>
-<th class="head"><p><span class="math notranslate nohighlight">\(\log_{10} K\)</span> [dits]</p></th>
-<th class="head"><p><span class="math notranslate nohighlight">\(\ln K\)</span> [nats]</p></th>
-<th class="head"><p>Strength of evidence</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>1.0 - 3.2</p></td>
-<td><p>0.0 - 0.5</p></td>
-<td><p>0.0 - 1.2</p></td>
-<td><p>Not worth more than a bare mention</p></td>
-</tr>
-<tr class="row-odd"><td><p>3.2 - 10.0</p></td>
-<td><p>0.5 - 1</p></td>
-<td><p>1.2 - 2.3</p></td>
-<td><p>Substantial</p></td>
-</tr>
-<tr class="row-even"><td><p>10.0 - 100.0</p></td>
-<td><p>1.0 - 2.0</p></td>
-<td><p>2.3 - 4.6</p></td>
-<td><p>Strong</p></td>
-</tr>
-<tr class="row-odd"><td><p>&gt; 100.0</p></td>
-<td><p>&gt; 2.0</p></td>
-<td><p>&gt; 4.6</p></td>
-<td><p>Decisive</p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<p>This result can be compared to the thresholds given by Kass &amp; Raftery [1995]: | <span class="math notranslate nohighlight">\(K\)</span> | <span class="math notranslate nohighlight">\(\log_{10} K\)</span> [dits] | <span class="math notranslate nohighlight">\(\ln K\)</span> [nats] | Strength of evidence | |—|—|—|—| | 1.0 - 3.2 | 0.0 - 0.5 | 0.0 - 1.2 | Not worth more than a bare mention | | 3.2 - 10.0 | 0.5 - 1 | 1.2 - 2.3 | Substantial | | 10.0 - 100.0 | 1.0 - 2.0 | 2.3 - 4.6 | Strong | | &gt; 100.0 | &gt; 2.0 | &gt; 4.6 | Decisive |</p>
 </section>
 </section>
 

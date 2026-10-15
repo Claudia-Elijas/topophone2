@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>3.2 Reading the config.ini file &#8212; topophone2</title>
+    <title>3.2 Reading the Comfiguration File &#8212; topophone2</title>
   
   
   
@@ -329,7 +329,7 @@
 </ul>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="example_3.1.html">3.1 Creating Synthetic Data</a></li>
-<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">3.2 Reading the <code class="docutils literal notranslate"><span class="pre">config.ini</span></code> file</a></li>
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">3.2 Reading the Comfiguration File</a></li>
 </ul>
 </div>
 </nav></div>
@@ -373,7 +373,7 @@
     
     <li class="breadcrumb-item"><a href="../../examples.html" class="nav-link">Examples</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">3.2 Reading the <code class="docutils literal notranslate"><span class="pre">config.ini</span></code> file</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">3.2 Reading the Comfiguration File</span></li>
   </ul>
 </nav>
 </div>
@@ -390,17 +390,11 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="3.2-Reading-the-config.ini-file">
-<h1>3.2 Reading the <code class="docutils literal notranslate"><span class="pre">config.ini</span></code> file<a class="headerlink" href="#3.2-Reading-the-config.ini-file" title="Link to this heading">#</a></h1>
-<p>In this notebook we demonstrate how to…</p>
-<ul class="simple">
-<li><p>populate a configuration file</p></li>
-<li><p>read the file</p></li>
-<li><p>access entries</p></li>
-</ul>
-<p>The only utility function we require is <code class="docutils literal notranslate"><span class="pre">parse_config</span></code>, and we imported as shown below:</p>
+  <section id="3.2-Reading-the-Comfiguration-File">
+<h1>3.2 Reading the Comfiguration File<a class="headerlink" href="#3.2-Reading-the-Comfiguration-File" title="Link to this heading">#</a></h1>
+<p>In this example we show how to populate a <em>Topophone2</em> configuration file, which can be used to specify inputs to the inversion such that the whole module can be run at the command line if desired.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Import: Topophone2 __</span>
@@ -418,7 +412,7 @@ Hello from topophone2!
 </div>
 <section id="Contents-of-the-configuration-file">
 <h2>Contents of the configuration file<a class="headerlink" href="#Contents-of-the-configuration-file" title="Link to this heading">#</a></h2>
-<p>The configuration file <code class="docutils literal notranslate"><span class="pre">config.ini</span></code> [saved in path: “../data/config_demo/config.ini”] will look as shown below…</p>
+<p>The configuration file <code class="docutils literal notranslate"><span class="pre">../data/config_demo/config.ini</span></code> is formatted similar to below. We suggest users copy and edit this file for their own use.</p>
 <div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="c1"># ================================= #</span>
 <span class="c1"># ................................. #</span>
 <span class="c1"># Configuration file for TopoPhone2 #</span>
@@ -507,11 +501,13 @@ Hello from topophone2!
 </section>
 <section id="Loading-the-file">
 <h2>Loading the file<a class="headerlink" href="#Loading-the-file" title="Link to this heading">#</a></h2>
+<p>The file is read using <code class="docutils literal notranslate"><span class="pre">utils.read.parse_config</span></code>.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">args_dict</span> <span class="o">=</span> <span class="n">parse_config</span><span class="p">(</span><span class="s2">"../data/config_demo/config.ini"</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Parse configuration file __</span>
+<span class="n">args_dict</span> <span class="o">=</span> <span class="n">parse_config</span><span class="p">(</span><span class="s2">"../data/config_demo/config.ini"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -528,12 +524,13 @@ No noise data file specified in config file. Setting Gamma_obs_noise to None.
 </section>
 <section id="Accessing-entries-of-the-file">
 <h2>Accessing entries of the file<a class="headerlink" href="#Accessing-entries-of-the-file" title="Link to this heading">#</a></h2>
-<p>The parser function returns a dictionary with keys that correspond to the arguments of the <code class="docutils literal notranslate"><span class="pre">topophone2.topophone.decomposition</span></code> function, which performs probabilistic wavefield decomposition from a single call.</p>
+<p>The parser function provides all the keyword parameters for the <code class="docutils literal notranslate"><span class="pre">topophone.decompose</span></code> helper function in a dictionary.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">args_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Print parameters of configuration file __</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">args_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> "</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -567,12 +564,13 @@ N_samples
 calc_likelihood
 </pre></div></div>
 </div>
-<p>We can access a given key as shown below,</p>
+<p>We can access a given key as such:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">N_obs</span> <span class="o">=</span> <span class="n">args_dict</span><span class="p">[</span><span class="s1">'N_obs'</span><span class="p">]</span> <span class="p">;</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"N_obs: </span><span class="si">{</span><span class="n">N_obs</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Print example of entry __</span>
+<span class="n">N_obs</span> <span class="o">=</span> <span class="n">args_dict</span><span class="p">[</span><span class="s1">'N_obs'</span><span class="p">]</span> <span class="p">;</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"N_obs: </span><span class="si">{</span><span class="n">N_obs</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -585,9 +583,9 @@ N_obs: 200
 </pre></div></div>
 </div>
 </section>
-<section id="Feeding-configuration-entries-into-the-decomposition-function">
-<h2>Feeding configuration entries into the <code class="docutils literal notranslate"><span class="pre">decomposition</span></code> function<a class="headerlink" href="#Feeding-configuration-entries-into-the-decomposition-function" title="Link to this heading">#</a></h2>
-<p>The keys returned by <code class="docutils literal notranslate"><span class="pre">parse_config</span></code> are in the same order as the arguments of <code class="docutils literal notranslate"><span class="pre">decomposition</span></code>, we can simply input them as</p>
+<section id="Feeding-configuration-entries-into-the-topophone.decompose-function">
+<h2>Feeding configuration entries into the <code class="docutils literal notranslate"><span class="pre">topophone.decompose</span></code> function<a class="headerlink" href="#Feeding-configuration-entries-into-the-topophone.decompose-function" title="Link to this heading">#</a></h2>
+<p>The output of <code class="docutils literal notranslate"><span class="pre">utils.read.parse_config</span></code> can be used as the input to the helper function <code class="docutils literal notranslate"><span class="pre">topophone.decompose</span></code>, which runs the entire <em>Topophone2</em> workflow in a single call.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">decompose</span> <span class="o">=</span> <span class="p">(</span><span class="o">**</span><span class="n">args_dict</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -644,7 +642,7 @@ N_obs: 200
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Contents-of-the-configuration-file">Contents of the configuration file</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Loading-the-file">Loading the file</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Accessing-entries-of-the-file">Accessing entries of the file</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Feeding-configuration-entries-into-the-decomposition-function">Feeding configuration entries into the <code class="docutils literal notranslate"><span class="pre">decomposition</span></code> function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Feeding-configuration-entries-into-the-topophone.decompose-function">Feeding configuration entries into the <code class="docutils literal notranslate"><span class="pre">topophone.decompose</span></code> function</a></li>
 </ul>
   </nav></div>
 

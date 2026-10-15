@@ -329,7 +329,7 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../example_3/example_3.1.html">3.1 Creating Synthetic Data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../example_3/example_3.2.html">3.2 Reading the <code class="docutils literal notranslate"><span class="pre">config.ini</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example_3/example_3.2.html">3.2 Reading the Comfiguration File</a></li>
 </ul>
 </div>
 </nav></div>
@@ -392,8 +392,9 @@
                   
   <section id="2.2-Model-interrogation">
 <h1>2.2 Model interrogation<a class="headerlink" href="#2.2-Model-interrogation" title="Link to this heading">#</a></h1>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<p>In this example, we invert the data produced in Example 2.1 and then use the posterior pdf to test for a hypothesis concerning the relationship between two parameters.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Import: Numerical __</span>
@@ -401,20 +402,20 @@
 
 <span class="c1">#__ Import: Topophone2 __</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">topophone2.topophone</span><span class="w"> </span><span class="kn">import</span> <span class="n">decompose</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">topophone2.inversion</span><span class="w"> </span><span class="kn">import</span> <span class="n">MarginalStats</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">topophone2.utils.read</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_txt</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">topophone2.utils.math</span><span class="w"> </span><span class="kn">import</span> <span class="n">density_params</span>
 
 <span class="c1">#__ Import: Plotting __</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.tri</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tri</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.ticker</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ticker</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.gridspec</span><span class="w"> </span><span class="kn">import</span> <span class="n">GridSpec</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.lines</span><span class="w"> </span><span class="kn">import</span> <span class="n">Line2D</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.axes_grid1.inset_locator</span><span class="w"> </span><span class="kn">import</span> <span class="n">inset_axes</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">cmcrameri.cm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cmc</span>
-
-<span class="c1">#__ Set up: Plotting __</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Set up: Plotting __</span>
 <span class="n">theme</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'#DC4424'</span><span class="p">,</span> <span class="s1">'#74A466'</span><span class="p">,</span> <span class="s1">'#24448C'</span><span class="p">,</span> <span class="s1">'#F8BC5C'</span><span class="p">]</span>
 <span class="n">small</span><span class="p">,</span> <span class="n">large</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">"font.sans-serif"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'Arial'</span><span class="p">]</span>
@@ -428,31 +429,24 @@
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Hello from topophone2!
-</pre></div></div>
-</div>
 <section id="2.2.1-Load-example-data">
 <h2>2.2.1 Load example data<a class="headerlink" href="#2.2.1-Load-example-data" title="Link to this heading">#</a></h2>
+<p>First, we load in the data from Example 2.1.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Read: Signal + noise __</span>
 <span class="n">out</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="s2">"../data/hukkakero/signal_topophone2.txt"</span><span class="p">)</span>
-<span class="n">freq_Hz</span>   <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Frequency vector         [Hz]       (frequency)</span>
-<span class="n">x</span>         <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Receiver position        [m]        (receiver, direction)</span>
-<span class="n">Gamma_obs</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># Array-covariance matrix  [Pa2.Hz-1] (frequency, receiver, receiver)</span>
+<span class="n">freq_Hz</span>   <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Frequency vector          [Hz]       (frequency)</span>
+<span class="n">x</span>         <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Receiver position         [m]        (receiver, direction)</span>
+<span class="n">Gamma_obs</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># Sample-covariance matrix  [Pa2.Hz-1] (frequency, receiver, receiver)</span>
 <span class="n">N_obs</span>     <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>  <span class="c1"># Independent observations</span>
 <span class="n">freq</span>      <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">freq_Hz</span>  <span class="c1"># Angular frequency vector [rad.s-1] (frequency)</span>
 
 <span class="c1">#__ Read: Noise only __</span>
 <span class="n">out</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="s2">"../data/hukkakero/noise_topophone2.txt"</span><span class="p">)</span>
-<span class="n">Gamma_obs_noise</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># Array-covariance matrix  [Pa2.Hz-1] (frequency, receiver, receiver)</span>
+<span class="n">Gamma_obs_noise</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># Sample-covariance matrix  [Pa2.Hz-1] (frequency, receiver, receiver)</span>
 <span class="n">N_obs_noise</span>     <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>  <span class="c1"># Independent observations</span>
 </pre></div>
 </div>
@@ -460,7 +454,13 @@ Hello from topophone2!
 </section>
 <section id="2.2.2-Invert-example-data">
 <h2>2.2.2 Invert example data<a class="headerlink" href="#2.2.2-Invert-example-data" title="Link to this heading">#</a></h2>
-<p>Set inversion parameters…</p>
+<p>We parameterise the wavefield using three components:</p>
+<ul class="simple">
+<li><p>a skew-normally distributed component (<code class="docutils literal notranslate"><span class="pre">'skewnormal'</span></code>),</p></li>
+<li><p>a sensor self-noise component (<code class="docutils literal notranslate"><span class="pre">'isoselfnoise'</span></code>),</p></li>
+<li><p>and a cylindrical-harmonic ambient-noise component (<code class="docutils literal notranslate"><span class="pre">{'sig':'noise2D',</span> <span class="pre">'max_order':2}</span></code>).</p></li>
+</ul>
+<p>The model vector contains the parameters… | Signal component | Parameter set | |—|—| |<code class="docutils literal notranslate"><span class="pre">'skewnormal'</span></code> | <span class="math notranslate nohighlight">\(\left(E, \xi_1, \xi_2, \sigma_1, \sigma_2, \rho_{12}, \alpha_1, \alpha_2\right)\)</span> | |<code class="docutils literal notranslate"><span class="pre">'isoselfnoise'</span></code> | <span class="math notranslate nohighlight">\(\left(E\right)\)</span> | |<code class="docutils literal notranslate"><span class="pre">'noise2D'</span></code> | <span class="math notranslate nohighlight">\(\left(E, s, a_1, a_2, b_1, b_2\right)\)</span> |</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
@@ -474,9 +474,9 @@ Hello from topophone2!
 
 <span class="c1">#__ Prior bounds __</span>
 <span class="n">lower</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>                                      <span class="c1"># Lower bound of prior pdf</span>
-    <span class="o">-</span><span class="mf">40.</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.7e-3</span><span class="p">,</span> <span class="mf">1.0e-3</span><span class="p">,</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.9</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.</span><span class="p">,</span>  <span class="c1">#     Skew-normal parameters [weight, xi_x, xi_y, sigma_x, sigma_y, rho_xy, alpha_x, alpha_y]</span>
-    <span class="o">-</span><span class="mf">55.</span><span class="p">,</span>                                               <span class="c1">#     Self-noise parameters  [weight]</span>
-    <span class="o">-</span><span class="mf">55.</span><span class="p">,</span> <span class="mf">2.2e-3</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.35</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.55</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.35</span>              <span class="c1">#     Noise field parameters [weight, slowness, a_1, a_2, b_1, b_2]</span>
+    <span class="o">-</span><span class="mf">40.</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.7e-3</span><span class="p">,</span> <span class="mf">1.0e-3</span><span class="p">,</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.9</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.</span><span class="p">,</span>  <span class="c1">#     Skew-normal parameters [energy, xi_x, xi_y, sigma_x, sigma_y, rho_xy, alpha_x, alpha_y]</span>
+    <span class="o">-</span><span class="mf">55.</span><span class="p">,</span>                                               <span class="c1">#     Self-noise parameters  [energy]</span>
+    <span class="o">-</span><span class="mf">55.</span><span class="p">,</span> <span class="mf">2.2e-3</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.35</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.55</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.35</span>              <span class="c1">#     Noise field parameters [energy, slowness, a_1, a_2, b_1, b_2]</span>
 <span class="p">])</span>
 <span class="n">upper</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>                                      <span class="c1"># Upper bound of prior pdf</span>
     <span class="o">-</span><span class="mf">30.</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.2e-3</span><span class="p">,</span> <span class="mf">1.6e-3</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span>  <span class="mf">0.9</span><span class="p">,</span>  <span class="mf">5.</span><span class="p">,</span>  <span class="mf">5.</span><span class="p">,</span>
@@ -488,16 +488,17 @@ Hello from topophone2!
 <span class="n">N_flow</span> <span class="o">=</span> <span class="mi">8</span>
 
 <span class="c1">#__ Inversion parameters __</span>
-<span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">5e-4</span>                       <span class="c1"># Learning rate for the optimiser</span>
-<span class="n">N_iterations</span>  <span class="o">=</span> <span class="mi">30000</span>                      <span class="c1"># Number of iterations for optimiser</span>
-<span class="n">N_montecarlo</span>  <span class="o">=</span> <span class="mi">50</span>                         <span class="c1"># Number of samples to estimate ELBO</span>
+<span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">5e-4</span>   <span class="c1"># Learning rate for the optimiser</span>
+<span class="n">N_iterations</span>  <span class="o">=</span> <span class="mi">30000</span>  <span class="c1"># Number of iterations for optimiser</span>
+<span class="n">N_montecarlo</span>  <span class="o">=</span> <span class="mi">50</span>     <span class="c1"># Number of samples to estimate ELBO</span>
 
 <span class="c1">#__ Number of samples to draw __</span>
 <span class="n">N_samples</span> <span class="o">=</span> <span class="mi">20000</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<p>The inversion is carried out using the <code class="docutils literal notranslate"><span class="pre">topophone.decompose</span></code> helper function.</p>
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
@@ -517,12 +518,138 @@ Hello from topophone2!
     <span class="n">N_iterations</span>    <span class="o">=</span> <span class="n">N_iterations</span><span class="p">,</span>
     <span class="n">N_montecarlo</span>    <span class="o">=</span> <span class="n">N_montecarlo</span><span class="p">,</span>
     <span class="n">N_out</span>           <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
-    <span class="n">verbose</span>         <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">N_samples</span>       <span class="o">=</span> <span class="n">N_samples</span>
 <span class="p">)</span>
 
 <span class="c1">#__ Read results __</span>
 <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">"../models/hukkakero/model-samples_iteration-</span><span class="si">{</span><span class="n">N_iterations</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">.txt"</span><span class="p">)</span>
+
+<span class="c1">#__ Unpack results __</span>
+<span class="n">w_s</span>   <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>      <span class="c1"># Skew-normal total energy                     (sample,)</span>
+<span class="n">xi</span>    <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>    <span class="c1"># Skew-normal location vector                  (sample, direction)</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">3</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>    <span class="c1"># Skew-normal scale vector                     (sample, direction)</span>
+<span class="n">corr</span>  <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">5</span><span class="p">]</span>      <span class="c1"># Skew-normal correlation matrix off-diagonal  (sample, direction pair)</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">6</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span>    <span class="c1"># Skew-normal shape vector                     (sample, direction)</span>
+<span class="n">w_n1</span>  <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">8</span><span class="p">]</span>      <span class="c1"># Self-noise total energy                      (sample,)</span>
+<span class="n">w_n2</span>  <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">9</span><span class="p">]</span>      <span class="c1"># Angular-harmonic total energy                (sample,)</span>
+<span class="n">s0</span>    <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">10</span><span class="p">]</span>     <span class="c1"># Angular-harmonic apparent slowness           (sample,)</span>
+<span class="n">a</span>     <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">11</span><span class="p">:</span><span class="mi">13</span><span class="p">]</span>  <span class="c1"># Angular-harmonic cosine coefficient          (sample, order)</span>
+<span class="n">b</span>     <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">13</span><span class="p">:</span><span class="mi">15</span><span class="p">]</span>  <span class="c1"># Angular-harmonic sine coefficient            (sample, order)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Create figure and axes __</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">'white'</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s1">'constrained'</span><span class="p">)</span>
+<span class="n">gs</span>  <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_gridspec</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">axs</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="o">*</span><span class="p">[</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)],</span>
+    <span class="o">*</span><span class="p">[</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)],</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span>
+    <span class="o">*</span><span class="p">[</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)],</span>
+    <span class="o">*</span><span class="p">[</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+<span class="p">]</span>
+
+<span class="c1">#__ Labels __</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">xlab</span><span class="p">,</span> <span class="n">ylab</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span>
+    <span class="p">[</span>
+        <span class="sa">r</span><span class="s2">"PSD [dB]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$\xi_1$ [s$\,$km$^{-1}$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$\xi_2$ [s$\,$km$^{-1}$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$\sigma_1$ [s$\,$km$^{-1}$]"</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">"$\sigma_2$ [s$\,$km$^{-1}$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$\rho_</span><span class="si">{12}</span><span class="s2">$"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$\alpha_1$"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$\alpha_2$"</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">"PSD [dB]"</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">"PSD [dB]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$s$ [s$\,$km$^{-1}$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$a_1$"</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">"$a_2$"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$b_1$"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$b_2$"</span>
+    <span class="p">],</span>
+    <span class="p">[</span>
+        <span class="sa">r</span><span class="s2">"skewnormal"</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">"isoselfnoise"</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">"noise2D"</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="p">]</span>
+<span class="p">):</span>
+    <span class="k">if</span> <span class="n">xlab</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlab</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">small</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ylab</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylab</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">small</span><span class="p">)</span>
+
+<span class="c1">#__ Ticks __</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">xticks</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span>
+    <span class="p">[</span>
+        <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.05</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.05</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.05</span><span class="p">),</span>
+        <span class="p">(</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.05</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.5</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.2</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.2</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.02</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.08</span><span class="p">,</span><span class="mf">0.02</span><span class="p">),</span>
+        <span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.02</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.02</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.02</span><span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">MultipleLocator</span><span class="p">(</span><span class="n">xticks</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_minor_locator</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">MultipleLocator</span><span class="p">(</span><span class="n">xticks</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="n">small</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">'gainsboro'</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="c1">#__ Plot 'skewnormal' parameter histograms __</span>
+<span class="n">scales</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e0</span><span class="p">,</span> <span class="mf">1e3</span><span class="p">,</span> <span class="mf">1e3</span><span class="p">,</span> <span class="mf">1e3</span><span class="p">,</span> <span class="mf">1e3</span><span class="p">,</span> <span class="mf">1e0</span><span class="p">,</span> <span class="mf">1e0</span><span class="p">,</span> <span class="mf">1e0</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">mi</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">sc</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">T</span><span class="p">[:</span><span class="mi">8</span><span class="p">],</span> <span class="n">axs</span><span class="p">[:</span><span class="mi">8</span><span class="p">],</span> <span class="n">scales</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">sc</span><span class="o">*</span><span class="n">mi</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">#__ Plot 'isoselfnoise' parameter histograms __</span>
+<span class="n">scales</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e0</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">mi</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">sc</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">m</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">8</span><span class="p">]],</span> <span class="p">[</span><span class="n">axs</span><span class="p">[</span><span class="mi">8</span><span class="p">]],</span> <span class="n">scales</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">sc</span><span class="o">*</span><span class="n">mi</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">#__ Plot 'noise2D' parameter histograms __</span>
+<span class="n">scales</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e0</span><span class="p">,</span> <span class="mf">1e3</span><span class="p">,</span> <span class="mf">1e0</span><span class="p">,</span> <span class="mf">1e0</span><span class="p">,</span> <span class="mf">1e0</span><span class="p">,</span> <span class="mf">1e0</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">mi</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">sc</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">9</span><span class="p">:],</span> <span class="n">axs</span><span class="p">[</span><span class="mi">9</span><span class="p">:],</span> <span class="n">scales</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">sc</span><span class="o">*</span><span class="n">mi</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">#__ Show figure __</span>
+<span class="n">display</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_example_2_example_2.2_12_0.png" src="../../_images/examples_example_2_example_2.2_12_0.png" />
+</div>
+</div>
+</section>
+<section id="2.2.3-Interrogate-model-ensemble">
+<h2>2.2.3 Interrogate model ensemble<a class="headerlink" href="#2.2.3-Interrogate-model-ensemble" title="Link to this heading">#</a></h2>
+<p>The location azimuth of the skew-normally distributed signal is deviated from the source-receiver azimuth due to cross-winds. We test the hypothesis that the azimuthal skew is pointing back towards the source-receiver azimuth, as perhaps expected due to scattering within cross winds.</p>
+<p>The function <code class="docutils literal notranslate"><span class="pre">utils.math.density_params</span></code> specifies the location vector in cylindrical coordinates (<code class="docutils literal notranslate"><span class="pre">xi_circ</span></code>). It then creates a local orthonormal basis at the location and projects the scale vector and skew vector (<code class="docutils literal notranslate"><span class="pre">wd_circ</span></code>) onto the basis. If the difference between the azimuth of the location vector and the source-receiver azimuth (290 deg) is positive then the location is deviated clockwise; if the projection of the skew vector in the local azimuthal direction is positive then the skew
+is clockwise relative to the location; anticlockwise vice-versa. The hypothesis is supported when one is clockwise and one is anticlockwise.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Rotate results __</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">xi_circ</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">wd_circ</span> <span class="o">=</span> <span class="n">density_params</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">corr</span><span class="p">[:,</span><span class="kc">None</span><span class="p">],</span> <span class="n">alpha</span><span class="p">)</span>
+<span class="c1">#    xi_circ : Location vector in cylindrical coordinates            (sample, direction)</span>
+<span class="c1">#    wd_circ : Skew vector in cylindircal coordinates about location (sample, direction)</span>
+<span class="c1">#        direction: [radius, azimuth]</span>
+
+<span class="c1">#__ Azimuthal deviation of location vector from Hukkakero __</span>
+<span class="n">hukkakero_azimuth</span> <span class="o">=</span> <span class="mi">290</span>                               <span class="c1"># Source-receiver azimuth                [deg]</span>
+<span class="n">xi_deviation</span>      <span class="o">=</span> <span class="n">xi_circ</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">hukkakero_azimuth</span>  <span class="c1"># Deviation from source-receiver azimuth [deg] (sample,)</span>
+
+<span class="c1">#__ Clockwise or anticlockwise? __</span>
+<span class="n">xi_clockwise</span> <span class="o">=</span> <span class="n">xi_deviation</span> <span class="o">&gt;</span> <span class="mi">0</span>  <span class="c1"># Location vector deviated clockwise wrt. Hukkakero? (sample,)</span>
+<span class="n">wd_clockwise</span> <span class="o">=</span> <span class="n">wd_circ</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>  <span class="c1"># Skew vector pointing clockwise wrt. location?      (sample,)</span>
+
+<span class="c1">#__ Calculate number of samples skewed back towards source __</span>
+<span class="n">points_back</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">xi_clockwise</span><span class="p">,</span> <span class="o">~</span><span class="n">wd_clockwise</span><span class="p">),</span>  <span class="c1"># Clockwise deviation, anti-clockwise skew</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="o">~</span><span class="n">xi_clockwise</span><span class="p">,</span> <span class="n">wd_clockwise</span><span class="p">)</span>   <span class="c1"># Anticlockwise deviation, clockwise skew</span>
+<span class="p">)</span>
+<span class="n">support</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">points_back</span><span class="p">)</span>  <span class="c1"># Proportion of samples supporting hypothesis</span>
+
+<span class="c1">#__ Print result __</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Proportion of samples supporting hypothesis: </span><span class="si">{</span><span class="n">support</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> %"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -531,173 +658,8 @@ Hello from topophone2!
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-----------------------------------------
-
-Iteration:     0,       Loss:  687340.70
-The elapsed time is: 0.44 s
+Proportion of samples supporting hypothesis: 99.98 %
 </pre></div></div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Load true model for comparison __</span>
-<span class="n">m_true</span> <span class="o">=</span> <span class="n">synthetics</span><span class="p">[</span><span class="s1">'m_true'</span><span class="p">]</span>
-
-<span class="c1">#__ Create figure and axes __</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">'white'</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s1">'constrained'</span><span class="p">)</span>
-<span class="n">gs</span>  <span class="o">=</span> <span class="n">GridSpec</span><span class="p">(</span><span class="n">figure</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
-<span class="n">axs</span> <span class="o">=</span> <span class="p">[</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[:,</span><span class="mi">3</span><span class="p">:])]</span>
-<span class="n">axs</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">j</span><span class="p">])</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)])</span>
-<span class="n">axs</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">])</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)])</span>
-<span class="n">axs</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">j</span><span class="p">])</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)])</span>
-
-<span class="c1">#__ Labels __</span>
-<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">xlab</span><span class="p">,</span> <span class="n">ylab</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span>
-    <span class="p">[</span><span class="sa">r</span><span class="s2">"Iteration"</span><span class="p">,</span>   <span class="sa">r</span><span class="s2">"PSD [dB]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$a_1$"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$b_1$"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"PSD [dB]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$\xi_1$ [ms$\,$km$^{-1}$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$\xi_2$ [ms$\,$km$^{-1}$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$\sigma_1$ [us$\,$m$^{-1}$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$\sigma_2$ [us$\,$m$^{-1}$]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$\rho_</span><span class="si">{12}</span><span class="s2">$"</span><span class="p">],</span>
-    <span class="p">[</span><span class="sa">r</span><span class="s2">"ELBO [nats]"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"noise2D"</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"normal"</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
-<span class="p">):</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">xlab</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlab</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">small</span><span class="p">)</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">ylab</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylab</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">small</span><span class="p">)</span>
-
-<span class="c1">#__ Ticks __</span>
-<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">xlims</span><span class="p">,</span> <span class="n">ylims</span><span class="p">,</span> <span class="n">xticks</span><span class="p">,</span> <span class="n">yticks</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span>
-    <span class="p">[(</span><span class="mi">1</span><span class="p">,</span><span class="n">N_iterations</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
-    <span class="p">[(</span><span class="o">-</span><span class="mi">13900</span><span class="p">,</span><span class="o">-</span><span class="mi">13840</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
-    <span class="p">[(</span><span class="mi">5000</span><span class="p">,</span><span class="mi">1000</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.6</span><span class="p">,</span><span class="mf">0.2</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.6</span><span class="p">,</span><span class="mf">0.2</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mf">2.5</span><span class="p">),</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mf">2.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.25</span><span class="p">)],</span>
-    <span class="p">[(</span><span class="mi">10</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
-<span class="p">):</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">xlims</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">*</span><span class="n">xlims</span><span class="p">)</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">ylims</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">*</span><span class="n">ylims</span><span class="p">)</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">xticks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">MultipleLocator</span><span class="p">(</span><span class="n">xticks</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_minor_locator</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">MultipleLocator</span><span class="p">(</span><span class="n">xticks</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-    <span class="k">else</span><span class="p">:</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">yticks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">MultipleLocator</span><span class="p">(</span><span class="n">yticks</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_minor_locator</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">MultipleLocator</span><span class="p">(</span><span class="n">yticks</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-    <span class="k">else</span><span class="p">:</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="n">small</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">'gainsboro'</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-
-<span class="c1">#__ Plot loss function __</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N_iterations</span><span class="p">),</span> <span class="n">lnELBO</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="c1">#__ Plot 'noise2D' parameter histograms __</span>
-<span class="n">scales</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e0</span><span class="p">,</span> <span class="mf">1e0</span><span class="p">,</span> <span class="mf">1e0</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">mi</span><span class="p">,</span> <span class="n">mi_true</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">sc</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">6</span><span class="p">:],</span> <span class="n">m_true</span><span class="p">[</span><span class="mi">6</span><span class="p">:],</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span> <span class="n">scales</span><span class="p">):</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">sc</span><span class="o">*</span><span class="n">mi</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">sc</span><span class="o">*</span><span class="n">mi_true</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">'--'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-
-<span class="c1">#__ Plot 'normal' parameter histograms __</span>
-<span class="n">scales</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e0</span><span class="p">,</span> <span class="mf">1e6</span><span class="p">,</span> <span class="mf">1e6</span><span class="p">,</span> <span class="mf">1e6</span><span class="p">,</span> <span class="mf">1e6</span><span class="p">,</span> <span class="mf">1e0</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">mi</span><span class="p">,</span> <span class="n">mi_true</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">sc</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">T</span><span class="p">[:</span><span class="mi">6</span><span class="p">],</span> <span class="n">m_true</span><span class="p">[:</span><span class="mi">6</span><span class="p">],</span> <span class="n">axs</span><span class="p">[</span><span class="mi">4</span><span class="p">:],</span> <span class="n">scales</span><span class="p">):</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">sc</span><span class="o">*</span><span class="n">mi</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">sc</span><span class="o">*</span><span class="n">mi_true</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">'--'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-
-<span class="c1">#__ Show figure __</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Model vector layout __</span>
-<span class="c1">#   [0]  w_sn      [1-2] xi_E, xi_N   [3-4] sigma_E, sigma_N   [5] rho   [6-7] alpha_E, alpha_N</span>
-<span class="c1">#   [8]  w_self</span>
-<span class="c1">#   [9]  w_noise   [10]  s            [11-12] a_1, a_2         [13-14] b_1, b_2</span>
-<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s1">'$w_\mathrm</span><span class="si">{sn}</span><span class="s1">$ [dB]'</span><span class="p">,</span> <span class="sa">r</span><span class="s1">'$\xi_E$ [s.km$^{-1}$]'</span><span class="p">,</span> <span class="sa">r</span><span class="s1">'$\xi_N$ [s.km$^{-1}$]'</span><span class="p">,</span>
-          <span class="sa">r</span><span class="s1">'$\sigma_E$ [s.km$^{-1}$]'</span><span class="p">,</span> <span class="sa">r</span><span class="s1">'$\sigma_N$ [s.km$^{-1}$]'</span><span class="p">,</span> <span class="sa">r</span><span class="s1">'$\rho$'</span><span class="p">,</span>
-          <span class="sa">r</span><span class="s1">'$\alpha_E$'</span><span class="p">,</span> <span class="sa">r</span><span class="s1">'$\alpha_N$'</span><span class="p">,</span>
-          <span class="sa">r</span><span class="s1">'$w_\mathrm</span><span class="si">{self}</span><span class="s1">$ [dB]'</span><span class="p">,</span>
-          <span class="sa">r</span><span class="s1">'$w_\mathrm</span><span class="si">{noise}</span><span class="s1">$ [dB]'</span><span class="p">,</span> <span class="sa">r</span><span class="s1">'$s$ [s.km$^{-1}$]'</span><span class="p">,</span>
-          <span class="sa">r</span><span class="s1">'$a_1$'</span><span class="p">,</span> <span class="sa">r</span><span class="s1">'$a_2$'</span><span class="p">,</span> <span class="sa">r</span><span class="s1">'$b_1$'</span><span class="p">,</span> <span class="sa">r</span><span class="s1">'$b_2$'</span><span class="p">]</span>
-<span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="p">;</span> <span class="n">scale</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">]]</span> <span class="o">=</span> <span class="mf">1e3</span>   <span class="c1"># Slownesses in s.km-1</span>
-
-<span class="c1">#__ Best-beam reference __</span>
-<span class="n">baz_bb</span><span class="p">,</span> <span class="n">v_bb</span> <span class="o">=</span> <span class="mf">112.9</span><span class="p">,</span> <span class="mf">422.6</span>
-
-<span class="c1">#__ Set up figure __</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">axes</span> <span class="o">=</span> <span class="n">axes</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
-
-<span class="c1">#__ Helper: histogram with median and 95% credible interval __</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">hist_panel</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">lo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ref</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="n">rng_</span> <span class="o">=</span> <span class="p">(</span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">lo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="n">rng_</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'C0'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">lo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">lo</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">'--'</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="p">;</span> <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">hi</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">'--'</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">q025</span><span class="p">,</span> <span class="n">q50</span><span class="p">,</span> <span class="n">q975</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="p">[</span><span class="mf">2.5</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mf">97.5</span><span class="p">])</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">q50</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'C3'</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="n">q025</span><span class="p">,</span> <span class="n">q975</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'C3'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">ref</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span> <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'C2'</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">':'</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="p">;</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">q50</span><span class="si">:</span><span class="s1">.3g</span><span class="si">}</span><span class="s1"> [</span><span class="si">{</span><span class="n">q025</span><span class="si">:</span><span class="s1">.3g</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">q975</span><span class="si">:</span><span class="s1">.3g</span><span class="si">}</span><span class="s1">]'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
-
-<span class="c1">#__ Parameter marginals __</span>
-<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
-    <span class="n">hist_panel</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">m</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span><span class="o">*</span><span class="n">scale</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">labels</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">lower</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">*</span><span class="n">scale</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">upper</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">*</span><span class="n">scale</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
-
-<span class="c1">#__ Positivity of noise azimuthal density __</span>
-<span class="n">theta</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">361</span><span class="p">)</span>
-<span class="n">basis</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">theta</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">theta</span><span class="p">)])</span>
-<span class="n">rho_min</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">m</span><span class="p">[:,</span> <span class="mi">11</span><span class="p">:</span><span class="mi">15</span><span class="p">]</span> <span class="o">@</span> <span class="n">basis</span><span class="p">)</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">rho_min</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'C2'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">'--'</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$\min_\theta\, 2\pi\rho(\theta)$'</span><span class="p">)</span> <span class="p">;</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="mi">100</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rho_min</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">% invalid'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
-
-<span class="c1">#__ Skew-normal mean: xi + W delta sqrt(2/pi), delta = Omega_z alpha / sqrt(1 + alpha' Omega_z alpha) __</span>
-<span class="n">xi</span><span class="p">,</span> <span class="n">sig</span><span class="p">,</span> <span class="n">rho_c</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">m</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">5</span><span class="p">],</span> <span class="n">m</span><span class="p">[:,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">m</span><span class="p">[:,</span> <span class="mi">6</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span>
-<span class="n">Oza</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">alpha</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">rho_c</span><span class="o">*</span><span class="n">alpha</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">rho_c</span><span class="o">*</span><span class="n">alpha</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">alpha</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">delta</span> <span class="o">=</span> <span class="n">Oza</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">alpha</span><span class="o">*</span><span class="n">Oza</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))[:,</span> <span class="kc">None</span><span class="p">]</span>
-<span class="n">p_mean</span> <span class="o">=</span> <span class="n">xi</span> <span class="o">+</span> <span class="n">sig</span> <span class="o">*</span> <span class="n">delta</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-
-<span class="c1">#__ Backazimuth and apparent velocity of the mean __</span>
-<span class="n">baz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="o">-</span><span class="n">p_mean</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="n">p_mean</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]))</span> <span class="o">%</span> <span class="mi">360</span>
-<span class="n">vel</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">p_mean</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">hist_panel</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">16</span><span class="p">],</span> <span class="n">baz</span><span class="p">,</span> <span class="s1">'Backazimuth of mean [deg]'</span><span class="p">,</span> <span class="n">ref</span><span class="o">=</span><span class="n">baz_bb</span><span class="p">)</span>
-<span class="n">hist_panel</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">17</span><span class="p">],</span> <span class="n">vel</span><span class="p">,</span> <span class="sa">r</span><span class="s1">'Apparent velocity of mean [m.s$^{-1}$]'</span><span class="p">,</span> <span class="n">ref</span><span class="o">=</span><span class="n">v_bb</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</section>
-<section id="2.2.3-Interrogate-model-ensemble">
-<h2>2.2.3 Interrogate model ensemble<a class="headerlink" href="#2.2.3-Interrogate-model-ensemble" title="Link to this heading">#</a></h2>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xi</span><span class="p">,</span> <span class="n">sig</span><span class="p">,</span> <span class="n">rho_c</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">m</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">5</span><span class="p">],</span> <span class="n">m</span><span class="p">[:,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">m</span><span class="p">[:,</span> <span class="mi">6</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span>
-
-<span class="c1">#__ delta = Omega_z alpha / sqrt(1 + alpha' Omega_z alpha) __</span>
-<span class="n">Oza</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">alpha</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">rho_c</span><span class="o">*</span><span class="n">alpha</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">rho_c</span><span class="o">*</span><span class="n">alpha</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">alpha</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">delta</span> <span class="o">=</span> <span class="n">Oza</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">alpha</span><span class="o">*</span><span class="n">Oza</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))[:,</span> <span class="kc">None</span><span class="p">]</span>
-
-<span class="c1">#__ Skew direction in slowness space [s.m-1] __</span>
-<span class="n">d</span> <span class="o">=</span> <span class="n">sig</span> <span class="o">*</span> <span class="n">delta</span>
-
-<span class="c1">#__ Tangential (clockwise) and radial unit vectors at xi __</span>
-<span class="n">xi_abs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
-<span class="n">t_cw</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">xi</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="n">xi</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">xi_abs</span>
-<span class="n">r_hat</span>  <span class="o">=</span> <span class="n">xi</span> <span class="o">/</span> <span class="n">xi_abs</span>
-
-<span class="c1">#__ Components of the skew __</span>
-<span class="n">d_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">d</span> <span class="o">*</span> <span class="n">t_cw</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>   <span class="c1"># &gt; 0: clockwise</span>
-<span class="n">d_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">d</span> <span class="o">*</span> <span class="n">r_hat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># &gt; 0: towards slower apparent velocity</span>
-
-<span class="c1">#__ Angular offset of the mean from xi [deg] __</span>
-<span class="n">dphi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">*</span> <span class="n">d_t</span> <span class="o">/</span> <span class="n">xi_abs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'P(anti-clockwise) = </span><span class="si">{</span><span class="mi">100</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">d_t</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> %'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'mean offset from xi: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">dphi</span><span class="p">)</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> deg [</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">dphi</span><span class="p">,</span><span class="mf">2.5</span><span class="p">)</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">dphi</span><span class="p">,</span><span class="mf">97.5</span><span class="p">)</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">]'</span><span class="p">)</span>
-</pre></div>
-</div>
 </div>
 </section>
 </section>

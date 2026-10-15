@@ -11,7 +11,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "In this example, we will perform array-covariance inversion on synthetic data consisting of an abyssal T-phase signal and cylindrically-harmonic ambient noise."
+    "In this example, we will perform probabilististic wavefield decomposition on synthetic data containing a normally distributed abyssal T-phase signal in a weakly anisotropic cylindrically harmonic ambient-noise field, recorded by an IMS-style hydrophone triad array."
    ]
   },
   {
@@ -38,13 +38,16 @@
     "\n",
     "#__ Import: Plotting __\n",
     "import matplotlib.pyplot as plt\n",
-    "import matplotlib.tri as tri\n",
     "import matplotlib.ticker as ticker\n",
-    "from matplotlib.gridspec import GridSpec\n",
-    "from matplotlib.lines import Line2D\n",
-    "from mpl_toolkits.axes_grid1.inset_locator import inset_axes\n",
-    "import cmcrameri.cm as cmc\n",
-    "\n",
+    "from matplotlib.gridspec import GridSpec"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
     "#__ Set up: Plotting __\n",
     "theme = ['#DC4424', '#74A466', '#24448C', '#F8BC5C']\n",
     "small, large = 8, 10\n",
@@ -73,26 +76,28 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "The synthetic data was generated using `pyat` with the following parameters:"
+    "Synthetic Green's functions were generated using the _KRAKEN_ software and convolved with a patch of seafloor sources, then the resulting sample-covariance matrix was stored in the file ``TRIAD_FULL_15DB_topophone2.txt`` in the _Topophone2_ input file format. The noise-only sample-covariance matrix was stored in the file ``TRIAD_NOISE_15DB_topophone2.txt``.\n",
+    "\n",
+    "Here, we read the data files using the function ``utils.read.read_txt``."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 2,
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
     "#__ Read: Signal + noise __\n",
     "out = read_txt(f\"{data_dir}/TRIAD_FULL_15DB_topophone2.txt\")\n",
-    "freq_Hz   = out[0]  # Frequency vector         [Hz]        (frequency)\n",
-    "x         = out[1]  # Receiver position        [m]         (receiver, direction)\n",
-    "Gamma_obs = out[2]  # Array-covariance matrix  [uPa2.Hz-1] (frequency, receiver, receiver)\n",
+    "freq_Hz   = out[0]  # Frequency vector          [Hz]        (frequency,)\n",
+    "x         = out[1]  # Receiver position         [m]         (receiver, direction)\n",
+    "Gamma_obs = out[2]  # Sample-covariance matrix  [uPa2.Hz-1] (frequency, receiver, receiver)\n",
     "N_obs     = out[3]  # Independent observations\n",
-    "freq      = 2 * np.pi * freq_Hz  # Angular frequency vector [rad.s-1] (frequency)\n",
+    "freq      = 2 * np.pi * freq_Hz  # Angular frequency vector [rad.s-1] (frequency,)\n",
     "\n",
     "#__ Read: Noise only __\n",
     "out = read_txt(f\"{data_dir}/TRIAD_NOISE_15DB_topophone2.txt\")\n",
-    "Gamma_obs_noise = out[2]  # Array-covariance matrix  [uPa2.Hz-1] (frequency, receiver, receiver)\n",
+    "Gamma_obs_noise = out[2]  # Sample-covariance matrix  [uPa2.Hz-1] (frequency, receiver, receiver)\n",
     "N_obs_noise     = out[3]  # Independent observations"
    ]
   },
@@ -107,12 +112,16 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "The forward model is ..."
+    "The forward modelling class is ``modelling.ArrayCovarianceModel``, which evaluates the characteristic functions and their gradients.\n",
+    "\n",
+    "The wavefield is parameterised using two components specified in the list ``sigs``:\n",
+    "- a normally distributed component (``'normal'``)\n",
+    "- and an ambient noise field (specified using a ``dict``) which is cylindrical-harmonic (``sig = 'noise2D'``), has a given apparent slowness (``s = s0_J``) and has a maximum harmonic order of 1 (``max_order = 1``)."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -122,9 +131,9 @@
     "\n",
     "#__ Signals present __\n",
     "sigs = [\n",
-    "    'normal',                   # Gaussian density-function field\n",
+    "    'normal',                   # Normally distributed wavefield\n",
     "    dict(\n",
-    "        sig       = 'noise2D',  # Cylindrically-harmonic noise field\n",
+    "        sig       = 'noise2D',  # Cylindrically-harmonic field\n",
     "        s         = s0_J,       # Local apparent slowness [s.m-1]\n",
     "        max_order = 1           # Maximum cylindrical-harmonic order\n",
     "    )\n",
@@ -133,7 +142,7 @@
     "#__ Forward modeller __\n",
     "array_covariance_model = ArrayCovarianceModel(\n",
     "    x = x,                  # Receiver locations       [m]       (receiver, direction)\n",
-    "    freq = freq,            # Angular frequency vector [rad.s-1] (frequency)\n",
+    "    freq = freq,            # Angular-frequency vector [rad.s-1] (frequency)\n",
     "    sigs = sigs,            # Signals present\n",
     "    calc_noise_only = True  # Calculate an additional noise-only array-covariance matrix\n",
     ")"
@@ -150,23 +159,29 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "The prior pdf is... the model vector contains parameters..."
+    "The class ``inversion.Uniform`` calculates the prior probability density of a given model vector (see below), given a bounded uniform prior pdf with bounds ``lower`` and ``upper``.\n",
+    "\n",
+    "The model vector contains the parameters...\n",
+    "| Signal component | Parameter set |\n",
+    "|---|---|\n",
+    "|``'normal'`` | $\\left(E, \\xi_1, \\xi_2, \\sigma_1, \\sigma_2, \\rho_{12}\\right)$ |\n",
+    "|``'noise2D'`` | $\\left(E, a_1, b_1\\right)$ |\n"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 5,
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
     "#__ Prior bounds __\n",
     "lower = np.array([                                 # Lower bound\n",
-    "    50.,  -5.0e-4, 8.0e-5, 1.0e-6, 1.0e-6, -0.99,  #     'normal' parameters\n",
-    "    50., -0.8, -0.8                                #     'noise2D' parameters\n",
+    "    50.,  -5.0e-4, 8.0e-5, 1.0e-6, 1.0e-6, -0.99,  #     'normal' parameters  [energy, xi_x, xi_y, sigma_x, sigma_y, rho_xy]\n",
+    "    50., -0.8, -0.8                                #     'noise2D' parameters [energy, a_1, b_1]\n",
     "])\n",
     "upper = np.array([                                 # Upper bound\n",
-    "    100., -4.2e-4, 1.6e-4, 5.0e-5, 5.0e-5,  0.99,  #     'normal' parameters\n",
-    "    100., 0.8,  0.8                                #     'noise2D parameters\n",
+    "    100., -4.2e-4, 1.6e-4, 5.0e-5, 5.0e-5,  0.99,\n",
+    "    100., 0.8,  0.8\n",
     "])\n",
     "\n",
     "#__ Uniform prior pdf __\n",
@@ -177,20 +192,20 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "The posterior pdf is..."
+    "The class `inversion.Posterior` calculates the posterior probability density and its gradient with respect to each model parameter."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 6,
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
     "#__ Posterior pdf __\n",
     "posterior = Posterior(\n",
-    "    Gamma_obs       = Gamma_obs,        # Observed array-covariance matrix\n",
+    "    Gamma_obs       = Gamma_obs,        # Observed sample-covariance matrix\n",
     "    N_obs           = N_obs,            # Number of independent observations\n",
-    "    Gamma_obs_noise = Gamma_obs_noise,  # Observed (noise-only) array-covariance matrix\n",
+    "    Gamma_obs_noise = Gamma_obs_noise,  # Observed (noise-only) sample-covariance matrix\n",
     "    N_obs_noise     = N_obs_noise,      # Number of independent (noise-only) observations\n",
     "    prior           = prior,            # Uniform prior pdf\n",
     "    array_covariance_model = array_covariance_model  # Forward modeller\n",
@@ -208,7 +223,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "The Normalising flow model.."
+    "The class ``inversion.LinearFlowsModel`` creates a normalising flows model to transform a base distribution, including a transformation from unconstrained to constrained space to accomodate the bounded uniform prior."
    ]
   },
   {
@@ -232,19 +247,19 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "The inversion class is..."
+    "The class ``inversion.Inference`` sets up the inverse problem to update the parameters of the flow model to best match the posterior pdf."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 8,
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
     "#__ Inversion parameters __\n",
-    "learning_rate = 5e-4                       # Learning rate for the optimiser\n",
-    "N_iterations  = 30000                      # Number of iterations for optimiser\n",
-    "N_montecarlo  = 100                        # Number of samples to estimate ELBO\n",
+    "learning_rate = 5e-4                # Learning rate for the optimiser\n",
+    "N_iterations  = 30000               # Number of iterations for optimiser\n",
+    "N_montecarlo  = 100                 # Number of samples to estimate ELBO\n",
     "\n",
     "#__ Set up inverse problem __\n",
     "inverse_problem = Inference(\n",
@@ -265,7 +280,9 @@
   {
    "cell_type": "markdown",
    "metadata": {},
-   "source": []
+   "source": [
+    "The ``invert`` method for the ``inversion.Inference`` class iteratively updates the parameters of the normalising flows towards the posterior pdf."
+   ]
   },
   {
    "cell_type": "code",
@@ -318,7 +335,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "Statistics on the... sample the normalising flows models"
+    "The ``sample`` method for the ``inversion.Inference`` class draws an ensemble of model samples from the variational distribution such that posterior statistics can be calculated."
    ]
   },
   {
@@ -347,7 +364,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 12,
+   "execution_count": null,
    "metadata": {},
    "outputs": [
     {

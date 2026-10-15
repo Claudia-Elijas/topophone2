@@ -329,7 +329,7 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../example_3/example_3.1.html">3.1 Creating Synthetic Data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../example_3/example_3.2.html">3.2 Reading the <code class="docutils literal notranslate"><span class="pre">config.ini</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example_3/example_3.2.html">3.2 Reading the Comfiguration File</a></li>
 </ul>
 </div>
 </nav></div>
@@ -392,7 +392,7 @@
                   
   <section id="1.1-Array-Covariance-Inversion">
 <h1>1.1 Array-Covariance Inversion<a class="headerlink" href="#1.1-Array-Covariance-Inversion" title="Link to this heading">#</a></h1>
-<p>In this example, we will perform array-covariance inversion on synthetic data consisting of an abyssal T-phase signal and cylindrically-harmonic ambient noise.</p>
+<p>In this example, we will perform probabilististic wavefield decomposition on synthetic data containing a normally distributed abyssal T-phase signal in a weakly anisotropic cylindrically harmonic ambient-noise field, recorded by an IMS-style hydrophone triad array.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
@@ -407,14 +407,24 @@
 
 <span class="c1">#__ Import: Plotting __</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.tri</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tri</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.ticker</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ticker</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.gridspec</span><span class="w"> </span><span class="kn">import</span> <span class="n">GridSpec</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.lines</span><span class="w"> </span><span class="kn">import</span> <span class="n">Line2D</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.axes_grid1.inset_locator</span><span class="w"> </span><span class="kn">import</span> <span class="n">inset_axes</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">cmcrameri.cm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cmc</span>
-
-<span class="c1">#__ Set up: Plotting __</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Hello from topophone2!
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Set up: Plotting __</span>
 <span class="n">theme</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'#DC4424'</span><span class="p">,</span> <span class="s1">'#74A466'</span><span class="p">,</span> <span class="s1">'#24448C'</span><span class="p">,</span> <span class="s1">'#F8BC5C'</span><span class="p">]</span>
 <span class="n">small</span><span class="p">,</span> <span class="n">large</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">"font.sans-serif"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'Arial'</span><span class="p">]</span>
@@ -432,32 +442,25 @@
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Hello from topophone2!
-</pre></div></div>
-</div>
 <section id="1.1.1-Read-synthetic-data">
 <h2>1.1.1 Read synthetic data<a class="headerlink" href="#1.1.1-Read-synthetic-data" title="Link to this heading">#</a></h2>
-<p>The synthetic data was generated using <code class="docutils literal notranslate"><span class="pre">pyat</span></code> with the following parameters:</p>
+<p>Synthetic Green’s functions were generated using the <em>KRAKEN</em> software and convolved with a patch of seafloor sources, then the resulting sample-covariance matrix was stored in the file <code class="docutils literal notranslate"><span class="pre">TRIAD_FULL_15DB_topophone2.txt</span></code> in the <em>Topophone2</em> input file format. The noise-only sample-covariance matrix was stored in the file <code class="docutils literal notranslate"><span class="pre">TRIAD_NOISE_15DB_topophone2.txt</span></code>.</p>
+<p>Here, we read the data files using the function <code class="docutils literal notranslate"><span class="pre">utils.read.read_txt</span></code>.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Read: Signal + noise __</span>
 <span class="n">out</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">data_dir</span><span class="si">}</span><span class="s2">/TRIAD_FULL_15DB_topophone2.txt"</span><span class="p">)</span>
-<span class="n">freq_Hz</span>   <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Frequency vector         [Hz]        (frequency)</span>
-<span class="n">x</span>         <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Receiver position        [m]         (receiver, direction)</span>
-<span class="n">Gamma_obs</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># Array-covariance matrix  [uPa2.Hz-1] (frequency, receiver, receiver)</span>
+<span class="n">freq_Hz</span>   <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Frequency vector          [Hz]        (frequency,)</span>
+<span class="n">x</span>         <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Receiver position         [m]         (receiver, direction)</span>
+<span class="n">Gamma_obs</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># Sample-covariance matrix  [uPa2.Hz-1] (frequency, receiver, receiver)</span>
 <span class="n">N_obs</span>     <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>  <span class="c1"># Independent observations</span>
-<span class="n">freq</span>      <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">freq_Hz</span>  <span class="c1"># Angular frequency vector [rad.s-1] (frequency)</span>
+<span class="n">freq</span>      <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">freq_Hz</span>  <span class="c1"># Angular frequency vector [rad.s-1] (frequency,)</span>
 
 <span class="c1">#__ Read: Noise only __</span>
 <span class="n">out</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">data_dir</span><span class="si">}</span><span class="s2">/TRIAD_NOISE_15DB_topophone2.txt"</span><span class="p">)</span>
-<span class="n">Gamma_obs_noise</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># Array-covariance matrix  [uPa2.Hz-1] (frequency, receiver, receiver)</span>
+<span class="n">Gamma_obs_noise</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># Sample-covariance matrix  [uPa2.Hz-1] (frequency, receiver, receiver)</span>
 <span class="n">N_obs_noise</span>     <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>  <span class="c1"># Independent observations</span>
 </pre></div>
 </div>
@@ -465,9 +468,14 @@ Hello from topophone2!
 </section>
 <section id="1.1.2-Set-up-forward-model">
 <h2>1.1.2 Set up forward model<a class="headerlink" href="#1.1.2-Set-up-forward-model" title="Link to this heading">#</a></h2>
-<p>The forward model is …</p>
+<p>The forward modelling class is <code class="docutils literal notranslate"><span class="pre">modelling.ArrayCovarianceModel</span></code>, which evaluates the characteristic functions and their gradients.</p>
+<p>The wavefield is parameterised using two components specified in the list <code class="docutils literal notranslate"><span class="pre">sigs</span></code>:</p>
+<ul class="simple">
+<li><p>a normally distributed component (<code class="docutils literal notranslate"><span class="pre">'normal'</span></code>)</p></li>
+<li><p>and an ambient noise field (specified using a <code class="docutils literal notranslate"><span class="pre">dict</span></code>) which is cylindrical-harmonic (<code class="docutils literal notranslate"><span class="pre">sig</span> <span class="pre">=</span> <span class="pre">'noise2D'</span></code>), has a given apparent slowness (<code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">s0_J</span></code>) and has a maximum harmonic order of 1 (<code class="docutils literal notranslate"><span class="pre">max_order</span> <span class="pre">=</span> <span class="pre">1</span></code>).</p></li>
+</ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Noise apparent slowness [s.m-1] __</span>
@@ -476,9 +484,9 @@ Hello from topophone2!
 
 <span class="c1">#__ Signals present __</span>
 <span class="n">sigs</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s1">'normal'</span><span class="p">,</span>                   <span class="c1"># Gaussian density-function field</span>
+    <span class="s1">'normal'</span><span class="p">,</span>                   <span class="c1"># Normally distributed wavefield</span>
     <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">sig</span>       <span class="o">=</span> <span class="s1">'noise2D'</span><span class="p">,</span>  <span class="c1"># Cylindrically-harmonic noise field</span>
+        <span class="n">sig</span>       <span class="o">=</span> <span class="s1">'noise2D'</span><span class="p">,</span>  <span class="c1"># Cylindrically-harmonic field</span>
         <span class="n">s</span>         <span class="o">=</span> <span class="n">s0_J</span><span class="p">,</span>       <span class="c1"># Local apparent slowness [s.m-1]</span>
         <span class="n">max_order</span> <span class="o">=</span> <span class="mi">1</span>           <span class="c1"># Maximum cylindrical-harmonic order</span>
     <span class="p">)</span>
@@ -487,7 +495,7 @@ Hello from topophone2!
 <span class="c1">#__ Forward modeller __</span>
 <span class="n">array_covariance_model</span> <span class="o">=</span> <span class="n">ArrayCovarianceModel</span><span class="p">(</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span>                  <span class="c1"># Receiver locations       [m]       (receiver, direction)</span>
-    <span class="n">freq</span> <span class="o">=</span> <span class="n">freq</span><span class="p">,</span>            <span class="c1"># Angular frequency vector [rad.s-1] (frequency)</span>
+    <span class="n">freq</span> <span class="o">=</span> <span class="n">freq</span><span class="p">,</span>            <span class="c1"># Angular-frequency vector [rad.s-1] (frequency)</span>
     <span class="n">sigs</span> <span class="o">=</span> <span class="n">sigs</span><span class="p">,</span>            <span class="c1"># Signals present</span>
     <span class="n">calc_noise_only</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Calculate an additional noise-only array-covariance matrix</span>
 <span class="p">)</span>
@@ -497,19 +505,20 @@ Hello from topophone2!
 </section>
 <section id="1.1.3-Set-up-the-likelihood-calculator">
 <h2>1.1.3 Set up the likelihood calculator<a class="headerlink" href="#1.1.3-Set-up-the-likelihood-calculator" title="Link to this heading">#</a></h2>
-<p>The prior pdf is… the model vector contains parameters…</p>
+<p>The class <code class="docutils literal notranslate"><span class="pre">inversion.Uniform</span></code> calculates the prior probability density of a given model vector (see below), given a bounded uniform prior pdf with bounds <code class="docutils literal notranslate"><span class="pre">lower</span></code> and <code class="docutils literal notranslate"><span class="pre">upper</span></code>.</p>
+<p>The model vector contains the parameters… | Signal component | Parameter set | |—|—| |<code class="docutils literal notranslate"><span class="pre">'normal'</span></code> | <span class="math notranslate nohighlight">\(\left(E, \xi_1, \xi_2, \sigma_1, \sigma_2, \rho_{12}\right)\)</span> | |<code class="docutils literal notranslate"><span class="pre">'noise2D'</span></code> | <span class="math notranslate nohighlight">\(\left(E, a_1, b_1\right)\)</span> |</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Prior bounds __</span>
 <span class="n">lower</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>                                 <span class="c1"># Lower bound</span>
-    <span class="mf">50.</span><span class="p">,</span>  <span class="o">-</span><span class="mf">5.0e-4</span><span class="p">,</span> <span class="mf">8.0e-5</span><span class="p">,</span> <span class="mf">1.0e-6</span><span class="p">,</span> <span class="mf">1.0e-6</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99</span><span class="p">,</span>  <span class="c1">#     'normal' parameters</span>
-    <span class="mf">50.</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8</span>                                <span class="c1">#     'noise2D' parameters</span>
+    <span class="mf">50.</span><span class="p">,</span>  <span class="o">-</span><span class="mf">5.0e-4</span><span class="p">,</span> <span class="mf">8.0e-5</span><span class="p">,</span> <span class="mf">1.0e-6</span><span class="p">,</span> <span class="mf">1.0e-6</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99</span><span class="p">,</span>  <span class="c1">#     'normal' parameters  [energy, xi_x, xi_y, sigma_x, sigma_y, rho_xy]</span>
+    <span class="mf">50.</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8</span>                                <span class="c1">#     'noise2D' parameters [energy, a_1, b_1]</span>
 <span class="p">])</span>
 <span class="n">upper</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>                                 <span class="c1"># Upper bound</span>
-    <span class="mf">100.</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.2e-4</span><span class="p">,</span> <span class="mf">1.6e-4</span><span class="p">,</span> <span class="mf">5.0e-5</span><span class="p">,</span> <span class="mf">5.0e-5</span><span class="p">,</span>  <span class="mf">0.99</span><span class="p">,</span>  <span class="c1">#     'normal' parameters</span>
-    <span class="mf">100.</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.8</span>                                <span class="c1">#     'noise2D parameters</span>
+    <span class="mf">100.</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.2e-4</span><span class="p">,</span> <span class="mf">1.6e-4</span><span class="p">,</span> <span class="mf">5.0e-5</span><span class="p">,</span> <span class="mf">5.0e-5</span><span class="p">,</span>  <span class="mf">0.99</span><span class="p">,</span>
+    <span class="mf">100.</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.8</span>
 <span class="p">])</span>
 
 <span class="c1">#__ Uniform prior pdf __</span>
@@ -517,16 +526,16 @@ Hello from topophone2!
 </pre></div>
 </div>
 </div>
-<p>The posterior pdf is…</p>
+<p>The class <code class="docutils literal notranslate"><span class="pre">inversion.Posterior</span></code> calculates the posterior probability density and its gradient with respect to each model parameter.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Posterior pdf __</span>
 <span class="n">posterior</span> <span class="o">=</span> <span class="n">Posterior</span><span class="p">(</span>
-    <span class="n">Gamma_obs</span>       <span class="o">=</span> <span class="n">Gamma_obs</span><span class="p">,</span>        <span class="c1"># Observed array-covariance matrix</span>
+    <span class="n">Gamma_obs</span>       <span class="o">=</span> <span class="n">Gamma_obs</span><span class="p">,</span>        <span class="c1"># Observed sample-covariance matrix</span>
     <span class="n">N_obs</span>           <span class="o">=</span> <span class="n">N_obs</span><span class="p">,</span>            <span class="c1"># Number of independent observations</span>
-    <span class="n">Gamma_obs_noise</span> <span class="o">=</span> <span class="n">Gamma_obs_noise</span><span class="p">,</span>  <span class="c1"># Observed (noise-only) array-covariance matrix</span>
+    <span class="n">Gamma_obs_noise</span> <span class="o">=</span> <span class="n">Gamma_obs_noise</span><span class="p">,</span>  <span class="c1"># Observed (noise-only) sample-covariance matrix</span>
     <span class="n">N_obs_noise</span>     <span class="o">=</span> <span class="n">N_obs_noise</span><span class="p">,</span>      <span class="c1"># Number of independent (noise-only) observations</span>
     <span class="n">prior</span>           <span class="o">=</span> <span class="n">prior</span><span class="p">,</span>            <span class="c1"># Uniform prior pdf</span>
     <span class="n">array_covariance_model</span> <span class="o">=</span> <span class="n">array_covariance_model</span>  <span class="c1"># Forward modeller</span>
@@ -537,7 +546,7 @@ Hello from topophone2!
 </section>
 <section id="1.1.4-Set-up-the-inversion">
 <h2>1.1.4 Set up the inversion<a class="headerlink" href="#1.1.4-Set-up-the-inversion" title="Link to this heading">#</a></h2>
-<p>The Normalising flow model..</p>
+<p>The class <code class="docutils literal notranslate"><span class="pre">inversion.LinearFlowsModel</span></code> creates a normalising flows model to transform a base distribution, including a transformation from unconstrained to constrained space to accomodate the bounded uniform prior.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
@@ -554,15 +563,15 @@ Hello from topophone2!
 </pre></div>
 </div>
 </div>
-<p>The inversion class is…</p>
+<p>The class <code class="docutils literal notranslate"><span class="pre">inversion.Inference</span></code> sets up the inverse problem to update the parameters of the flow model to best match the posterior pdf.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Inversion parameters __</span>
-<span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">5e-4</span>                       <span class="c1"># Learning rate for the optimiser</span>
-<span class="n">N_iterations</span>  <span class="o">=</span> <span class="mi">30000</span>                      <span class="c1"># Number of iterations for optimiser</span>
-<span class="n">N_montecarlo</span>  <span class="o">=</span> <span class="mi">100</span>                        <span class="c1"># Number of samples to estimate ELBO</span>
+<span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">5e-4</span>                <span class="c1"># Learning rate for the optimiser</span>
+<span class="n">N_iterations</span>  <span class="o">=</span> <span class="mi">30000</span>               <span class="c1"># Number of iterations for optimiser</span>
+<span class="n">N_montecarlo</span>  <span class="o">=</span> <span class="mi">100</span>                 <span class="c1"># Number of samples to estimate ELBO</span>
 
 <span class="c1">#__ Set up inverse problem __</span>
 <span class="n">inverse_problem</span> <span class="o">=</span> <span class="n">Inference</span><span class="p">(</span>
@@ -577,6 +586,7 @@ Hello from topophone2!
 </section>
 <section id="1.1.5-Run-the-inversion">
 <h2>1.1.5 Run the inversion<a class="headerlink" href="#1.1.5-Run-the-inversion" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">invert</span></code> method for the <code class="docutils literal notranslate"><span class="pre">inversion.Inference</span></code> class iteratively updates the parameters of the normalising flows towards the posterior pdf.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
@@ -623,7 +633,7 @@ The elapsed time is: 588.12 s
 Finish training!
 </pre></div></div>
 </div>
-<p>Statistics on the… sample the normalising flows models</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">sample</span></code> method for the <code class="docutils literal notranslate"><span class="pre">inversion.Inference</span></code> class draws an ensemble of model samples from the variational distribution such that posterior statistics can be calculated.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
@@ -648,7 +658,7 @@ Finish training!
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Load true model for comparison __</span>
@@ -714,7 +724,7 @@ Finish training!
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_example_1_example_1.1_24_0.png" src="../../_images/examples_example_1_example_1.1_24_0.png" />
+<img alt="../../_images/examples_example_1_example_1.1_25_0.png" src="../../_images/examples_example_1_example_1.1_25_0.png" />
 </div>
 </div>
 </section>

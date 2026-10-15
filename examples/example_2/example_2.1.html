@@ -329,7 +329,7 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../example_3/example_3.1.html">3.1 Creating Synthetic Data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../example_3/example_3.2.html">3.2 Reading the <code class="docutils literal notranslate"><span class="pre">config.ini</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example_3/example_3.2.html">3.2 Reading the Comfiguration File</a></li>
 </ul>
 </div>
 </nav></div>
@@ -392,6 +392,7 @@
                   
   <section id="2.1-Estimate-Array-Covariance-from-Time-Series">
 <h1>2.1 Estimate Array Covariance from Time Series<a class="headerlink" href="#2.1-Estimate-Array-Covariance-from-Time-Series" title="Link to this heading">#</a></h1>
+<p>In this example, we show how to use the <code class="docutils literal notranslate"><span class="pre">utils.dsp</span></code> module to process time series into a sample-covariance matrix. We use infrasound from a Hukkakero explosion event recorded by IMS station IS37 as an example.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
@@ -405,21 +406,6 @@
 
 <span class="c1">#__ Import: Plotting __</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.tri</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tri</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.ticker</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ticker</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.gridspec</span><span class="w"> </span><span class="kn">import</span> <span class="n">GridSpec</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.lines</span><span class="w"> </span><span class="kn">import</span> <span class="n">Line2D</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.axes_grid1.inset_locator</span><span class="w"> </span><span class="kn">import</span> <span class="n">inset_axes</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">cmcrameri.cm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cmc</span>
-
-<span class="c1">#__ Set up: Plotting __</span>
-<span class="n">theme</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'#DC4424'</span><span class="p">,</span> <span class="s1">'#74A466'</span><span class="p">,</span> <span class="s1">'#24448C'</span><span class="p">,</span> <span class="s1">'#F8BC5C'</span><span class="p">]</span>
-<span class="n">small</span><span class="p">,</span> <span class="n">large</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">"font.sans-serif"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'Arial'</span><span class="p">]</span>
-
-<span class="c1">#__ Disable: Warnings __</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -431,8 +417,24 @@
 Hello from topophone2!
 </pre></div></div>
 </div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Set up: Plotting __</span>
+<span class="n">theme</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'#DC4424'</span><span class="p">,</span> <span class="s1">'#74A466'</span><span class="p">,</span> <span class="s1">'#24448C'</span><span class="p">,</span> <span class="s1">'#F8BC5C'</span><span class="p">]</span>
+<span class="n">small</span><span class="p">,</span> <span class="n">large</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">"font.sans-serif"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'Arial'</span><span class="p">]</span>
+
+<span class="c1">#__ Disable: Warnings __</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 <section id="2.1.1-Read-data">
 <h2>2.1.1 Read data<a class="headerlink" href="#2.1.1-Read-data" title="Link to this heading">#</a></h2>
+<p>First, we read in the time series.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -445,6 +447,7 @@ Hello from topophone2!
 </pre></div>
 </div>
 </div>
+<p>Second, we split the time series into signal and noise windows. The latter will help constrain the noise parameters during the inversion.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -464,7 +467,7 @@ Hello from topophone2!
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Create figure and axes __</span>
@@ -503,24 +506,26 @@ Hello from topophone2!
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_example_2_example_2.1_6_0.png" src="../../_images/examples_example_2_example_2.1_6_0.png" />
+<img alt="../../_images/examples_example_2_example_2.1_9_0.png" src="../../_images/examples_example_2_example_2.1_9_0.png" />
 </div>
 </div>
 </section>
 <section id="2.1.2-Estimate-array-covariance-within-noise-windows">
 <h2>2.1.2 Estimate array-covariance within noise windows<a class="headerlink" href="#2.1.2-Estimate-array-covariance-within-noise-windows" title="Link to this heading">#</a></h2>
+<p>When calculating the sample-covariance matrix (estimate to the array-covariance matrix), the expectation over independent realisations must be taken. When the time window must be minimised, taking the mean over Slepian tapers provides a sweet spot between minimimising the time window required and maximising frequency resolution.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Select frequency bins __</span>
 <span class="n">frequency</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">])</span>  <span class="c1"># Frequency bins [Hz]</span>
 
 <span class="c1">#__ Set Slepian taper bandwidth __</span>
-<span class="n">bw</span> <span class="o">=</span> <span class="mf">0.3</span>  <span class="c1"># Full bandwidth [Hz]</span>
+<span class="n">bw</span> <span class="o">=</span> <span class="mf">0.3</span>                               <span class="c1"># Full bandwidth [Hz]</span>
 </pre></div>
 </div>
 </div>
+<p>The <code class="docutils literal notranslate"><span class="pre">utils.dsp.sample_covariance_matrix</span></code> function applies Slepian tapers to the time series, takes the Fourier transform to the frequency domain, takes the inter-sensor cross-spectrum, and then averages over the tapers to give a sample-covariance matrix.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
@@ -556,6 +561,7 @@ Hello from topophone2!
 </pre></div>
 </div>
 </div>
+<p>The <code class="docutils literal notranslate"><span class="pre">utils.read.convert_to_txt</span></code> function saves sample-covariance matrices in the <em>Topophone2</em> data format.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
@@ -590,6 +596,7 @@ Data successfully written to: ../data/hukkakero/noise_topophone2.txt
 </section>
 <section id="Estimate-array-covariance-within-signal-window">
 <h2>Estimate array-covariance within signal window<a class="headerlink" href="#Estimate-array-covariance-within-signal-window" title="Link to this heading">#</a></h2>
+<p>The moveout phase of the nonstationary signal can cause edge effects for the cross-spectra between widely separated sensors (the signal in the same time window for the two different sensors is different). Therefore, we align the traces first using the function <code class="docutils literal notranslate"><span class="pre">utils.dsp.best_beam_DOA</span></code> which maximises the cross-correlation.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
@@ -625,6 +632,7 @@ Best-beam apparent velocity: 422.6 m.s-1
 Best-beam backazimuth:       112.9 deg
 </pre></div></div>
 </div>
+<p>Now, the sample-covariance matrix of the time-shifted traces is calculated using the function <code class="docutils literal notranslate"><span class="pre">utils.dsp.sample_covariance_matrix</span></code>, and the cross-phase is corrected afterwards by specifying the time shifts in the <code class="docutils literal notranslate"><span class="pre">correction</span></code> option.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>

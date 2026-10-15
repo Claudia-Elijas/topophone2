@@ -398,16 +398,13 @@
   <section id="module-topophone2.utils.math">
 <span id="maths-utility-functions"></span><h1>maths utility functions<a class="headerlink" href="#module-topophone2.utils.math" title="Link to this heading">#</a></h1>
 <div class="module-intro docutils container">
-<p>The <code class="docutils literal notranslate"><span class="pre">topophone2.utils.math</span></code> module provides mathematical convenience functions:</p>
-<blockquote>
-<div><p><a class="reference internal" href="#topophone2.utils.math.bessel_function" title="topophone2.utils.math.bessel_function"><code class="xref py py-func docutils literal notranslate"><span class="pre">bessel_function()</span></code></a> - Computes the Bessel function of the first kind or the spherical Bessel function.</p>
-<p><a class="reference internal" href="#topophone2.utils.math.legendre_polynomial" title="topophone2.utils.math.legendre_polynomial"><code class="xref py py-func docutils literal notranslate"><span class="pre">legendre_polynomial()</span></code></a> - Computes the associated Legendre polynomial.</p>
-</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">topophone2.utils.math</span></code> module provides mathematical convenience functions.</p>
 </div>
 <dl class="py function">
 <dt class="sig sig-object py" id="topophone2.utils.math.bessel_function">
 <span class="sig-prename descclassname"><span class="pre">topophone2.utils.math.</span></span><span class="sig-name descname"><span class="pre">bessel_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argument</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cylindrical'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">derivative</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/utils/math.html#bessel_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.utils.math.bessel_function" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Calculate Bessel function (derivative).</p>
+<dl class="field-list simple">
 <dt class="field-odd">Input<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>argument</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code> or <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Argument to Bessel function</p></li>
@@ -420,26 +417,25 @@
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> – Function output</p>
 </dd>
 </dl>
-<div class="math notranslate nohighlight">
-\[J_n(x) = \sum_{m=0}^{\infty} \frac{(-1)^m}{m! \Gamma(m+n+1)} \left(\frac{x}{2}\right)^{2m+n}\]</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="topophone2.utils.math.legendre_polynomial">
 <span class="sig-prename descclassname"><span class="pre">topophone2.utils.math.</span></span><span class="sig-name descname"><span class="pre">legendre_polynomial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argument</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condon_shortley</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/utils/math.html#legendre_polynomial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.utils.math.legendre_polynomial" title="Link to this definition">#</a></dt>
-<dd><p>Function to compute the associated Legendre polynomial $P_n^m(x)$ using <code class="docutils literal notranslate"><span class="pre">scipy.special.lpmv</span></code>.</p>
+<dd><p>Function to compute the associated Legendre polynomial <span class="math notranslate nohighlight">\(P_n^m\left(x\right)\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Input<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>argument</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Argument to polynomial</p></li>
-<li><p><strong>degree</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Degree of polynomial ($n$)</p></li>
-<li><p><strong>order</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Order of polynomial ($m$)</p></li>
+<li><p><strong>degree</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Degree of polynomial (n)</p></li>
+<li><p><strong>order</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Order of polynomial (m)</p></li>
 <li><p><strong>condon_shortley</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code> (default <code class="docutils literal notranslate"><span class="pre">False</span></code>)) – Include the Condon-Shortley phase $(-1)^m$</p></li>
 </ul>
 </dd>
+<dt class="field-even">Output<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> – Polynomial</p>
+</dd>
 </dl>
-<div class="math notranslate nohighlight">
-\[P_n^m(x) = (-1)^m \frac{(1-x^2)^{m/2}}{2^n n!} \frac{d^{n+m}}{dx^{n+m}} (x^2 - 1)^n\]</div>
 </dd></dl>
 
 <dl class="py function">
@@ -469,11 +465,9 @@
 (model, direction)</p></li>
 <li><p><strong>mean_circ</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Mean vector in cylindrical/spherical coordinates [s.m-1, deg from North[, deg from horizontal]]
 (model, direction)</p></li>
-<li><p><strong>sigma_circ</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Standard deviation along the local radial, azimuthal[, elevation] directions at the mean,
-from the covariance (Omega - 2/pi wd wd^T for the skew-normal) [s.m-1, deg[, deg]]
+<li><p><strong>sigma_circ</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Standard deviation along the local radial, azimuthal[, elevation] directions at the location [s.m-1, deg[, deg]]
 (model, direction)</p></li>
-<li><p><strong>wd_circ</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Skewness-direction vector resolved along the local radial, azimuthal[, elevation] directions
-at the mean; azimuthal component positive clockwise [s.m-1, deg[, deg]]
+<li><p><strong>wd_circ</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Skewness-direction vector along the local radial, azimuthal[, elevation] directions at the location [s.m-1, deg[, deg]]
 (model, direction)</p></li>
 </ul>
 </dd>

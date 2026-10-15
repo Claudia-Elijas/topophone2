@@ -329,7 +329,7 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../example_3/example_3.1.html">3.1 Creating Synthetic Data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../example_3/example_3.2.html">3.2 Reading the <code class="docutils literal notranslate"><span class="pre">config.ini</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example_3/example_3.2.html">3.2 Reading the Comfiguration File</a></li>
 </ul>
 </div>
 </nav></div>
@@ -392,6 +392,7 @@
                   
   <section id="1.2-Information-Gain">
 <h1>1.2 Information Gain<a class="headerlink" href="#1.2-Information-Gain" title="Link to this heading">#</a></h1>
+<p>In this example, we show how to calculate the information gain from the ensemble of model samples generated in Example 1.1, and compare to the information gain under different experimental conditions.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
@@ -404,14 +405,15 @@
 
 <span class="c1">#__ Import: Plotting __</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.tri</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tri</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.ticker</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ticker</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.gridspec</span><span class="w"> </span><span class="kn">import</span> <span class="n">GridSpec</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.lines</span><span class="w"> </span><span class="kn">import</span> <span class="n">Line2D</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.axes_grid1.inset_locator</span><span class="w"> </span><span class="kn">import</span> <span class="n">inset_axes</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">cmcrameri.cm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cmc</span>
-
-<span class="c1">#__ Set up: Plotting __</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Set up: Plotting __</span>
 <span class="n">theme</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'#DC4424'</span><span class="p">,</span> <span class="s1">'#74A466'</span><span class="p">,</span> <span class="s1">'#24448C'</span><span class="p">,</span> <span class="s1">'#F8BC5C'</span><span class="p">]</span>
 <span class="n">small</span><span class="p">,</span> <span class="n">large</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">"font.sans-serif"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'Arial'</span><span class="p">]</span>
@@ -424,7 +426,7 @@
 </div>
 <section id="1.2.1-Read-inversion-results">
 <h2>1.2.1 Read inversion results<a class="headerlink" href="#1.2.1-Read-inversion-results" title="Link to this heading">#</a></h2>
-<p>Inversion results calculated in Example 1.1 (triad, 15db), also other geometries…</p>
+<p>The inversion results in Example 1.1 were stored in the folder <code class="docutils literal notranslate"><span class="pre">TRIAD_15DB</span></code>. Equivalent results for an extra sensor added to the centre of the array were stored in the folder <code class="docutils literal notranslate"><span class="pre">QUAD_15DB</span></code>, and for an increased noise level of 15dB in <code class="docutils literal notranslate"><span class="pre">TRIAD_0DB</span></code>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
@@ -448,6 +450,7 @@
 </section>
 <section id="1.2.2-Calculate-information-gain">
 <h2>1.2.2 Calculate information gain<a class="headerlink" href="#1.2.2-Calculate-information-gain" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">inversion.MarginalStats</span></code> class is the one-stop shop for posterior analysis. Here, we use the <code class="docutils literal notranslate"><span class="pre">calc_information</span></code> method to calculate the information gain for different subsets of parameters under the three different sets of experimental conditions.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
@@ -481,7 +484,7 @@
 </pre></div>
 </div>
 </div>
-<p>To calculate the SNR…</p>
+<p>The signal-to-noise ratio is calculated as the difference in total energies (specified in dB). Posterior analysis can be done on combinations of parameters like this.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
@@ -508,6 +511,7 @@
 </section>
 <section id="1.2.3-Compare">
 <h2>1.2.3 Compare<a class="headerlink" href="#1.2.3-Compare" title="Link to this heading">#</a></h2>
+<p>We compare the relative change in information gain between the deviated experimental conditions and those in Example 1.1. This gives an indication as to how much tighter (information gain) or broader (information loss) the posterior pdfs were under each set of experimental conditions.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
@@ -526,7 +530,7 @@
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Create figure and axes __</span>
@@ -563,7 +567,7 @@
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_example_1_example_1.2_12_0.png" src="../../_images/examples_example_1_example_1.2_12_0.png" />
+<img alt="../../_images/examples_example_1_example_1.2_15_0.png" src="../../_images/examples_example_1_example_1.2_15_0.png" />
 </div>
 </div>
 </section>

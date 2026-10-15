@@ -396,7 +396,7 @@
   <section id="module-topophone2.utils.read">
 <span id="data-reading-utility-functions"></span><h1>data reading utility functions<a class="headerlink" href="#module-topophone2.utils.read" title="Link to this heading">#</a></h1>
 <div class="module-intro docutils container">
-<p>The <code class="docutils literal notranslate"><span class="pre">topophone2.utils.read</span></code> module provides functions to read the data and parese the configuration file.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">topophone2.utils.read</span></code> module provides functions to read the data and parse the configuration file.</p>
 <p>The main function is <a class="reference internal" href="#topophone2.utils.read.parse_config" title="topophone2.utils.read.parse_config"><code class="xref py py-func docutils literal notranslate"><span class="pre">parse_config()</span></code></a>, which reads the configuration file and returns a dictionary of variables.</p>
 <p>The following functions are used by <a class="reference internal" href="#topophone2.utils.read.parse_config" title="topophone2.utils.read.parse_config"><code class="xref py py-func docutils literal notranslate"><span class="pre">parse_config()</span></code></a> to parse specific entries in the configuration file:</p>
 <blockquote>
@@ -443,7 +443,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="topophone2.utils.read.read_txt">
 <span class="sig-prename descclassname"><span class="pre">topophone2.utils.read.</span></span><span class="sig-name descname"><span class="pre">read_txt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/utils/read.html#read_txt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.utils.read.read_txt" title="Link to this definition">#</a></dt>
-<dd><p>Read the frequency, x, and Gamma_obs arrays from a text file.</p>
+<dd><p>Read a Topophone2 data file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Input<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -455,13 +455,13 @@
 </dd>
 <dt class="field-even">Output<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>frequency</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Frequency array
-(N_freq,)</p></li>
-<li><p><strong>x</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Receiver positions array
-(N_rec, dims)</p></li>
-<li><p><strong>Gamma_obs</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Transfer function array
-(N_freq, N_rec, N_rec)</p></li>
-<li><p><strong>N_obs</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of observations</p></li>
+<li><p><strong>frequency</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Frequency vector [Hz]
+(frequency,)</p></li>
+<li><p><strong>x</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Receiver positions [m]
+(receiver, direction)</p></li>
+<li><p><strong>Gamma_obs</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Sample-covariance matrix
+(frequency, receiver, receiver)</p></li>
+<li><p><strong>N_obs</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of independent samples</p></li>
 </ul>
 </dd>
 </dl>
@@ -470,18 +470,18 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="topophone2.utils.read.convert_to_txt">
 <span class="sig-prename descclassname"><span class="pre">topophone2.utils.read.</span></span><span class="sig-name descname"><span class="pre">convert_to_txt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Gamma_obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/utils/read.html#convert_to_txt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.utils.read.convert_to_txt" title="Link to this definition">#</a></dt>
-<dd><p>Convert the frequency, x, and Gamma_obs arrays to the suitable input text file for Topophone2.</p>
+<dd><p>Write to a Topophone2 data file.</p>
 <dl class="field-list">
 <dt class="field-odd">Input<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>frequency</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Frequency array [Hz]
-(N_freq,)</p></li>
-<li><p><strong>x</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Receiver positions array
-(N_rec, dims)</p></li>
-<li><p><strong>Gamma_obs</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Array-covariance matrix
-(N_freq, N_rec, N_rec)</p></li>
+<li><p><strong>frequency</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Frequency vector [Hz]
+(frequency,)</p></li>
+<li><p><strong>x</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Receiver position [m]
+(receiver, direction)</p></li>
+<li><p><strong>Gamma_obs</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Sample-covariance matrix
+(frequency, receiver, receiver)</p></li>
 <li><p><strong>output_path</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – Path to the output text file (<code class="docutils literal notranslate"><span class="pre">_topophone2.txt</span></code> is appended)</p></li>
-<li><p><strong>N_obs</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of observations</p></li>
+<li><p><strong>N_obs</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of independent samples</p></li>
 <li><p><strong>out_order</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code> (default <code class="docutils literal notranslate"><span class="pre">'C'</span></code>)) – Order in which Gamma_obs is flattened. <code class="docutils literal notranslate"><span class="pre">'C'</span></code> means receiver q varies fastest,
 then receiver p, then frequency</p></li>
 </ul>
@@ -496,8 +496,8 @@ then receiver p, then frequency</p></li>
 <span class="p">(</span><span class="n">YPSN</span> <span class="n">y1</span><span class="p">,</span><span class="n">y2</span><span class="p">,</span><span class="o">...</span><span class="p">)</span>
 <span class="p">(</span><span class="n">ZPSN</span> <span class="n">z1</span><span class="p">,</span><span class="n">z2</span><span class="p">,</span><span class="o">...</span><span class="p">)</span>
 <span class="n">CO</span><span class="p">,</span><span class="n">QUAD</span>
-<span class="n">re111</span><span class="p">,</span> <span class="n">im111</span>
-<span class="n">re112</span><span class="p">,</span> <span class="n">im112</span>
+<span class="n">Re111</span><span class="p">,</span> <span class="n">Im111</span>
+<span class="n">Re112</span><span class="p">,</span> <span class="n">Im112</span>
 <span class="o">...</span>
 </pre></div>
 </div>

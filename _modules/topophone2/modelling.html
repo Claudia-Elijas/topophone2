@@ -359,10 +359,10 @@
 <span class="sd">    The ``topophone2.modelling`` module provides functionality for array-covariance modelling. It contains the :class:`ArrayCovarianceModel` class to predict the array covariance </span>
 <span class="sd">    for a given geometry and frequency vector recording any combination of energy distributions:</span>
 
-<span class="sd">        - point (plane wave)</span>
+<span class="sd">        - degenerate distribution (plane wave)</span>
 <span class="sd">        - normal distribution</span>
 <span class="sd">        - skew-normal distribution</span>
-<span class="sd">        - spherically-/cylindrically-harmonic field.</span>
+<span class="sd">        - cyclindrical-/spherical-harmonic distribution.</span>
 
 <span class="sd">"""</span>
 
@@ -392,35 +392,36 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">ArrayCovarianceModel</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">'''</span>
 <span class="sd">        Class to model the array covariance for a given geometry</span>
-<span class="sd">        and frequency vector recording any combination of energy distributions: point (plane wave),</span>
-<span class="sd">        normal distribution, skew-normal distribution, and spherically-/cylindrically-harmonic field.</span>
+<span class="sd">        and frequency vector recording any combination of wavefield components with energies distributed</span>
+<span class="sd">        over slowness space: degenerate distribution (plane wave), normal distribution, skew-normal distribution,</span>
+<span class="sd">        angular-harmonic distribution.</span>
 <span class="sd">               </span>
 <span class="sd">        Methods</span>
 <span class="sd">        -------</span>
-<span class="sd">        - :meth:`cf_point` : characteristic function for point (plane wave)</span>
+<span class="sd">        - :meth:`cf_point` : characteristic function for degenerate distribution (plane wave)</span>
 <span class="sd">        - :meth:`cf_normal` : characteristic function for normal distribution</span>
 <span class="sd">        - :meth:`cf_skewnormal` : characteristic function for skew-normal distribution</span>
-<span class="sd">        - :meth:`cf_isonoise` : characteristic function for isotropic noise</span>
-<span class="sd">        - :meth:`cf_noise2D` : characteristic function for 2D noise</span>
-<span class="sd">        - :meth:`cf_noise3D` : characteristic function for 3D noise</span>
+<span class="sd">        - :meth:`cf_isonoise` : characteristic function for isotropic distribution</span>
+<span class="sd">        - :meth:`cf_noise2D` : characteristic function for cylindrical-harmonic distribution</span>
+<span class="sd">        - :meth:`cf_noise3D` : characteristic function for spherical-harmonic distribution</span>
 <span class="sd">        - :meth:`forward` : predict array covariance for a given model vector</span>
 <span class="sd">    </span>
 <span class="sd">        Input</span>
 <span class="sd">        -----</span>
 <span class="sd">        x : ``numpy.ndarray``</span>
-<span class="sd">            Receiver location vectors </span>
+<span class="sd">            Receiver location vectors [m]</span>
 <span class="sd">            (receiver, direction)</span>
 <span class="sd">    </span>
 <span class="sd">        freq : ``numpy.ndarray``</span>
-<span class="sd">            Angular frequency vector</span>
+<span class="sd">            Angular frequency vector [rad.s-1]</span>
 <span class="sd">            (frequency)</span>
 <span class="sd">    </span>
 <span class="sd">        sigs : ``list`` of ``str`` or ``dict``</span>
-<span class="sd">            Signal components to superpose. </span>
+<span class="sd">            Wavefield components to superpose. </span>
 <span class="sd">            </span>
-<span class="sd">            a)  ``str``: density functions ('point', 'normal', 'skewnormal')</span>
+<span class="sd">            a)  ``str``: density distributions ('point', 'normal', 'skewnormal')</span>
 <span class="sd">            </span>
-<span class="sd">            b) ``dict``: harmonic functions for noise field ('isonoise', 'noise2D', 'noise3D') with optional parameters.</span>
+<span class="sd">            b) ``dict``: angular-harmonic distributions ('isonoise', 'noise2D', 'noise3D') with optional parameters.</span>
 <span class="sd">                    </span>
 <span class="sd">                    **sig** : ``str`` (required) - signal type ('isonoise', 'noise2D', 'noise3D')</span>
 <span class="sd">                    </span>
@@ -439,10 +440,10 @@
 <span class="sd">            ('dB' or 'linear') </span>
 
 <span class="sd">        calc_noise_only : ``bool`` (default ``False``)</span>
-<span class="sd">            Include an additional noise-only calculation</span>
+<span class="sd">            Include an additional noise-only (angular-harmonic distributions and/or self-noise) calculation</span>
 <span class="sd">    </span>
 <span class="sd">        custom_cf : ``dict`` (default `{}`)</span>
-<span class="sd">            Custom characteristic functions keyed by signal name,</span>
+<span class="sd">            Custom characteristic functions keyed by component name,</span>
 <span class="sd">            containing tuple of number of parameters and function with arguments:</span>
 
 <span class="sd">                **t**   ``numpy.ndarray`` : Characteristic function argument (frequency, receiver pair, direction)</span>
@@ -463,13 +464,13 @@
 <span class="sd">        Attributes</span>
 <span class="sd">        ----------</span>
 <span class="sd">        dist : ``numpy.ndarray``</span>
-<span class="sd">            Inter-receiver distances (receiver pair)</span>
+<span class="sd">            Inter-receiver distances [m] (receiver pair)</span>
 <span class="sd">    </span>
 <span class="sd">        az : ``numpy.ndarray``</span>
-<span class="sd">            Inter-receiver azimuths (receiver pair)</span>
+<span class="sd">            Inter-receiver azimuths [deg] (receiver pair)</span>
 <span class="sd">    </span>
 <span class="sd">        pol : ``numpy.ndarray``</span>
-<span class="sd">            Inter-receiver polar angles (receiver pair)</span>
+<span class="sd">            Inter-receiver polar angles [deg] (receiver pair)</span>
 <span class="sd">    </span>
 <span class="sd">        t : ``numpy.ndarray``</span>
 <span class="sd">            Characteristic function argument (frequency, receiver pair, direction)</span>
@@ -478,10 +479,10 @@
 <span class="sd">            Units of the signal weights in the model vector</span>
 <span class="sd">    </span>
 <span class="sd">        sigs : ``list``</span>
-<span class="sd">            Signal components to superpose</span>
+<span class="sd">            Wavefield components to superpose</span>
 <span class="sd">    </span>
 <span class="sd">        freq : ``numpy.ndarray``</span>
-<span class="sd">            Angular frequency vector</span>
+<span class="sd">            Angular frequency vector [rad.s-1]</span>
 <span class="sd">    </span>
 <span class="sd">        N_pair : ``int``</span>
 <span class="sd">            Number of receiver pairs</span>
@@ -496,37 +497,37 @@
 <span class="sd">            Number of correlation coefficients (upper triangle of Omega_z)</span>
 <span class="sd">    </span>
 <span class="sd">        order_2D : ``numpy.ndarray``</span>
-<span class="sd">            2D harmonic orders</span>
+<span class="sd">            Cylindrical-harmonic orders</span>
 <span class="sd">    </span>
 <span class="sd">        order_3D : ``numpy.ndarray``</span>
-<span class="sd">            3D harmonic orders</span>
+<span class="sd">            Spherical-harmonic orders</span>
 <span class="sd">    </span>
 <span class="sd">        degree_3D : ``numpy.ndarray``</span>
-<span class="sd">            3D harmonic degrees</span>
+<span class="sd">            Spherical-harmonic degrees</span>
 <span class="sd">    </span>
 <span class="sd">        cos_2D : ``numpy.ndarray``</span>
-<span class="sd">            2D harmonic cosine basis (receiver pair, order)</span>
+<span class="sd">            Cylindrical-harmonic cosine basis (receiver pair, order)</span>
 <span class="sd">    </span>
 <span class="sd">        sin_2D : ``numpy.ndarray``</span>
-<span class="sd">            2D harmonic sine basis (receiver pair, order)</span>
+<span class="sd">            Cylindrical-harmonic sine basis (receiver pair, order)</span>
 <span class="sd">    </span>
 <span class="sd">        cos_3D : ``numpy.ndarray``</span>
-<span class="sd">            3D harmonic cosine basis (receiver pair, order)</span>
+<span class="sd">            Spherical-harmonic cosine basis (receiver pair, order)</span>
 <span class="sd">    </span>
 <span class="sd">        sin_3D : ``numpy.ndarray``</span>
-<span class="sd">            3D harmonic sine basis (receiver pair, order)</span>
+<span class="sd">            Spherical-harmonic sine basis (receiver pair, order)</span>
 <span class="sd">    </span>
 <span class="sd">        e_m : ``numpy.ndarray``</span>
-<span class="sd">            2D harmonic cosine/sine normalisation factors (order)</span>
+<span class="sd">            Cylindrical-harmonic cosine/sine normalisation factors (order)</span>
 <span class="sd">    </span>
 <span class="sd">        i_m : ``numpy.ndarray``</span>
-<span class="sd">            2D harmonic imaginary unit powers (order)</span>
+<span class="sd">            Cylindrical-harmonic imaginary unit powers (order)</span>
 <span class="sd">    </span>
 <span class="sd">        i_n : ``numpy.ndarray``</span>
-<span class="sd">            3D harmonic imaginary unit powers (degree)</span>
+<span class="sd">            Spherical-harmonic imaginary unit powers (degree)</span>
 <span class="sd">    </span>
 <span class="sd">        P_nm : ``numpy.ndarray``</span>
-<span class="sd">            3D harmonic Legendre polynomials (receiver pair, order, degree)</span>
+<span class="sd">            Spherical-harmonic Legendre polynomials (receiver pair, order, degree)</span>
 <span class="sd">    </span>
 <span class="sd">        N_tri : ``int``</span>
 <span class="sd">            Number of triangular (m &lt;= n) index pairs</span>
@@ -710,7 +711,7 @@
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 
-<span class="sd">        Function that returns the characteristic function for a point (plane wave) distribution.</span>
+<span class="sd">        Calculate the characteristic function (and partial derivatives) for a degenerate distribution (plane wave).</span>
 
 <span class="sd">        Input</span>
 <span class="sd">        -----</span>
@@ -733,21 +734,14 @@
 <span class="sd">            - **xi** : (``numpy.ndarray``) -- (model, frequency, receiver pair, direction)</span>
 
 <span class="sd">        </span>
-<span class="sd">        The characteristic function for a point (plane wave) distribution is given by</span>
+<span class="sd">        The characteristic function for a degenerate distribution is given by</span>
 
 <span class="sd">        .. math::</span>
 <span class="sd">                </span>
-<span class="sd">                    \varphi_\mathbf{s} \left(\mathbf{t} ; \mathbf{\xi}\right) = \exp \left[i \mathbf{t}^T \mathbf{\xi}\right]</span>
+<span class="sd">                    \varphi_\mathbf{s} \left(\mathbf{t} ; \bm{\xi}\right) = \exp \left[\mathrm{i} \mathbf{t}^T \bm{\xi}\right]</span>
 
-<span class="sd">        where :math:`\mathbf{t}` is the characteristic function argument (frequency, receiver pair, direction) and :math:`\mathbf{\xi}` is the location vector (slowness).</span>
-<span class="sd">                </span>
-<span class="sd">        The gradients of the characteristic function are given by the following expression:</span>
-
-<span class="sd">        .. math::</span>
-
-<span class="sd">                    \frac{\partial \varphi_\mathbf{s}}{\partial \xi_i} = i t_i \varphi_\mathbf{s}</span>
+<span class="sd">        where :math:`\mathbf{t}` is the characteristic function argument and :math:`\bm{\xi}` is the location vector.</span>
 <span class="sd">        </span>
-<span class="sd">    </span>
 <span class="sd">        """</span>
 
         <span class="c1">#__ np.einsum subscripts:  </span>
@@ -781,7 +775,7 @@
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 
-<span class="sd">        Function that returns the characteristic function for a normal distribution.</span>
+<span class="sd">        Calculate the characteristic function (and partial derivatives) of a normal distribution.</span>
 <span class="sd">        </span>
 <span class="sd">        Input</span>
 <span class="sd">        -----</span>
@@ -817,33 +811,17 @@
 <span class="sd">                    </span>
 <span class="sd">        Note</span>
 <span class="sd">        ----</span>
-<span class="sd">        The correlation matrix is already flattened to upper triangle of ``Omega_z``</span>
+<span class="sd">        The correlation matrix is already flattened to upper triangle of :math:`\bm{\Omega}_z`</span>
 
 
 <span class="sd">        The characteristic function for a normal distribution is given by</span>
 
 <span class="sd">        .. math::</span>
 
-<span class="sd">                \varphi_\mathbf{s} \left(\mathbf{t} ; \mathbf{\xi}, \Omega\right) = \exp \left[i \mathbf{t}^T \mathbf{\xi} - \frac{1}{2} \mathbf{t}^T \Omega \mathbf{t}\right]</span>
+<span class="sd">                \varphi_\mathbf{s} \left(\mathbf{t} ; \bm{\xi}, \bm{\Omega}\right) = \exp \left[\mathrm{i} \mathbf{t}^T \bm{\xi} - \frac{1}{2} \mathbf{t}^T \bm{\Omega} \mathbf{t}\right]</span>
 
-<span class="sd">                \Omega = W \Omega_z W</span>
-
-<span class="sd">                W = \mathrm{diag} \left(\mathbf{\sigma}\right)</span>
-
-<span class="sd">                \Omega_z = \left\|\rho_{ij}\right\|</span>
-
-<span class="sd">        where :math:`\mathbf{t}` is the characteristic function argument (frequency, receiver pair, direction), :math:`\mathbf{\xi}` is the location vector (slowness), :math:`\Omega` is the covariance matrix, :math:`W` is the diagonal scale matrix, and :math:`\Omega_z` is the correlation matrix.</span>
-<span class="sd">        The gradients of the characteristic function are given by the following expressions:</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">                </span>
-<span class="sd">                \frac{\partial \varphi_\mathbf{s}}{\partial \xi_i} = i t_i \varphi_\mathbf{s}</span>
-
-<span class="sd">                \frac{\partial \varphi_\mathbf{s}}{\partial \sigma_i} = - \sum_j rho_{ij} \sigma_j t_i t_j \varphi_\mathbf{s}</span>
-
-<span class="sd">                \frac{\partial \varphi_\mathbf{s}}{\partial \rho_{ij}} = - \sigma_i \sigma_j t_i t_j \varphi_\mathbf{s}</span>
-
-<span class="sd">        where</span>
+<span class="sd">        where :math:`\mathbf{t}` is the characteristic function argument, :math:`\bm{\xi}` is the location vector, and the scale matrix :math:`\bm{\Omega} = \mathbf{W} \bm{\Omega}_z \mathbf{W}`</span>
+<span class="sd">        is built from the scale vector :math:`\bm{\sigma}` (:math:`\mathbf{W} = \mathrm{diag} \left(\bm{\sigma}\right)`) and the correlation matrix :math:`\bm{\Omega}_z`.</span>
 
 <span class="sd">        """</span>
 
@@ -892,7 +870,7 @@
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        </span>
-<span class="sd">        Function that returns the characteristic function for a skew-normal distribution.</span>
+<span class="sd">        Calculate the characteristic function (and partial derivatives) for a skew-normal distribution.</span>
 
 <span class="sd">        Input</span>
 <span class="sd">        -----</span>
@@ -935,43 +913,18 @@
 
 <span class="sd">        Note</span>
 <span class="sd">        ----</span>
-<span class="sd">        The correlation matrix is already flattened to upper triangle of ``Omega_z``.</span>
+<span class="sd">        The correlation matrix is already flattened to upper triangle of :math:`\bm{\Omega}_z` ``Omega_z``.</span>
 
 
 <span class="sd">        The characteristic function for a skew-normal distribution is given by</span>
 
 <span class="sd">        .. math::</span>
 
-<span class="sd">            \varphi_\mathbf{s} \left(\mathbf{t} ; \mathbf{\xi}, \Omega, \mathbf{\alpha}\right) = \exp \left[i \mathbf{t}^T \mathbf{\xi} - \frac{1}{2} \mathbf{t}^T \Omega \mathbf{t}\right] \left[1 + i \erfi \left(\frac{\sqrt{2}}{2} \mathbf{\delta}^T W \mathbf{t}\right)\right]</span>
+<span class="sd">            \varphi_\mathbf{s} \left(\mathbf{t} ; \bm{\xi}, \bm{\Omega}, \bm{\alpha}\right) = \exp \left[\mathrm{i} \mathbf{t}^T \bm{\xi} - \frac{1}{2} \mathbf{t}^T \bm{\Omega} \mathbf{t}\right] \left[1 + \mathrm{i} \mathrm{erfi} \left(\frac{\sqrt{2}}{2} \bm{\delta}^T \mathbf{W} \mathbf{t}\right)\right]</span>
 
-<span class="sd">            \Omega = W \Omega_z W</span>
-
-<span class="sd">            W = \mathrm{diag} \left(\mathbf{\sigma}\right)</span>
-
-<span class="sd">            \Omega_z = \left\|\rho_{ij}\right\|</span>
-
-<span class="sd">            \mathbf{\delta} = \frac{\Omega_z \mathbf{\alpha}}{\sqrt{1 + \mathbf{\alpha}^T \Omega_z \mathbf{\alpha}}}</span>
-
-
-<span class="sd">        where :math:`\mathbf{t}` is the characteristic function argument (frequency, receiver pair, direction), :math:`\mathbf{\xi}` is the location vector (slowness), :math:`\Omega` is the covariance matrix, :math:`W` is the diagonal scale matrix, :math:`\Omega_z` is the correlation matrix, and :math:`\mathbf{\delta}` is the skewness-direction vector.</span>
-<span class="sd">        The gradients of the characteristic function are given by the following expressions:</span>
-
-<span class="sd">        .. math::</span>
-
-<span class="sd">            \frac{\partial \varphi_\mathbf{s}}{\partial \xi_i} = i t_i \varphi_\mathbf{s}</span>
-<span class="sd">            </span>
-<span class="sd">            \frac{\partial \varphi_\mathbf{s}}{\partial \sigma_i} = - \sum_j \rho_{ij} \sigma_j t_i t_j \varphi_\mathbf{s} + \sqrt{\frac{2}{\pi}} i \exp \left[u^2 + L\right] \delta_i t_i</span>
-
-<span class="sd">            u = \frac{\sqrt{2}}{2} \mathbf{\delta}^T W \mathbf{t}</span>
-
-<span class="sd">            L = i \mathbf{t}^T \mathbf{\xi} - \frac{1}{2} \mathbf{t}^T \Omega \mathbf{t}</span>
-<span class="sd">            </span>
-<span class="sd">            \frac{\partial \varphi_\mathbf{s}}{\partial \rho_{ij}} = - \sigma_i \sigma_j t_i t_j \varphi_\mathbf{s} + \sqrt{\frac{2}{\pi}} i N \exp \left[u^2 + L\right] \left(\sigma_i t_i \alpha_j + \sigma_j t_j \alpha_i - N^2 \alpha_i \alpha_j \sum_{k, l} \sigma_k t_k \rho_{kl} \alpha_l\right)</span>
-<span class="sd">            </span>
-<span class="sd">            N = \left(1 + \mathbf{\alpha}^T \Omega_z \mathbf{\alpha}\right)^\tfrac{-1}{2}</span>
-
-<span class="sd">            \frac{\partial \varphi_\mathbf{s}}{\partial \alpha_i} = \sqrt{\frac{2}{\pi}} i \exp \left[u^2 + L\right] \sum_{j, k, l} \sigma_j t_j \left(\rho_{ji} N - \rho_{il} \alpha_l \rho_{jk} \alpha_k N^3\right)</span>
-<span class="sd">            </span>
+<span class="sd">        where :math:`\mathbf{t}` is the characteristic function argument, :math:`\bm{\xi}` is the location vector, the scale matrix :math:`\bm{\Omega} = \mathbf{W} \bm{\Omega} \mathbf{W}`</span>
+<span class="sd">        is built from the scale vector :math:`\bm{\sigma}` (:math:`\mathbf{W} = \mathrm{diag} \left(\bm{\sigma}\right)`) and the correlation matrix :math:`\bm{\Omega}_z`, and the skewness-direction vector</span>
+<span class="sd">        :math:`\bm{\delta} = \bm{\Omega_z} \bm{\alpha} / \sqrt{1 + \bm{\alpha}^T \bm{\Omega_z} \bm{\alpha}}` is built from the shape vector :math:`\bm{\alpha}`.    </span>
 <span class="sd">        </span>
 <span class="sd">        """</span>
 
@@ -1041,7 +994,7 @@
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">""" </span>
 <span class="sd">        </span>
-<span class="sd">        Function that returns the characteristic function for an isotropic noise field.</span>
+<span class="sd">        Calculate the characteristic function (and partial derivatives) for an isotropic distribution.</span>
 
 <span class="sd">        Input</span>
 <span class="sd">        -----</span>
@@ -1070,26 +1023,18 @@
 <span class="sd">            - **s** : (``numpy.ndarray``) -- (model, frequency, receiver pair)</span>
 <span class="sd">            </span>
 
-<span class="sd">        The characteristic function for an isotropic noise field is given by</span>
+<span class="sd">        The characteristic function for an isotropic distribution is given by</span>
 
 <span class="sd">        .. math::</span>
 
-<span class="sd">            \varphi_{\mathbf{s}}(\mathbf{t};S_{tr}) = </span>
+<span class="sd">            \varphi_{\mathbf{s}} \left(\mathbf{t}; s\right) = </span>
 <span class="sd">            \begin{cases}</span>
-<span class="sd">                J_0\left(\ S_{tr} |\mathbf{t}\| \right), &amp; \text{2D (cylindrical)} \\</span>
-<span class="sd">                j_0\left(\ S_{tr} |\mathbf{t}\| \right), &amp; \text{3D (spherical)} </span>
+<span class="sd">                J_0 \left(s \left|\mathbf{t}\right|\right), &amp; \text{Cylindrical-harmonic} \\</span>
+<span class="sd">                j_0 \left(s \left|\mathbf{t}\right|\right), &amp; \text{Spherical-harmonic} </span>
 <span class="sd">            \end{cases}</span>
 
-<span class="sd">        where :math:`J_0` is the Bessel function of order 0 and :math:`j_0` is the spherical Bessel function of order 0.</span>
-<span class="sd">        The gradients of the characteristic function are given by the following expressions:</span>
-<span class="sd">        </span>
-<span class="sd">        .. math::</span>
-
-<span class="sd">            \frac{\partial \varphi_{\mathbf{s}}}{\partial S_{tr}} = </span>
-<span class="sd">            \begin{cases}</span>
-<span class="sd">                -|\mathbf{t}\| J_1 \left(\ S_{tr} |\mathbf{t}\| \right), &amp; \text{2D (cylindrical)} \\</span>
-<span class="sd">                -|\mathbf{t}\| j_1 \left(\ S_{tr} |\mathbf{t}\| \right), &amp; \text{3D (spherical)}</span>
-<span class="sd">            \end{cases}</span>
+<span class="sd">        where :math:`\mathbf{t}` is the characteristic function argument, :math:`J_0` is the order-0 cylindrical Bessel function of the first kind and :math:`j_0` is the order-0 spherical Bessel function of the first kind,</span>
+<span class="sd">        and :math:`s` is the local apparent slowness (cylindrical-harmonic) or the absolute slowness (spherical-harmonic).</span>
 
 <span class="sd">        """</span>
 
@@ -1132,7 +1077,7 @@
 
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 
-<span class="sd">        Function that returns the characteristic function for a 2D isotropic noise field.</span>
+<span class="sd">        Calculate the characteristic function (and partial derivatives) of a cylindrical-harmonic distribution.</span>
 
 <span class="sd">        Input</span>
 <span class="sd">        -----</span>
@@ -1163,40 +1108,16 @@
 <span class="sd">            - **s** : (``numpy.ndarray``) -- (model, frequency, receiver pair)</span>
 
 <span class="sd">        </span>
-<span class="sd">        The characteristic function for a 2D isotropic noise field is given by</span>
+<span class="sd">        The characteristic function for a cylindrical-harmonic distribution with maximum order :math:`M` is given by</span>
 <span class="sd">        </span>
 <span class="sd">        .. math::</span>
 
-<span class="sd">            \varphi_{\mathbf{s}}(\mathbf{t}, \phi; S_{tr}, \mathbf{b}, \mathbf{b}) = \sum_{m=0}^{M} i^m \epsilon_m C_m (\phi; a_m , b_m) J_m(S_{tr} |\mathbf{t}\|)</span>
+<span class="sd">            \varphi_{\mathbf{s}} \left(\mathbf{t}, \phi; s, \mathbf{a}, \mathbf{b}\right) = \sum_{m=0}^{M} \mathrm{i}^m \epsilon_m C_m \left(\phi; a_m , b_m\right) J_m \left(s \left|\mathbf{t}\right|\right)</span>
 
-<span class="sd">        where :math:`C_m = a_m \cos(m \phi) + b_m \sin(m \phi)` and :math:`J_m` is the Bessel function of order :math:`m`.</span>
-<span class="sd">        The gradients of the characteristic function are given by the following expressions:</span>
-
-<span class="sd">        .. math::</span>
-
-<span class="sd">            \frac{\partial \varphi_{\mathbf{s}}}{\partial a_m} = i^m \epsilon_m \cos(m \phi) J_m(S_{tr} |\mathbf{t}\|)</span>
+<span class="sd">        where :math:`\mathbf{t}` is the characteristic function argument, :math:`\phi` is the azimuth (anticlockwise from X),</span>
+<span class="sd">        the harmonic basis is :math:`C_m = a_m \cos(m \phi) + b_m \sin(m \phi)`, and :math:`J_m` is the :math:`m`-order cylindrical Bessel function of the first kind.</span>
 <span class="sd">            </span>
-<span class="sd">        </span>
-<span class="sd">        .. math::</span>
-
-<span class="sd">            \frac{\partial \varphi_{\mathbf{s}}}{\partial b_m} = i^m \epsilon_m \sin(m \phi) J_m(S_{tr} |\mathbf{t}\|)</span>
-
-
-<span class="sd">        .. math::</span>
-<span class="sd">        </span>
-<span class="sd">            \frac{\partial \varphi_{\mathbf{s}}}{\partial S_{tr}} = - \sum_{m=0}^{M} i^m \epsilon_m C_m (\phi; a_m , b_m) S_{tr} J'_m(S_{tr} |\mathbf{t}\|)</span>
-
-<span class="sd">        where </span>
-<span class="sd">        </span>
-<span class="sd">        .. math::</span>
-
-<span class="sd">            \mathbf{\epsilon} = (1, 2, \ldots, 2) </span>
-
-<span class="sd">            C_m = a_m \cos(m \phi) + b_m \sin(m \phi)</span>
-
-<span class="sd">            J_m '(S_{tr} |\mathbf{t}\|) = \frac{1}{2} \left[ J_{m-1}(S_{tr} |\mathbf{t}\|) - J_{m+1}(S_{tr} |\mathbf{t}\|) \right]</span>
-<span class="sd">            </span>
-<span class="sd">            """</span>    
+<span class="sd">        """</span>    
 
         <span class="c1">#__ np.einsum subscripts:</span>
         <span class="c1">#__ [i] model</span>
@@ -1251,7 +1172,7 @@
 
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        </span>
-<span class="sd">        Function that returns the characteristic function for a 3D isotropic noise field.</span>
+<span class="sd">        Calculate the characteristic function (and partial derivatives) of a spherical-harmonic distribution.</span>
 
 <span class="sd">        Input</span>
 <span class="sd">        -----</span>
@@ -1278,48 +1199,21 @@
 
 <span class="sd">            - **s** : (``numpy.ndarray``) -- (model, frequency, receiver pair)</span>
 
+<span class="sd">            </span>
 <span class="sd">        Note</span>
 <span class="sd">        ----</span>
 <span class="sd">        **a** and **b** are already flattened to :math:`m \leq n` triangle.</span>
 
 
-
-<span class="sd">        The characteristic function for a 3D isotropic noise field is given by</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">        </span>
-<span class="sd">            \varphi_{\mathbf{s}}(\mathbf{t}, \phi, \theta; S_{tr}, A, B) = \sum_{n=0}^{N} \sum_{m=0}^{n} i^n C_{nm} (\phi ; A, B) P_n^m(\cos(\theta)) j_n(S_{tr} |\mathbf{t}\|)</span>
-
-<span class="sd">        where :math:`P_n^m` is the associated Legendre polynomial of order :math:`m` and degree :math:`n`, and :math:`j_n` is the spherical Bessel function of order :math:`n`.</span>
-<span class="sd">        The azimuthal angle :math:`\phi` is measured from the x-axis in the xy-plane, and the polar angle :math:`\theta` is measured from the z-axis. </span>
-<span class="sd">        The coefficients :math:`A_n^m` and :math:`B_n^m` are the cosine and sine components of the harmonic expansion, respectively.</span>
-<span class="sd">        The harmonic coefficient :math:`C_n^m` is given by</span>
+<span class="sd">        The characteristic function for a spherical-harmonic distribution of maximum order :math:`N` is given by</span>
 
 <span class="sd">        .. math::</span>
 <span class="sd">        </span>
-<span class="sd">            C_n^m = A_n^m \cos(m \phi) + B_n^m \sin(m \phi)</span>
+<span class="sd">            \varphi_{\mathbf{s}} \left(\mathbf{t}, \phi, \theta; s, \mathbf{A}, \mathbf{B}\right) = \sum_{n=0}^{N} \sum_{m=0}^{n} \mathrm{i}^n C_{nm} \left(\phi; \mathbf{A}, \mathbf{B}\right) P_n^m \left(\cos \left(\theta\right)\right) j_n \left(s \left|\mathbf{t}\right|\right)</span>
 
-<span class="sd">        </span>
-<span class="sd">        The derivatives of the characteristic function with respect to the model parameters are:</span>
-<span class="sd">            </span>
-<span class="sd">        .. math:: </span>
-<span class="sd">        </span>
-<span class="sd">            \frac{\partial \varphi_{\mathbf{s}}}{\partial S_{tr}} = \sum_{n=0}^{N} \sum_{m=0}^{n} i^n C_n^m P_n^m S_{tr} j'_n(S_{tr} |\mathbf{t}\|)</span>
-<span class="sd">       </span>
-<span class="sd">        where :math:`j'_n` is the derivative of the spherical Bessel function of order :math:`n` with respect to its argument, and is given by</span>
-<span class="sd">        </span>
-<span class="sd">        .. math::</span>
-<span class="sd">        </span>
-<span class="sd">            j'_n(S_{tr} |\mathbf{t}\|) ) = \frac{n j_{n-1}(S_{tr} |\mathbf{t}\|) - (n+1) j_{n+1}(S_{tr} |\mathbf{t}\|)}{2n + 1}</span>
-<span class="sd">             </span>
-<span class="sd">        .. math::   </span>
-<span class="sd">        </span>
-<span class="sd">            \frac{\partial \varphi_{\mathbf{s}}}{\partial A_n^m} = i^n \cos(m \phi) P_n^m j_n(S_{tr} |\mathbf{t}\|)</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            </span>
-<span class="sd">            \frac{\partial \varphi_{\mathbf{s}}}{\partial B_n^m} = i^n \sin(m \phi) P_n^m j_n(S_{tr} |\mathbf{t}\|)</span>
-<span class="sd">            </span>
+<span class="sd">        where :math:`\mathbf{t}` is the characteristic function argument, :math:`\phi` is the azimuth (anticlockwise from X), :math:`\theta` is the polar angle (wrt. -Z),</span>
+<span class="sd">        the cylindrical-harmonic basis is :math:`C_n^m = A_n^m \cos \left(m \phi\right) + B_n^m \sin \left(m \phi\right)`, :math:`P_n^m` is the associated Legendre polynomial of order :math:`m` and degree :math:`n`,</span>
+<span class="sd">        and :math:`j_n` is the :math:`n`-order spherical Bessel function of the first kind.</span>
 
 <span class="sd">        """</span>
 
@@ -1588,8 +1482,7 @@
 <span class="w">       </span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 
-<span class="sd">        Compute the covariance and its gradient with respect to the model parameters.</span>
-
+<span class="sd">        Compute the array covariance and its gradient with respect to the model parameters.</span>
 
 <span class="sd">        Input</span>
 <span class="sd">        -----</span>
@@ -1621,7 +1514,6 @@
 <span class="sd">        </span>
 <span class="sd">        Note</span>
 <span class="sd">        ----</span>
-<span class="sd">        </span>
 <span class="sd">        If requested noise-only calculation (``calc_noise_only`` is ``True``), **cov_noise** and **dcov_noise** will be returned in addition to **cov** and **dcov**. </span>
 
 <span class="sd">        """</span>

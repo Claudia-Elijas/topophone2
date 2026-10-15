@@ -356,7 +356,7 @@
 <span></span><span class="sd">"""</span>
 <span class="sd">.. container:: module-intro</span>
 
-<span class="sd">    The ``topophone2.utils.read`` module provides functions to read the data and parese the configuration file.</span>
+<span class="sd">    The ``topophone2.utils.read`` module provides functions to read the data and parse the configuration file.</span>
 
 <span class="sd">    The main function is :func:`parse_config`, which reads the configuration file and returns a dictionary of variables.</span>
 
@@ -586,7 +586,7 @@
 <a class="viewcode-back" href="../../../topophone2.utils.read.html#topophone2.utils.read.read_txt">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">read_txt</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">'C'</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""</span>
-<span class="sd">    Read the frequency, x, and Gamma_obs arrays from a text file.</span>
+<span class="sd">    Read a Topophone2 data file.</span>
 
 <span class="sd">    Input</span>
 <span class="sd">    -----</span>
@@ -603,19 +603,19 @@
 <span class="sd">    Output</span>
 <span class="sd">    ------</span>
 <span class="sd">    frequency : ``numpy.ndarray``</span>
-<span class="sd">        Frequency array</span>
-<span class="sd">        (N_freq,)</span>
+<span class="sd">        Frequency vector [Hz]</span>
+<span class="sd">        (frequency,)</span>
 
 <span class="sd">    x : ``numpy.ndarray``</span>
-<span class="sd">        Receiver positions array</span>
-<span class="sd">        (N_rec, dims)</span>
+<span class="sd">        Receiver positions [m]</span>
+<span class="sd">        (receiver, direction)</span>
 
 <span class="sd">    Gamma_obs : ``numpy.ndarray``</span>
-<span class="sd">        Transfer function array</span>
-<span class="sd">        (N_freq, N_rec, N_rec)</span>
+<span class="sd">        Sample-covariance matrix</span>
+<span class="sd">        (frequency, receiver, receiver)</span>
 
 <span class="sd">    N_obs : ``int``</span>
-<span class="sd">        Number of observations</span>
+<span class="sd">        Number of independent samples</span>
 <span class="sd">    """</span>
 
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Reading data from: </span><span class="si">{</span><span class="n">input_file</span><span class="si">}</span><span class="s2"> ............................</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
@@ -708,27 +708,27 @@
 <a class="viewcode-back" href="../../../topophone2.utils.read.html#topophone2.utils.read.convert_to_txt">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">convert_to_txt</span><span class="p">(</span><span class="n">frequency</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">Gamma_obs</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">N_obs</span><span class="p">,</span> <span class="n">out_order</span><span class="o">=</span><span class="s1">'C'</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""</span>
-<span class="sd">    Convert the frequency, x, and Gamma_obs arrays to the suitable input text file for Topophone2.</span>
+<span class="sd">    Write to a Topophone2 data file.</span>
 
 <span class="sd">    Input</span>
 <span class="sd">    -----</span>
 <span class="sd">    frequency : ``numpy.ndarray``</span>
-<span class="sd">        Frequency array [Hz]</span>
-<span class="sd">        (N_freq,)</span>
+<span class="sd">        Frequency vector [Hz]</span>
+<span class="sd">        (frequency,)</span>
 
 <span class="sd">    x : ``numpy.ndarray``</span>
-<span class="sd">        Receiver positions array</span>
-<span class="sd">        (N_rec, dims)</span>
+<span class="sd">        Receiver position [m]</span>
+<span class="sd">        (receiver, direction)</span>
 
 <span class="sd">    Gamma_obs : ``numpy.ndarray``</span>
-<span class="sd">        Array-covariance matrix</span>
-<span class="sd">        (N_freq, N_rec, N_rec)</span>
+<span class="sd">        Sample-covariance matrix</span>
+<span class="sd">        (frequency, receiver, receiver)</span>
 
 <span class="sd">    output_path : ``str``</span>
 <span class="sd">        Path to the output text file (``_topophone2.txt`` is appended)</span>
 
 <span class="sd">    N_obs : ``int``</span>
-<span class="sd">        Number of observations</span>
+<span class="sd">        Number of independent samples</span>
 
 <span class="sd">    out_order : ``str`` (default ``'C'``)</span>
 <span class="sd">        Order in which Gamma_obs is flattened. ``'C'`` means receiver q varies fastest,</span>
@@ -746,8 +746,8 @@
 <span class="sd">            (YPSN y1,y2,...)</span>
 <span class="sd">            (ZPSN z1,z2,...)</span>
 <span class="sd">            CO,QUAD</span>
-<span class="sd">            re111, im111</span>
-<span class="sd">            re112, im112</span>
+<span class="sd">            Re111, Im111</span>
+<span class="sd">            Re112, Im112</span>
 <span class="sd">            ...</span>
 <span class="sd">    """</span>
 
