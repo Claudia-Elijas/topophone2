@@ -72,6 +72,20 @@ napoleon_custom_sections = [
 
 nbsphinx_execute = 'never'
 
+# Static gallery thumbnails for notebooks that have no plotted figures (the
+# others use their last figure automatically). Keys are notebook paths relative
+# to this folder, without ".ipynb"; values are image paths relative to this
+# folder.
+nbsphinx_thumbnails = {
+    'examples/example_1/example_1.1': '_static/thumbnails/example_1.1.png',
+    'examples/example_1/example_1.2': '_static/thumbnails/example_1.2.png',
+    'examples/example_1/example_1.3': '_static/thumbnails/example_1.3.png',
+    'examples/example_2/example_2.1': '_static/thumbnails/example_2.1.png',
+    'examples/example_2/example_2.2': '_static/thumbnails/example_2.2.png',
+    'examples/example_3/example_3.1': '_static/thumbnails/example_3.1.png',
+    'examples/example_3/example_3.2': '_static/thumbnails/example_3.2.png',
+}
+
 
 
 # -- Options for HTML output -------------------------------------------------
