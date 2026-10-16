@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>topophone2.utils.dsp &#8212; topophone2</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=7e27919d" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/topophone2/utils/dsp';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/home.svg" class="logo__image only-light" alt="topophone2 home page"/>
+    <img src="../../../_static/home.svg" class="logo__image only-dark pst-js-only" alt="topophone2 home page"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../setup.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../documentation.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../license.html">
+    License
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../setup.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../documentation.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../license.html">
+    License
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">topophone2.utils.dsp</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for topophone2.utils.dsp</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""</span>
+<span class="sd">.. container:: module-intro</span>
+
+<span class="sd">    The ``topophone2.utils.dsp`` module provides utilities for digital signal processing.</span>
+<span class="sd">"""</span>
+
+<span class="c1">#________ IMPORT ________#</span>
+
+<span class="c1">#__ Numerical __</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1">#__ Signal processing __</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.fft</span><span class="w"> </span><span class="kn">import</span> <span class="n">next_fast_len</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.signal.windows</span><span class="w"> </span><span class="kn">import</span> <span class="n">tukey</span><span class="p">,</span> <span class="n">dpss</span>
+
+<span class="c1">#________ DOMAIN TRANSFORMS ________#</span>
+
+<span class="c1">#__ Time -&gt; Frequency __</span>
+<div class="viewcode-block" id="rfft">
+<a class="viewcode-back" href="../../../topophone2.utils.dsp.html#topophone2.utils.dsp.rfft">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">rfft</span><span class="p">(</span>
+    <span class="n">u_t</span>   <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">dt</span>    <span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">nfft</span>  <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">alpha</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Transform real time series to frequency domain (engineering phase convention).</span>
+
+<span class="sd">    Input</span>
+<span class="sd">    -----</span>
+<span class="sd">    u_t : ``numpy.ndarray``</span>
+<span class="sd">        Time series</span>
+<span class="sd">        (..., time)</span>
+
+<span class="sd">    dt : ``float``</span>
+<span class="sd">        Sampling interval [s]</span>
+
+<span class="sd">    nfft : ``int`` (optional)</span>
+<span class="sd">        Number of points in FFT</span>
+
+<span class="sd">    alpha : ``float`` (optional)</span>
+<span class="sd">        Pre-FFT taper fraction</span>
+
+<span class="sd">    Output</span>
+<span class="sd">    ------</span>
+<span class="sd">    u_f : ``numpy.ndarray``</span>
+<span class="sd">        Complex spectrum</span>
+<span class="sd">        (..., frequency)</span>
+
+<span class="sd">    f : ``numpy.ndarray``</span>
+<span class="sd">        Frequency vector [Hz]</span>
+<span class="sd">        (frequency,)</span>
+
+<span class="sd">    nfft : ``int``</span>
+<span class="sd">        Number of points in FFT</span>
+<span class="sd">    """</span>
+
+    <span class="c1">#__ Calculate number of points in FFT __</span>
+    <span class="n">npts</span> <span class="o">=</span> <span class="n">u_t</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nfft</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">nfft</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">next_fast_len</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="o">-</span><span class="n">npts</span><span class="o">//</span><span class="mi">2</span><span class="p">),</span> <span class="n">real</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#__ Apply taper __</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">alpha</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span> <span class="n">u_t</span> <span class="o">=</span> <span class="n">u_t</span> <span class="o">*</span> <span class="n">tukey</span><span class="p">(</span><span class="n">npts</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+
+    <span class="c1">#__ Perform FFT __</span>
+    <span class="n">u_f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="n">u_t</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">nfft</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1">#__ Calculate frequency vector __</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfftfreq</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">nfft</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+
+    <span class="c1">#__ Return output __</span>
+    <span class="k">return</span> <span class="n">u_f</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">nfft</span></div>
+
+
+<span class="c1">#__ Frequency -&gt; Time __</span>
+<div class="viewcode-block" id="irfft">
+<a class="viewcode-back" href="../../../topophone2.utils.dsp.html#topophone2.utils.dsp.irfft">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">irfft</span><span class="p">(</span>
+    <span class="n">u_f</span>  <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">dt</span>   <span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">nfft</span> <span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">npts</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Transform complex spectrum to real time series (engineering phase convention).</span>
+
+<span class="sd">    Input</span>
+<span class="sd">    -----</span>
+<span class="sd">    u_f : ``numpy.ndarray``</span>
+<span class="sd">        Complex spectrum</span>
+<span class="sd">        (..., frequency)</span>
+
+<span class="sd">    dt : ``float``</span>
+<span class="sd">        Sampling interval [s]</span>
+
+<span class="sd">    nfft : ``int``</span>
+<span class="sd">        Number of points in FFT</span>
+
+<span class="sd">    npts : ``int`` (optional)</span>
+<span class="sd">        Number of points in output time series</span>
+
+<span class="sd">    Output</span>
+<span class="sd">    ------</span>
+<span class="sd">    u_t : ``numpy.ndarray``</span>
+<span class="sd">        Time series</span>
+<span class="sd">        (..., time)</span>
+
+<span class="sd">    t : ``numpy.ndarray``</span>
+<span class="sd">        Time vector [s]</span>
+<span class="sd">        (time,)</span>
+
+<span class="sd">    npts : ``int``</span>
+<span class="sd">        Number of points in output time series</span>
+<span class="sd">    """</span>
+
+    <span class="c1">#__ Perform inverse FFT __</span>
+    <span class="n">u_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">irfft</span><span class="p">(</span><span class="n">u_f</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">nfft</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1">#__ Truncate padding __</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">npts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span> <span class="n">u_t</span> <span class="o">=</span> <span class="n">u_t</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="n">npts</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span> <span class="n">npts</span> <span class="o">=</span> <span class="n">nfft</span>
+
+    <span class="c1">#__ Calculate time vector [s] __</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">npts</span><span class="p">)</span> <span class="o">*</span> <span class="n">dt</span>
+
+    <span class="c1">#__ Return output __</span>
+    <span class="k">return</span> <span class="n">u_t</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">npts</span></div>
+
+
+<span class="c1">#________ BEAMFORMING ________#</span>
+
+<span class="c1">#__ Calculate time shifts __</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_calc_shift</span><span class="p">(</span>
+    <span class="n">x</span>        <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">p_bounds</span> <span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+    <span class="n">dp</span>       <span class="p">:</span> <span class="nb">float</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Calculate the time shift for an ensemble of slowness vectors.</span>
+
+<span class="sd">    Input</span>
+<span class="sd">    -----</span>
+<span class="sd">    x : ``numpy.ndarray``</span>
+<span class="sd">        Receiver location [m]</span>
+<span class="sd">        (receiver, direction)</span>
+
+<span class="sd">    p_bounds : ``list``</span>
+<span class="sd">        (Minimum, maximum) slowness to search in each direction [s.m-1]</span>
+
+<span class="sd">    dp : ``float``</span>
+<span class="sd">        Slowness search interval [s.m-1]</span>
+
+<span class="sd">    Output</span>
+<span class="sd">    ------</span>
+<span class="sd">    shift : ``numpy.ndarray``</span>
+<span class="sd">        Time shifts [s]</span>
+<span class="sd">        (slowness, receiver)</span>
+
+<span class="sd">    p : ``numpy.ndarray``</span>
+<span class="sd">        Slowness vectors [s.m-1]</span>
+<span class="sd">        (slowness, direction)</span>
+<span class="sd">    """</span>
+
+    <span class="c1">#__ Construct slowness vectors __</span>
+    <span class="n">p_cube</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="o">*</span><span class="p">[</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">p_min</span><span class="p">,</span> <span class="n">p_max</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">p_max</span><span class="o">-</span><span class="n">p_min</span><span class="p">)</span><span class="o">/</span><span class="n">dp</span><span class="p">))</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">p_min</span><span class="p">,</span><span class="n">p_max</span><span class="p">)</span> <span class="ow">in</span> <span class="n">p_bounds</span>
+    <span class="p">],</span> <span class="n">indexing</span><span class="o">=</span><span class="s1">'ij'</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">p_i</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="k">for</span> <span class="n">p_i</span> <span class="ow">in</span> <span class="n">p_cube</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="c1">#__ Calculate travel times __</span>
+    <span class="n">shift</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'ik,jk-&gt;ij'</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+    <span class="c1">#__ Return output __</span>
+    <span class="k">return</span> <span class="n">shift</span><span class="p">,</span> <span class="n">p</span>
+
+<span class="c1">#__ Apply time shift __</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_apply_shift</span><span class="p">(</span>
+    <span class="n">u_f</span>         <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">f</span>           <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">shift</span>       <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">dt</span>          <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">nfft</span>        <span class="p">:</span> <span class="nb">int</span>   <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">npts</span>        <span class="p">:</span> <span class="nb">int</span>   <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">return_time</span> <span class="p">:</span> <span class="nb">bool</span>  <span class="o">=</span> <span class="kc">False</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Apply a time shift to a signal in the frequency domain.</span>
+
+<span class="sd">    Input</span>
+<span class="sd">    -----</span>
+<span class="sd">    u_f : ``numpy.ndarray``</span>
+<span class="sd">        Complex spectrum</span>
+<span class="sd">        (receiver, frequency)</span>
+
+<span class="sd">    f : ``numpy.ndarray``</span>
+<span class="sd">        Frequency vector [Hz]</span>
+<span class="sd">        (frequency,)</span>
+
+<span class="sd">    shift : ``numpy.ndarray``</span>
+<span class="sd">        Time shift [s]</span>
+<span class="sd">        (slowness, receiver)</span>
+
+<span class="sd">    dt : ``float`` (optional)</span>
+<span class="sd">        Sampling interval [s]</span>
+
+<span class="sd">    nfft : ``int`` (optional)</span>
+<span class="sd">        Number of points in FFT</span>
+
+<span class="sd">    npts : ``int`` (optional)</span>
+<span class="sd">        Number of points in time series</span>
+
+<span class="sd">    return_time : ``bool`` (default ``False``)</span>
+<span class="sd">        Return signal in the time domain</span>
+
+<span class="sd">    Output</span>
+<span class="sd">    ------</span>
+<span class="sd">    ushift_f/ushift_t : ``numpy.ndarray``</span>
+<span class="sd">        Shifted signal in the frequency/time domain</span>
+<span class="sd">        (slowness, receiver, frequency/time)</span>
+
+<span class="sd">    phase_shift : ``numpy.ndarray``</span>
+<span class="sd">        Phase-rotation scalar applied to signal</span>
+<span class="sd">        (slowness, receiver, frequency)</span>
+<span class="sd">    """</span>
+
+    <span class="c1">#__ Calculate phase shift __</span>
+    <span class="n">w</span>           <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">f</span>
+    <span class="n">phase_shift</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">shift</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">w</span><span class="p">)</span>
+
+    <span class="c1">#__ Apply phase shift __</span>
+    <span class="n">ushift_f</span> <span class="o">=</span> <span class="n">u_f</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">*</span> <span class="n">phase_shift</span>
+
+    <span class="c1">#__ Transform to time domain __</span>
+    <span class="k">if</span> <span class="n">return_time</span><span class="p">:</span> <span class="n">ushift_t</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">irfft</span><span class="p">(</span><span class="n">ushift_f</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">nfft</span><span class="o">=</span><span class="n">nfft</span><span class="p">,</span> <span class="n">npts</span><span class="o">=</span><span class="n">npts</span><span class="p">)</span>
+
+    <span class="c1">#__ Return output __</span>
+    <span class="k">if</span> <span class="n">return_time</span><span class="p">:</span> <span class="k">return</span> <span class="n">ushift_t</span><span class="p">,</span> <span class="n">phase_shift</span>
+    <span class="k">else</span><span class="p">:</span>           <span class="k">return</span> <span class="n">ushift_f</span><span class="p">,</span> <span class="n">phase_shift</span>
+
+<span class="c1">#__ Apply time window to signal __</span>
+<div class="viewcode-block" id="apply_window">
+<a class="viewcode-back" href="../../../topophone2.utils.dsp.html#topophone2.utils.dsp.apply_window">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">apply_window</span><span class="p">(</span>
+    <span class="n">u_t</span>   <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">t</span>     <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">t_w</span>   <span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">T_w</span>   <span class="p">:</span> <span class="nb">float</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Apply time window to signal.</span>
+
+<span class="sd">    Input</span>
+<span class="sd">    -----</span>
+<span class="sd">    u_t : ``numpy.ndarray``</span>
+<span class="sd">        Time series</span>
+<span class="sd">        (..., time)</span>
+
+<span class="sd">    t : ``numpy.ndarray``</span>
+<span class="sd">        Time vector [s]</span>
+<span class="sd">        (time,)</span>
+
+<span class="sd">    t_w : ``float``</span>
+<span class="sd">        Time-window centre [s]</span>
+
+<span class="sd">    T_w : ``float``</span>
+<span class="sd">        Time-window half-width [s]</span>
+
+<span class="sd">    Output</span>
+<span class="sd">    ------</span>
+<span class="sd">    u_t_w : ``numpy.ndarray``</span>
+<span class="sd">        Windowed time series</span>
+<span class="sd">        (..., time)</span>
+
+<span class="sd">    npts_w : ``int``</span>
+<span class="sd">        Length of time window</span>
+<span class="sd">    """</span>
+
+    <span class="c1">#__ Calculate window __</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">t_w</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">T_w</span><span class="p">)</span>
+    <span class="n">npts_w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">window</span><span class="p">)</span>
+
+    <span class="c1">#__ Window __</span>
+    <span class="n">u_t_w</span> <span class="o">=</span> <span class="n">u_t</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">window</span><span class="p">]</span>
+
+    <span class="c1">#__ Return output __</span>
+    <span class="k">return</span> <span class="n">u_t_w</span><span class="p">,</span> <span class="n">npts_w</span></div>
+
+
+<span class="c1">#__ Calculate the best beam DOA __</span>
+<div class="viewcode-block" id="best_beam_DOA">
+<a class="viewcode-back" href="../../../topophone2.utils.dsp.html#topophone2.utils.dsp.best_beam_DOA">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">best_beam_DOA</span><span class="p">(</span>
+    <span class="n">u_t</span>      <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">t</span>        <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">x</span>        <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">p_bounds</span> <span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+    <span class="n">dp</span>       <span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">t_w</span>      <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">T_w</span>      <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">alpha_maj</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">alpha_min</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Estimate the direction-of-arrival of the best beam.</span>
+
+<span class="sd">    Input</span>
+<span class="sd">    -----</span>
+<span class="sd">    u_t : ``numpy.ndarray``</span>
+<span class="sd">        Time series</span>
+<span class="sd">        (receiver, time)</span>
+
+<span class="sd">    t : ``numpy.ndarray``</span>
+<span class="sd">        Time vector [s]</span>
+<span class="sd">        (time,)</span>
+
+<span class="sd">    x : ``numpy.ndarray``</span>
+<span class="sd">        Receiver location [m]</span>
+<span class="sd">        (receiver, direction)</span>
+
+<span class="sd">    p_bounds : ``list``</span>
+<span class="sd">        (Minimum, maximum) slowness to search in each direction [s.m-1]</span>
+
+<span class="sd">    dp : ``float``</span>
+<span class="sd">        Slowness search interval [s.m-1]</span>
+
+<span class="sd">    t_w : ``float`` (optional)</span>
+<span class="sd">        Time-window centre [s]</span>
+
+<span class="sd">    T_w : ``float`` (optional)</span>
+<span class="sd">        Time-window half-width [s]</span>
+
+<span class="sd">    alpha_maj : ``float`` (optional)</span>
+<span class="sd">        Pre-FFT taper fraction</span>
+
+<span class="sd">    alpha_min : ``float`` (optional)</span>
+<span class="sd">        Time-window taper fraction</span>
+
+<span class="sd">    Output</span>
+<span class="sd">    ------</span>
+<span class="sd">    ushift_t_best : ``numpy.ndarray``</span>
+<span class="sd">        Time-shifted time series</span>
+<span class="sd">        (receiver, time)</span>
+
+<span class="sd">    p_best : ``numpy.ndarray``</span>
+<span class="sd">        Best-beam slowness vector [s.m-1]</span>
+<span class="sd">        (direction,)</span>
+
+<span class="sd">    shift_best : ``numpy.ndarray``</span>
+<span class="sd">        Best-beam time shift [s]</span>
+<span class="sd">        (receiver,)</span>
+
+<span class="sd">    npts_w : ``int``</span>
+<span class="sd">        Number of points in time window</span>
+<span class="sd">    """</span>
+
+    <span class="c1">#__ Extract time variables __</span>
+    <span class="n">N_rec</span><span class="p">,</span> <span class="n">npts</span> <span class="o">=</span> <span class="n">u_t</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">dt</span>          <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1">#__ Convert to frequency domain __</span>
+    <span class="n">u_f</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">nfft</span> <span class="o">=</span> <span class="n">rfft</span><span class="p">(</span><span class="n">u_t</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha_maj</span><span class="p">)</span>
+
+    <span class="c1">#__ Calculate time shifts __</span>
+    <span class="n">shift</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">_calc_shift</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">p_bounds</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+
+    <span class="c1">#__ Apply time shifts __</span>
+    <span class="n">ushift_t</span><span class="p">,</span> <span class="n">phase_shift</span> <span class="o">=</span> <span class="n">_apply_shift</span><span class="p">(</span><span class="n">u_f</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">shift</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">nfft</span><span class="p">,</span> <span class="n">npts</span><span class="p">,</span> <span class="n">return_time</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#__ Apply window __</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">t_w</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">T_w</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">ushift_t_w</span><span class="p">,</span> <span class="n">npts_w</span> <span class="o">=</span> <span class="n">apply_window</span><span class="p">(</span><span class="n">ushift_t</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">t_w</span><span class="p">,</span> <span class="n">T_w</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span> <span class="n">ushift_t_w</span><span class="p">,</span> <span class="n">npts_w</span> <span class="o">=</span> <span class="n">ushift_t</span><span class="p">,</span> <span class="n">npts</span>
+
+    <span class="c1">#__ Calculate F-stat taper __</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">alpha_min</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span> <span class="n">taper</span> <span class="o">=</span> <span class="n">tukey</span><span class="p">(</span><span class="n">npts_w</span><span class="p">,</span> <span class="n">alpha_min</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>                       <span class="n">taper</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">npts_w</span><span class="p">)</span>
+    
+    <span class="c1">#__ Calculate F-statistic __</span>
+    <span class="n">sum_square_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">ushift_t_w</span><span class="o">*</span><span class="n">taper</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">sum_mean_square</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">ushift_t_w</span><span class="o">*</span><span class="n">taper</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">F_statistic</span>     <span class="o">=</span> <span class="p">(</span><span class="n">N_rec</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">sum_square_mean</span> <span class="o">/</span> <span class="p">(</span><span class="n">sum_mean_square</span> <span class="o">-</span> <span class="n">sum_square_mean</span><span class="p">)</span>
+    
+    <span class="c1">#__ Extract maximum __</span>
+    <span class="n">idx_best</span>      <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">F_statistic</span><span class="p">)</span>
+    <span class="n">p_best</span>        <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">idx_best</span><span class="p">]</span>
+    <span class="n">shift_best</span>    <span class="o">=</span> <span class="n">shift</span><span class="p">[</span><span class="n">idx_best</span><span class="p">]</span>
+    <span class="n">ushift_t_best</span> <span class="o">=</span> <span class="n">ushift_t_w</span><span class="p">[</span><span class="n">idx_best</span><span class="p">]</span>
+
+    <span class="c1">#__ Return output __</span>
+    <span class="k">return</span> <span class="n">ushift_t_best</span><span class="p">,</span> <span class="n">p_best</span><span class="p">,</span> <span class="n">shift_best</span><span class="p">,</span> <span class="n">npts_w</span></div>
+
+
+<span class="c1">#__ Create Slepian tapers __</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_slepian</span><span class="p">(</span>
+    <span class="n">npts</span> <span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">dt</span>   <span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">bw</span>   <span class="p">:</span> <span class="nb">float</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Calculate set of Slepian tapers.</span>
+
+<span class="sd">    Input</span>
+<span class="sd">    -----</span>
+<span class="sd">    npts : ``int``</span>
+<span class="sd">        Number of points in time vector</span>
+
+<span class="sd">    dt : ``float``</span>
+<span class="sd">        Sampling interval [s]</span>
+
+<span class="sd">    bw : ``float``</span>
+<span class="sd">        Full bandwidth [Hz]</span>
+
+<span class="sd">    Output</span>
+<span class="sd">    ------</span>
+<span class="sd">    taper : ``numpy.ndarray``</span>
+<span class="sd">        Slepian tapers</span>
+<span class="sd">        (taper, time)</span>
+
+<span class="sd">    T_bw : ``float``</span>
+<span class="sd">        Time-bandwidth product</span>
+
+<span class="sd">    N : ``int``</span>
+<span class="sd">        Number of tapers</span>
+<span class="sd">    """</span>
+
+    <span class="c1">#__ Slepian-sequence parameters __</span>
+    <span class="n">T</span>    <span class="o">=</span> <span class="n">npts</span> <span class="o">*</span> <span class="n">dt</span>              <span class="c1"># Total time duration [s]</span>
+    <span class="n">T_bw</span> <span class="o">=</span> <span class="n">T</span> <span class="o">*</span> <span class="n">bw</span>                 <span class="c1"># Time-bandwidth product</span>
+    <span class="n">N</span>    <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">T_bw</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Number of tapers</span>
+
+    <span class="c1">#__ Calculate Slepian sequences __</span>
+    <span class="n">taper</span> <span class="o">=</span> <span class="n">dpss</span><span class="p">(</span><span class="n">M</span><span class="o">=</span><span class="n">npts</span><span class="p">,</span> <span class="n">NW</span><span class="o">=</span><span class="n">T_bw</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">Kmax</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+
+    <span class="c1">#__ Return output __</span>
+    <span class="k">return</span> <span class="n">taper</span><span class="p">,</span> <span class="n">T_bw</span><span class="p">,</span> <span class="n">N</span>
+
+<span class="c1">#__ Calculate sample-covariance matrix __</span>
+<div class="viewcode-block" id="sample_covariance_matrix">
+<a class="viewcode-back" href="../../../topophone2.utils.dsp.html#topophone2.utils.dsp.sample_covariance_matrix">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">sample_covariance_matrix</span><span class="p">(</span>
+    <span class="n">u_t</span>   <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">npts</span>  <span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">dt</span>    <span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">bw</span>    <span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">correction</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Calculate the sample-covariance matrix.</span>
+
+<span class="sd">    Input</span>
+<span class="sd">    -----</span>
+<span class="sd">    u_t : ``numpy.ndarray``</span>
+<span class="sd">        Time series</span>
+<span class="sd">        (receiver, time)</span>
+
+<span class="sd">    npts : ``int``</span>
+<span class="sd">        Number of points in time series</span>
+
+<span class="sd">    dt : ``float``</span>
+<span class="sd">        Sampling interval [s]</span>
+
+<span class="sd">    bw : ``float``</span>
+<span class="sd">        Slepian-sequence full bandwidth [Hz]</span>
+
+<span class="sd">    correction : ``numpy.ndarray`` (optional)</span>
+<span class="sd">        Time shifts to be applied post-FFT [s]</span>
+<span class="sd">        (receiver,)</span>
+
+<span class="sd">    Output</span>
+<span class="sd">    ------</span>
+<span class="sd">    scm : ``numpy.ndarray``</span>
+<span class="sd">        Sample-covariance matrix</span>
+<span class="sd">        (frequency, receiver, receiver)</span>
+
+<span class="sd">    f : ``numpy.ndarray``</span>
+<span class="sd">        Frequency vector [Hz]</span>
+<span class="sd">        (frequency,)</span>
+
+<span class="sd">    N : ``int``</span>
+<span class="sd">        Number of tapers used to estimate array-covariance</span>
+
+<span class="sd">    T_bw : ``float``</span>
+<span class="sd">        Time-bandwidth product of Slepian sequences</span>
+<span class="sd">    """</span>
+
+    <span class="c1">#__ Calculate Slepian tapers __</span>
+    <span class="n">taper</span><span class="p">,</span> <span class="n">T_bw</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="n">_slepian</span><span class="p">(</span><span class="n">npts</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">bw</span><span class="p">)</span>
+
+    <span class="c1">#__ Apply Slepian tapers __</span>
+    <span class="n">utap_t</span> <span class="o">=</span> <span class="n">taper</span><span class="p">[:,</span><span class="kc">None</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">u_t</span><span class="p">[</span><span class="kc">None</span><span class="p">,:,:]</span>
+
+    <span class="c1">#__ Transform to frequency domain __</span>
+    <span class="n">utap_f</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">nfft</span> <span class="o">=</span> <span class="n">rfft</span><span class="p">(</span><span class="n">utap_t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+    <span class="c1">#__ Apply correction __</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">correction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">utap_f</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_apply_shift</span><span class="p">(</span><span class="n">utap_f</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">correction</span><span class="p">)</span>
+        <span class="n">utap_f</span>    <span class="o">=</span> <span class="n">utap_f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1">#__ Calculate sample-covariance matrix __</span>
+    <span class="n">scm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
+        <span class="n">utap_f</span><span class="p">[:,:,</span><span class="kc">None</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">utap_f</span><span class="p">[:,</span><span class="kc">None</span><span class="p">,:,:]),</span>
+        <span class="n">axis</span><span class="o">=</span><span class="mi">0</span>
+    <span class="p">)</span>
+
+    <span class="c1">#__ Transpose SCM __</span>
+    <span class="n">scm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">scm</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1">#__ Scale to one-sided cross-spectral density __</span>
+    <span class="n">scm</span> <span class="o">*=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">dt</span>                     <span class="c1"># unit2 -&gt; unit2.Hz-1</span>
+    <span class="n">scm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/=</span> <span class="mi">2</span>                       <span class="c1"># DC has no negative frequency partner</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nfft</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span> <span class="n">scm</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">/=</span> <span class="mi">2</span>  <span class="c1"># Nyquist has no negative-frequency partner</span>
+
+    <span class="c1">#__ Return output __</span>
+    <span class="k">return</span> <span class="n">scm</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">T_bw</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, jack-andrew smith.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

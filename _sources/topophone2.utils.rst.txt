@@ -1,9 +1,16 @@
 Code utilities
 ==============
 
-The ``topophone2.utils`` subpackage provides utility functions that support the core functionality of the TopoPhone2 package. 
+The ``topophone2.utils`` subpackage provides utility functions that support the core functionality of the TopoPhone2 package: 
+the reading module (reading and parsing data files), the mathematical module (density functions, besel functions, legendre polynomials ...) and 
+the signal processing module (digital signal processing tasks such as filtering, Fourier transforms, and spectral analysis...). 
 
-It includes two main modules. The ``topophone2.utils.math`` module contains mathematical convenience functions, 
+
+.. toctree::
+   :maxdepth: 2
+
+   topophone2.utils.read
+
 
 .. toctree::
    :maxdepth: 2
@@ -11,13 +18,13 @@ It includes two main modules. The ``topophone2.utils.math`` module contains math
    topophone2.utils.math
    
 
-
-and the ``topophone2.utils.read`` module provides functions for reading configuration files and extracting relevant parameters for the TopoPhone2 algorithms.
-
 .. toctree::
    :maxdepth: 2
 
-   topophone2.utils.read
+   topophone2.utils.dsp
+
+
+
 
    
 

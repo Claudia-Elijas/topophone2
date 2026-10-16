@@ -162,6 +162,7 @@
     "The class ``inversion.Uniform`` calculates the prior probability density of a given model vector (see below), given a bounded uniform prior pdf with bounds ``lower`` and ``upper``.\n",
     "\n",
     "The model vector contains the parameters...\n",
+    "\n",
     "| Signal component | Parameter set |\n",
     "|---|---|\n",
     "|``'normal'`` | $\\left(E, \\xi_1, \\xi_2, \\sigma_1, \\sigma_2, \\rho_{12}\\right)$ |\n",

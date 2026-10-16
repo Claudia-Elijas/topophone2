@@ -1,5 +1,5 @@
-data reading utility functions
-==============================
+Data reading
+============
 
 .. automodule:: topophone2.utils.read
    :members:

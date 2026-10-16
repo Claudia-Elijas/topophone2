@@ -46,7 +46,7 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="maths utility functions" href="topophone2.utils.math.html" />
+    <link rel="next" title="Data reading" href="topophone2.utils.read.html" />
     <link rel="prev" title="Topophone module" href="topophone2.topophone.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
@@ -326,8 +326,9 @@
 </ul>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a aria-current="page" class="current reference internal" href="#">Code utilities</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.math.html">maths utility functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.read.html">data reading utility functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.read.html">Data reading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.math.html">Mathematics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.dsp.html">Signal processing</a></li>
 </ul>
 </details></li>
 </ul>
@@ -392,11 +393,26 @@
                   
   <section id="code-utilities">
 <h1>Code utilities<a class="headerlink" href="#code-utilities" title="Link to this heading">#</a></h1>
-<p>The <code class="docutils literal notranslate"><span class="pre">topophone2.utils</span></code> subpackage provides utility functions that support the core functionality of the TopoPhone2 package.</p>
-<p>It includes two main modules. The <code class="docutils literal notranslate"><span class="pre">topophone2.utils.math</span></code> module contains mathematical convenience functions,</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">topophone2.utils</span></code> subpackage provides utility functions that support the core functionality of the TopoPhone2 package:
+the reading module (reading and parsing data files), the mathematical module (density functions, besel functions, legendre polynomials …) and
+the signal processing module (digital signal processing tasks such as filtering, Fourier transforms, and spectral analysis…).</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="topophone2.utils.math.html">maths utility functions</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="topophone2.utils.read.html">Data reading</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.read.html#topophone2.utils.read.parse_config"><code class="docutils literal notranslate"><span class="pre">parse_config()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.read.html#topophone2.utils.read.parse_array_from_config"><code class="docutils literal notranslate"><span class="pre">parse_array_from_config()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.read.html#topophone2.utils.read.read_csv_to_array"><code class="docutils literal notranslate"><span class="pre">read_csv_to_array()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.read.html#topophone2.utils.read.sigs_input"><code class="docutils literal notranslate"><span class="pre">sigs_input()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.read.html#topophone2.utils.read.read_txt"><code class="docutils literal notranslate"><span class="pre">read_txt()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.read.html#topophone2.utils.read.convert_to_txt"><code class="docutils literal notranslate"><span class="pre">convert_to_txt()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.read.html#topophone2.utils.read.row"><code class="docutils literal notranslate"><span class="pre">row()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="topophone2.utils.math.html">Mathematics</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="topophone2.utils.math.html#topophone2.utils.math.bessel_function"><code class="docutils literal notranslate"><span class="pre">bessel_function()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="topophone2.utils.math.html#topophone2.utils.math.legendre_polynomial"><code class="docutils literal notranslate"><span class="pre">legendre_polynomial()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="topophone2.utils.math.html#topophone2.utils.math.density_params"><code class="docutils literal notranslate"><span class="pre">density_params()</span></code></a></li>
@@ -406,17 +422,14 @@
 </li>
 </ul>
 </div>
-<p>and the <code class="docutils literal notranslate"><span class="pre">topophone2.utils.read</span></code> module provides functions for reading configuration files and extracting relevant parameters for the TopoPhone2 algorithms.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="topophone2.utils.read.html">data reading utility functions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.read.html#topophone2.utils.read.parse_config"><code class="docutils literal notranslate"><span class="pre">parse_config()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.read.html#topophone2.utils.read.parse_array_from_config"><code class="docutils literal notranslate"><span class="pre">parse_array_from_config()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.read.html#topophone2.utils.read.read_csv_to_array"><code class="docutils literal notranslate"><span class="pre">read_csv_to_array()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.read.html#topophone2.utils.read.sigs_input"><code class="docutils literal notranslate"><span class="pre">sigs_input()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.read.html#topophone2.utils.read.read_txt"><code class="docutils literal notranslate"><span class="pre">read_txt()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.read.html#topophone2.utils.read.convert_to_txt"><code class="docutils literal notranslate"><span class="pre">convert_to_txt()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.read.html#topophone2.utils.read.row"><code class="docutils literal notranslate"><span class="pre">row()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="topophone2.utils.dsp.html">Signal processing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.dsp.html#topophone2.utils.dsp.rfft"><code class="docutils literal notranslate"><span class="pre">rfft()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.dsp.html#topophone2.utils.dsp.irfft"><code class="docutils literal notranslate"><span class="pre">irfft()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.dsp.html#topophone2.utils.dsp.apply_window"><code class="docutils literal notranslate"><span class="pre">apply_window()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.dsp.html#topophone2.utils.dsp.best_beam_DOA"><code class="docutils literal notranslate"><span class="pre">best_beam_DOA()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="topophone2.utils.dsp.html#topophone2.utils.dsp.sample_covariance_matrix"><code class="docutils literal notranslate"><span class="pre">sample_covariance_matrix()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -443,11 +456,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="topophone2.utils.math.html"
+       href="topophone2.utils.read.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">maths utility functions</p>
+        <p class="prev-next-title">Data reading</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
