@@ -1,5 +1,5 @@
-maths utility functions
-=======================
+Mathematics
+===========
 
 .. automodule:: topophone2.utils.math
    :members:
