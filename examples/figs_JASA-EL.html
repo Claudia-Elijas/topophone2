@@ -398,7 +398,7 @@
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
+<div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
@@ -406,18 +406,10 @@
 Hello from topophone2!
 </pre></div></div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not installed. Falling back to cpu.
-</pre></div></div>
-</div>
 <section id="Synthetic-data">
 <h1>Synthetic data<a class="headerlink" href="#Synthetic-data" title="Link to this heading">#</a></h1>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Read array geometry __</span>
@@ -471,7 +463,7 @@ An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not i
 <span class="n">w_density</span> <span class="o">/=</span> <span class="n">w_density</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 
 <span class="c1">#__ Unpack: True model __</span>
-<span class="n">m_true</span> <span class="o">=</span> <span class="n">sim_data</span><span class="p">[</span><span class="s1">'m_true'</span><span class="p">]</span>
+<span class="n">m_true</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s1">'./data/eg1/true_model.txt'</span><span class="p">)</span>
 
 <span class="c1">#__ Read: Inversion results __</span>
 <span class="n">m</span>     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'./models/eg1/triad/inversion_results.npz'</span><span class="p">)[</span><span class="s1">'m'</span><span class="p">]</span>
@@ -555,7 +547,7 @@ An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not i
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Summarise statistics __</span>
@@ -566,6 +558,9 @@ An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not i
     <span class="n">ml</span><span class="p">,</span> <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">scale</span><span class="o">*</span><span class="n">p_vec</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">p</span><span class="p">)],</span> <span class="n">scale</span><span class="o">*</span><span class="n">mi_lo</span><span class="p">,</span> <span class="n">scale</span><span class="o">*</span><span class="n">mi_hi</span>
     <span class="k">if</span> <span class="n">interval</span><span class="p">:</span> <span class="k">return</span> <span class="n">ml</span><span class="p">,</span> <span class="n">lo</span><span class="o">-</span><span class="n">ml</span><span class="p">,</span> <span class="n">hi</span><span class="o">-</span><span class="n">ml</span>
     <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="n">ml</span><span class="p">,</span> <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span>
+
+<span class="c1">#__ True model __</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"True model:"</span><span class="p">,</span> <span class="n">m_true</span><span class="p">)</span>
 
 <span class="c1">#__ Apparent slowness __</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"Slowness mean:"</span><span class="p">,</span> <span class="o">*</span><span class="n">summary</span><span class="p">(</span><span class="n">xi_circ</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1e6</span><span class="p">))</span>
@@ -585,7 +580,7 @@ An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not i
 
 <span class="c1">#__ Information gain __</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"Noisy:"</span><span class="p">,</span> <span class="n">rel_IG_noisy</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Quad:"</span><span class="p">,</span> <span class="n">rel_IG_rec</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Quad:"</span><span class="p">,</span> <span class="n">rel_IG_quad</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -594,16 +589,19 @@ An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not i
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Slowness mean: 476.8299608387702 [-0.99396277] [1.15810568]
-Slowness beamwidth: 4.595253375891868 [-1.21437018] [1.75172742]
-Backazimuth mean: 104.9210623346701 [-0.28986747] [0.286777]
-Backazimuth beamwidth: 2.3436471265305303 [-0.28422996] [0.28208446]
-a1: 0.15680002548687 [-0.47143281] [0.38217282]
-b1: 0.11678029618967356 [-0.4671605] [0.36639684]
-SNR: 14.983915238978039 [-0.67827767] [0.73722611]
-SNR threshold [14.48131023]
-Noisy: [-38.13917321 -60.7417865   11.21533376 -14.21460824]
-Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
+True model: [ 9.00000000e+01 -6.17928737e-04  1.66304578e-04  1.31065962e-05
+  1.85564810e-05  2.04315596e-01  8.00000000e+01  3.03000000e-01
+  1.75000000e-01]
+Slowness mean: 639.8980916739309 [-2.36919058] [2.33484472]
+Slowness beamwidth: 12.742949602965224 [-2.00248451] [2.51327386]
+Backazimuth mean: 105.06199284274716 [-0.33060671] [0.31116066]
+Backazimuth beamwidth: 1.7466364091530728 [-0.26170678] [0.2841032]
+a1: 0.2920542575155999 [-0.30548026] [0.04044608]
+b1: 0.20562180351391782 [-0.27681133] [0.10660097]
+SNR: 9.989388221822269 [-0.67575585] [0.63471477]
+SNR threshold [9.48516686]
+Noisy: [-31.30807709 -55.92543629   7.83218999 -14.50530893]
+Quad: [  7.55942926   5.6708635  141.69103104   1.15872422]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
