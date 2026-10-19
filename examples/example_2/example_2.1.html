@@ -440,7 +440,7 @@ Hello from topophone2!
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Read data __</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'../data/hukkakero/IS37_hukkakero_2016-08-19.npz'</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'../data/eg2/IS37_hukkakero_2016-08-19.npz'</span><span class="p">)</span>
 <span class="n">u_t</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">'u_t'</span><span class="p">]</span>  <span class="c1"># Waveform data     [Pa] (receiver, time)</span>
 <span class="n">t</span>   <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">'t'</span><span class="p">]</span>    <span class="c1"># Lapse time vector [s]  (time,)</span>
 <span class="n">x</span>   <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">'x'</span><span class="p">]</span>    <span class="c1"># Receiver location [m]  (receiver, direction)</span>
@@ -572,7 +572,7 @@ Hello from topophone2!
     <span class="n">x</span>           <span class="o">=</span> <span class="n">x</span><span class="p">,</span>
     <span class="n">Gamma_obs</span>   <span class="o">=</span> <span class="n">Gamma_obs_noise</span><span class="p">,</span>
     <span class="n">N_obs</span>       <span class="o">=</span> <span class="n">N_obs_noise</span><span class="p">,</span>
-    <span class="n">output_path</span> <span class="o">=</span> <span class="s2">"../data/hukkakero/noise"</span>
+    <span class="n">output_path</span> <span class="o">=</span> <span class="s2">"../data/eg2/noise"</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -656,7 +656,7 @@ Best-beam backazimuth:       112.9 deg
     <span class="n">x</span>           <span class="o">=</span> <span class="n">x</span><span class="p">,</span>
     <span class="n">Gamma_obs</span>   <span class="o">=</span> <span class="n">Gamma_obs</span><span class="p">,</span>
     <span class="n">N_obs</span>       <span class="o">=</span> <span class="n">N_obs</span><span class="p">,</span>
-    <span class="n">output_path</span> <span class="o">=</span> <span class="s2">"../data/hukkakero/signal"</span>
+    <span class="n">output_path</span> <span class="o">=</span> <span class="s2">"../data/eg2/signal"</span>
 <span class="p">)</span>
 </pre></div>
 </div>

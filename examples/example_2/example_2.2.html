@@ -437,7 +437,7 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Read: Signal + noise __</span>
-<span class="n">out</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="s2">"../data/hukkakero/signal_topophone2.txt"</span><span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="s2">"../data/eg2/signal_topophone2.txt"</span><span class="p">)</span>
 <span class="n">freq_Hz</span>   <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Frequency vector          [Hz]       (frequency)</span>
 <span class="n">x</span>         <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Receiver position         [m]        (receiver, direction)</span>
 <span class="n">Gamma_obs</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># Sample-covariance matrix  [Pa2.Hz-1] (frequency, receiver, receiver)</span>
@@ -445,7 +445,7 @@
 <span class="n">freq</span>      <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">freq_Hz</span>  <span class="c1"># Angular frequency vector [rad.s-1] (frequency)</span>
 
 <span class="c1">#__ Read: Noise only __</span>
-<span class="n">out</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="s2">"../data/hukkakero/noise_topophone2.txt"</span><span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="s2">"../data/eg2/noise_topophone2.txt"</span><span class="p">)</span>
 <span class="n">Gamma_obs_noise</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># Sample-covariance matrix  [Pa2.Hz-1] (frequency, receiver, receiver)</span>
 <span class="n">N_obs_noise</span>     <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>  <span class="c1"># Independent observations</span>
 </pre></div>
@@ -533,7 +533,7 @@
     <span class="n">prior_bounds</span>    <span class="o">=</span> <span class="p">(</span><span class="n">lower</span><span class="p">,</span><span class="n">upper</span><span class="p">),</span>
     <span class="n">N_flow</span>          <span class="o">=</span> <span class="n">N_flow</span><span class="p">,</span>
     <span class="n">learning_rate</span>   <span class="o">=</span> <span class="n">learning_rate</span><span class="p">,</span>
-    <span class="n">outpath</span>         <span class="o">=</span> <span class="s2">"../models/hukkakero"</span><span class="p">,</span>
+    <span class="n">outpath</span>         <span class="o">=</span> <span class="s2">"../models/eg2"</span><span class="p">,</span>
     <span class="n">N_iterations</span>    <span class="o">=</span> <span class="n">N_iterations</span><span class="p">,</span>
     <span class="n">N_montecarlo</span>    <span class="o">=</span> <span class="n">N_montecarlo</span><span class="p">,</span>
     <span class="n">N_out</span>           <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
@@ -541,7 +541,7 @@
 <span class="p">)</span>
 
 <span class="c1">#__ Read results __</span>
-<span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">"../models/hukkakero/model-samples_iteration-</span><span class="si">{</span><span class="n">N_iterations</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">.txt"</span><span class="p">)</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">"../models/eg2/model-samples_iteration-</span><span class="si">{</span><span class="n">N_iterations</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">.txt"</span><span class="p">)</span>
 
 <span class="c1">#__ Unpack results __</span>
 <span class="n">w_s</span>   <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>      <span class="c1"># Skew-normal total energy                     (sample,)</span>

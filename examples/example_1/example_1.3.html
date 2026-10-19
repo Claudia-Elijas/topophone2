@@ -414,10 +414,6 @@
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Set up: Random seed __</span>
 <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">2026</span><span class="p">)</span>
 
-<span class="c1">#__ Set up: File paths __</span>
-<span class="n">data_dir</span>  <span class="o">=</span> <span class="s1">'../data/TRIAD_15DB'</span>
-<span class="n">model_dir</span> <span class="o">=</span> <span class="s1">'../models/ALT'</span>
-
 <span class="c1">#__ Disable: Warnings __</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
@@ -514,7 +510,7 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Read: Signal + noise __</span>
-<span class="n">out</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">data_dir</span><span class="si">}</span><span class="s2">/TRIAD_FULL_15DB_topophone2.txt"</span><span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="s2">"../data/eg1/triad/triad_topophone2.txt"</span><span class="p">)</span>
 <span class="n">freq_Hz</span>   <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Frequency vector          [Hz]        (frequency)</span>
 <span class="n">x</span>         <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Receiver position         [m]         (receiver, direction)</span>
 <span class="n">Gamma_obs</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># Sample-covariance matrix  [uPa2.Hz-1] (frequency, receiver, receiver)</span>
@@ -522,13 +518,12 @@
 <span class="n">freq</span>      <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">freq_Hz</span>  <span class="c1"># Angular frequency vector [rad.s-1] (frequency)</span>
 
 <span class="c1">#__ Read: Noise only __</span>
-<span class="n">out</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">data_dir</span><span class="si">}</span><span class="s2">/TRIAD_NOISE_15DB_topophone2.txt"</span><span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="s2">"../data/eg1/triad/triad_noise-only_topophone2.txt"</span><span class="p">)</span>
 <span class="n">Gamma_obs_noise</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># Array-covariance matrix  [uPa2.Hz-1] (frequency, receiver, receiver)</span>
 <span class="n">N_obs_noise</span>     <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>  <span class="c1"># Independent observations</span>
 
 <span class="c1">#__ Noise apparent slowness [s.m-1] __</span>
-<span class="n">synthetics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'../data/SYNTHETICS.npz'</span><span class="p">)</span>
-<span class="n">s0_J</span>       <span class="o">=</span> <span class="n">synthetics</span><span class="p">[</span><span class="s1">'s0'</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">s0_J</span> <span class="o">=</span> <span class="mf">6.683784304186701e-4</span>
 </pre></div>
 </div>
 </div>
@@ -549,12 +544,12 @@
 
 <span class="c1">#__ Prior bounds __</span>
 <span class="n">lower</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>                  <span class="c1"># Lower bound</span>
-    <span class="mf">50.</span><span class="p">,</span>  <span class="o">-</span><span class="mf">5.0e-4</span><span class="p">,</span> <span class="mf">8.0e-5</span><span class="p">,</span> <span class="mf">1.0e-6</span><span class="p">,</span>  <span class="c1">#     'radial2D' parameters [energy, xi_x, xi_y, sigma_r]</span>
-    <span class="mf">50.</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8</span>                 <span class="c1">#     'noise2D' parameters  [energy, a_1, b_1]</span>
+    <span class="mf">50.</span><span class="p">,</span>  <span class="o">-</span><span class="mf">6.6e-4</span><span class="p">,</span> <span class="mf">1.2e-4</span><span class="p">,</span> <span class="mf">1.0e-6</span><span class="p">,</span>  <span class="c1">#     'radial2D' parameters [energy, xi_x, xi_y, sigma_r]</span>
+    <span class="mf">50.</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.15</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.15</span>                 <span class="c1">#     'noise2D' parameters  [energy, a_1, b_1]</span>
 <span class="p">])</span>
 <span class="n">upper</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>                  <span class="c1"># Upper bound</span>
-    <span class="mf">100.</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.2e-4</span><span class="p">,</span> <span class="mf">1.6e-4</span><span class="p">,</span> <span class="mf">5.0e-5</span><span class="p">,</span>
-    <span class="mf">100.</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.8</span>
+    <span class="mf">100.</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.8e-4</span><span class="p">,</span> <span class="mf">2.0e-4</span><span class="p">,</span> <span class="mf">5.0e-5</span><span class="p">,</span>
+    <span class="mf">100.</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">,</span>  <span class="mf">0.35</span>
 <span class="p">])</span>
 
 <span class="c1">#__ Number of flows __</span>
@@ -589,7 +584,7 @@
     <span class="n">prior_bounds</span>    <span class="o">=</span> <span class="p">(</span><span class="n">lower</span><span class="p">,</span><span class="n">upper</span><span class="p">),</span>
     <span class="n">N_flow</span>          <span class="o">=</span> <span class="n">N_flow</span><span class="p">,</span>
     <span class="n">learning_rate</span>   <span class="o">=</span> <span class="n">learning_rate</span><span class="p">,</span>
-    <span class="n">outpath</span>         <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">model_dir</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+    <span class="n">outpath</span>         <span class="o">=</span> <span class="s2">"../models/eg1/mod"</span><span class="p">,</span>
     <span class="n">N_iterations</span>    <span class="o">=</span> <span class="n">N_iterations</span><span class="p">,</span>
     <span class="n">N_montecarlo</span>    <span class="o">=</span> <span class="n">N_montecarlo</span><span class="p">,</span>
     <span class="n">N_out</span>           <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
@@ -599,8 +594,8 @@
 <span class="p">)</span>
 
 <span class="c1">#__ Read results __</span>
-<span class="n">m0</span>      <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">model_dir</span><span class="si">}</span><span class="s2">/model-samples_iteration-</span><span class="si">{</span><span class="n">N_iterations</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">.txt"</span><span class="p">)</span>
-<span class="n">lnp_dm0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">model_dir</span><span class="si">}</span><span class="s2">/log-likelihood_iteration-</span><span class="si">{</span><span class="n">N_iterations</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">.txt"</span><span class="p">)</span>
+<span class="n">m0</span>      <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">"../models/eg1/mod/model-samples_iteration-</span><span class="si">{</span><span class="n">N_iterations</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">.txt"</span><span class="p">)</span>
+<span class="n">lnp_dm0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">"../models/eg1/mod/log-likelihood_iteration-</span><span class="si">{</span><span class="n">N_iterations</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">.txt"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -640,7 +635,7 @@ Finish training!
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Read results __</span>
-<span class="n">result1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'../models/TRIAD_15DB/inversion_results.npz'</span><span class="p">)</span>
+<span class="n">result1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'../models/eg1/triad/inversion_results.npz'</span><span class="p">)</span>
 <span class="n">m1</span>      <span class="o">=</span> <span class="n">result1</span><span class="p">[</span><span class="s1">'m'</span><span class="p">]</span>             <span class="c1"># Model samples  (sample, parameter)</span>
 <span class="n">lnp_dm1</span> <span class="o">=</span> <span class="n">result1</span><span class="p">[</span><span class="s1">'lnp_dm'</span><span class="p">]</span>        <span class="c1"># Log-likelihood (sample,)</span>
 <span class="n">bounds1</span> <span class="o">=</span> <span class="n">result1</span><span class="p">[</span><span class="s1">'prior_bounds'</span><span class="p">]</span>  <span class="c1"># Prior bounds   (parameter,)</span>

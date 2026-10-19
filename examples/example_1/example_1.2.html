@@ -426,16 +426,16 @@
 </div>
 <section id="1.2.1-Read-inversion-results">
 <h2>1.2.1 Read inversion results<a class="headerlink" href="#1.2.1-Read-inversion-results" title="Link to this heading">#</a></h2>
-<p>The inversion results in Example 1.1 were stored in the folder <code class="docutils literal notranslate"><span class="pre">TRIAD_15DB</span></code>. Equivalent results for an extra sensor added to the centre of the array were stored in the folder <code class="docutils literal notranslate"><span class="pre">QUAD_15DB</span></code>, and for an increased noise level of 15dB in <code class="docutils literal notranslate"><span class="pre">TRIAD_0DB</span></code>.</p>
+<p>The inversion results in Example 1.1 were stored in the folder <code class="docutils literal notranslate"><span class="pre">models/eg1/triad</span></code>. Equivalent results for an extra sensor added to the centre of the array were stored in the folder <code class="docutils literal notranslate"><span class="pre">models/eg1/extra-receiver</span></code>, and for an increased noise level of 10dB in <code class="docutils literal notranslate"><span class="pre">models/eg1/extra-noise</span></code>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Load results __</span>
 <span class="n">inversion_results</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-    <span class="n">triad_15dB</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'../models/TRIAD_15DB/inversion_results.npz'</span><span class="p">),</span>  <span class="c1"># Triad geometry, SNR 15dB</span>
-    <span class="n">triad_0dB</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'../models/TRIAD_0DB/inversion_results.npz'</span><span class="p">),</span>   <span class="c1"># Triad geometry, SNR 0dB</span>
-    <span class="n">quad_15dB</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'../models/QUAD_15DB/inversion_results.npz'</span><span class="p">)</span>    <span class="c1"># Extra sensor, SNR 15dB</span>
+    <span class="n">triad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'../models/eg1/triad/inversion_results.npz'</span><span class="p">),</span>          <span class="c1"># Triad geometry, SNR 10dB</span>
+    <span class="n">noisy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'../models/eg1/extra-noise/inversion_results.npz'</span><span class="p">),</span>    <span class="c1"># Triad geometry, SNR 0dB</span>
+    <span class="n">quad</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'../models/eg1/extra-receiver/inversion_results.npz'</span><span class="p">)</span>  <span class="c1"># Extra sensor, SNR 10dB</span>
 <span class="p">)</span>
 
 <span class="c1">#    __ `inversion_results` structure __</span>
@@ -517,15 +517,15 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Store as arrays __</span>
-<span class="n">D_triad_15dB</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">D_mean</span><span class="p">[</span><span class="s1">'triad_15dB'</span><span class="p">],</span> <span class="n">D_bw</span><span class="p">[</span><span class="s1">'triad_15dB'</span><span class="p">],</span> <span class="n">D_noise</span><span class="p">[</span><span class="s1">'triad_15dB'</span><span class="p">],</span> <span class="n">D_snr</span><span class="p">[</span><span class="s1">'triad_15dB'</span><span class="p">]])</span>
-<span class="n">D_triad_0dB</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">D_mean</span><span class="p">[</span><span class="s1">'triad_0dB'</span><span class="p">],</span>  <span class="n">D_bw</span><span class="p">[</span><span class="s1">'triad_0dB'</span><span class="p">],</span>  <span class="n">D_noise</span><span class="p">[</span><span class="s1">'triad_0dB'</span><span class="p">],</span>  <span class="n">D_snr</span><span class="p">[</span><span class="s1">'triad_0dB'</span><span class="p">]])</span>
-<span class="n">D_quad_15dB</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">D_mean</span><span class="p">[</span><span class="s1">'quad_15dB'</span><span class="p">],</span>  <span class="n">D_bw</span><span class="p">[</span><span class="s1">'quad_15dB'</span><span class="p">],</span>  <span class="n">D_noise</span><span class="p">[</span><span class="s1">'quad_15dB'</span><span class="p">],</span>  <span class="n">D_snr</span><span class="p">[</span><span class="s1">'quad_15dB'</span><span class="p">]])</span>
+<span class="n">D_triad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">D_mean</span><span class="p">[</span><span class="s1">'triad'</span><span class="p">],</span> <span class="n">D_bw</span><span class="p">[</span><span class="s1">'triad'</span><span class="p">],</span> <span class="n">D_noise</span><span class="p">[</span><span class="s1">'triad'</span><span class="p">],</span> <span class="n">D_snr</span><span class="p">[</span><span class="s1">'triad'</span><span class="p">]])</span>
+<span class="n">D_noisy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">D_mean</span><span class="p">[</span><span class="s1">'noisy'</span><span class="p">],</span>  <span class="n">D_bw</span><span class="p">[</span><span class="s1">'noisy'</span><span class="p">],</span>  <span class="n">D_noise</span><span class="p">[</span><span class="s1">'noisy'</span><span class="p">],</span>  <span class="n">D_snr</span><span class="p">[</span><span class="s1">'noisy'</span><span class="p">]])</span>
+<span class="n">D_quad</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">D_mean</span><span class="p">[</span><span class="s1">'quad'</span><span class="p">],</span>  <span class="n">D_bw</span><span class="p">[</span><span class="s1">'quad'</span><span class="p">],</span>  <span class="n">D_noise</span><span class="p">[</span><span class="s1">'quad'</span><span class="p">],</span>  <span class="n">D_snr</span><span class="p">[</span><span class="s1">'quad'</span><span class="p">]])</span>
 
-<span class="c1">#__ Calculate relative information gain with noise level increased by 15dB __</span>
-<span class="n">rel_IG_noisy</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">D_triad_0dB</span> <span class="o">-</span> <span class="n">D_triad_15dB</span><span class="p">)</span> <span class="o">/</span> <span class="n">D_triad_15dB</span>
+<span class="c1">#__ Calculate relative information gain with noise level increased by 10dB __</span>
+<span class="n">rel_IG_noisy</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">D_noisy</span> <span class="o">-</span> <span class="n">D_triad</span><span class="p">)</span> <span class="o">/</span> <span class="n">D_triad</span>
 
 <span class="c1">#__ Calculate relative information gain for extra receiver added __</span>
-<span class="n">rel_IG_rec</span>   <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">D_quad_15dB</span> <span class="o">-</span> <span class="n">D_triad_15dB</span><span class="p">)</span> <span class="o">/</span> <span class="n">D_triad_15dB</span>
+<span class="n">rel_IG_quad</span>  <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">D_quad</span> <span class="o">-</span> <span class="n">D_triad</span><span class="p">)</span> <span class="o">/</span> <span class="n">D_triad</span>
 </pre></div>
 </div>
 </div>
@@ -549,7 +549,7 @@
 <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
 
 <span class="c1">#__ Plot information gain __</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">rel_IG_rec</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Extra receiver"</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">rel_IG_quad</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Extra receiver"</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">rel_IG_noisy</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Increased noise"</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1">#__ Plot neutral __</span>
@@ -568,6 +568,14 @@
 </div>
 <div class="output_area docutils container">
 <img alt="../../_images/examples_example_1_example_1.2_15_0.png" src="../../_images/examples_example_1_example_1.2_15_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">savez_compressed</span><span class="p">(</span><span class="s1">'../data/figures/info-gain.npz'</span><span class="p">,</span> <span class="n">rel_IG_noisy</span><span class="o">=</span><span class="n">rel_IG_noisy</span><span class="p">,</span> <span class="n">rel_IG_quad</span><span class="o">=</span><span class="n">rel_IG_quad</span><span class="p">)</span>
+</pre></div>
 </div>
 </div>
 </section>

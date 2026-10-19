@@ -421,7 +421,7 @@ An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not i
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#__ Read array geometry __</span>
-<span class="n">out</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="sa">f</span><span class="s2">"./data/TRIAD_15DB/TRIAD_FULL_15DB_topophone2.txt"</span><span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="sa">f</span><span class="s2">"./data/eg1/triad/triad_topophone2.txt"</span><span class="p">)</span>
 <span class="n">x</span>   <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Receiver position [m] (receiver, direction)</span>
 
 <span class="c1">#__ Load synthetic parameters __</span>
@@ -474,7 +474,7 @@ An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not i
 <span class="n">m_true</span> <span class="o">=</span> <span class="n">sim_data</span><span class="p">[</span><span class="s1">'m_true'</span><span class="p">]</span>
 
 <span class="c1">#__ Read: Inversion results __</span>
-<span class="n">m</span>     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'./models/TRIAD_15DB/inversion_results.npz'</span><span class="p">)[</span><span class="s1">'m'</span><span class="p">]</span>
+<span class="n">m</span>     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'./models/eg1/triad/inversion_results.npz'</span><span class="p">)[</span><span class="s1">'m'</span><span class="p">]</span>
 <span class="n">w_T</span>   <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">xi</span>    <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
 <span class="n">sigma</span> <span class="o">=</span> <span class="n">m</span><span class="p">[:,</span><span class="mi">3</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
@@ -502,7 +502,7 @@ An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not i
 
 <span class="c1">#__ Information gain __</span>
 <span class="n">ig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'./data/figures/info-gain.npz'</span><span class="p">)</span>
-<span class="n">rel_IG_rec</span> <span class="o">=</span> <span class="n">ig</span><span class="p">[</span><span class="s1">'rel_IG_rec'</span><span class="p">]</span>
+<span class="n">rel_IG_quad</span>  <span class="o">=</span> <span class="n">ig</span><span class="p">[</span><span class="s1">'rel_IG_quad'</span><span class="p">]</span>
 <span class="n">rel_IG_noisy</span> <span class="o">=</span> <span class="n">ig</span><span class="p">[</span><span class="s1">'rel_IG_noisy'</span><span class="p">]</span>
 
 <span class="c1">#__ Noise field __</span>
@@ -940,7 +940,7 @@ Quad: [ 4.89156129  8.9735713  82.20542323  1.37848054]
 
 <span class="c1">#__ Extra receiver __</span>
 <span class="n">axs</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span>
-    <span class="n">y</span><span class="p">,</span> <span class="n">rel_IG_rec</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">,</span> <span class="n">rel_IG_quad</span><span class="p">,</span>
     <span class="n">color</span><span class="o">=</span><span class="n">theme</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Extra receiver"</span><span class="p">,</span>
     <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span>
 <span class="p">)</span>
