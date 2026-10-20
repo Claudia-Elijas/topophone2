@@ -35,7 +35,7 @@ We test the hypothesis that the signal is skewed back towards the source with re
     examples/example_2/example_2.1.ipynb
     examples/example_2/example_2.2.ipynb
 
-
+The waveform data used in this example is available from the virtual Data Exploitation Centre of the International Data Centre at https://www.ctbto.org/specials/vdec/ . 
  
 3. Synthetic testing
 --------------------
