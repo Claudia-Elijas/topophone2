@@ -15,6 +15,7 @@ docs/_build/
 docs/source/examples/data/figures/
 docs/source/examples/figs_JASA-EL.ipynb
 docs/source/examples/data/SYNTHETICS.npz
+docs/source/examples/data/eg2/IS37_hukkakero_2016-08-19.npz
 
 # editors / OS
 .vscode/
