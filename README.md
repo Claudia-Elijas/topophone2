@@ -57,12 +57,7 @@ python -c "import topophone2.inversion; print('topophone2 is ready')"
 ![Completed](https://img.shields.io/badge/completed-✓-brightgreen)
 
 
-## Examples
-
 You can find several examples in the [examples gallery](https://claudia-elijas.github.io/topophone2/examples.html).
-
-
-## Documentation
 
 The API documentation can be found in the [documentation](https://claudia-elijas.github.io/topophone2/documentation.html).
 
