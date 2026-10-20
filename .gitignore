@@ -11,6 +11,11 @@ dist/
 # Sphinx docs build
 docs/_build/
 
+# files related to paper figures
+docs/source/examples/data/figures/
+docs/source/examples/figs_JASA-EL.ipynb
+docs/source/examples/data/SYNTHETICS.npz
+
 # editors / OS
 .vscode/
 .DS_Store
