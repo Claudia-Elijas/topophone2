@@ -15,7 +15,7 @@ compare competing models through Bayesian evidence.
 Visit the [package website](https://claudia-elijas.github.io/topophone2/) for more information!
 
 >[!NOTE]
->We would like to remind the prospective users that this package is under active development to ensure the implemented methodology is accessible and easy to employ for a wider community. We welcome feedback, feature suggestions, and collaboration requests. Please feel free to contact the developers by [email](mailto:jack.andrew.smith53@gmail.com) or use Issues<https://github.com/Claudia-Elijas/topophone2/issues>, or use [Issues](https://github.com/Claudia-Elijas/topophone2/issues) or [Pull Requests](https://github.com/Claudia-Elijas/topophone2/pulls) to get in touch and contribute to the project.
+>We would like to remind the prospective users that this package is under active development to ensure the implemented methodology is accessible and easy to employ for a wider community. We welcome feedback, feature suggestions, and collaboration requests. Please feel free to contact the developers by [email](mailto:jack.andrew.smith53@gmail.com) or use [Issues](https://github.com/Claudia-Elijas/topophone2/issues) or [Pull Requests](https://github.com/Claudia-Elijas/topophone2/pulls) to get in touch and contribute to the project.
 
 ## Getting started 
 
