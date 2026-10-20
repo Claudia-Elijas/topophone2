@@ -379,9 +379,9 @@ class ArrayCovarianceModel():
 
         .. math::
                 
-                    \varphi_\mathbf{s} \left(\mathbf{t} ; \bm{\xi}\right) = \exp \left[\mathrm{i} \mathbf{t}^T \bm{\xi}\right]
+                    \varphi_\boldsymbol{s} \left(\boldsymbol{t} ; \boldsymbol{\xi}\right) = \exp \left[\mathrm{i} \boldsymbol{t}^T \boldsymbol{\xi}\right]
 
-        where :math:`\mathbf{t}` is the characteristic function argument and :math:`\bm{\xi}` is the location vector.
+        where :math:`\boldsymbol{t}` is the characteristic function argument and :math:`\boldsymbol{\xi}` is the location vector.
         
         """
 
@@ -449,17 +449,17 @@ class ArrayCovarianceModel():
                     
         Note
         ----
-        The correlation matrix is already flattened to upper triangle of :math:`\bm{\Omega}_z`
+        The correlation matrix is already flattened to upper triangle of :math:`\boldsymbol{\Omega}_z`
 
 
         The characteristic function for a normal distribution is given by
 
         .. math::
 
-                \varphi_\mathbf{s} \left(\mathbf{t} ; \bm{\xi}, \bm{\Omega}\right) = \exp \left[\mathrm{i} \mathbf{t}^T \bm{\xi} - \frac{1}{2} \mathbf{t}^T \bm{\Omega} \mathbf{t}\right]
+                \varphi_\boldsymbol{s} \left(\boldsymbol{t} ; \boldsymbol{\xi}, \boldsymbol{\Omega}\right) = \exp \left[\mathrm{i} \boldsymbol{t}^T \boldsymbol{\xi} - \frac{1}{2} \boldsymbol{t}^T \boldsymbol{\Omega} \boldsymbol{t}\right]
 
-        where :math:`\mathbf{t}` is the characteristic function argument, :math:`\bm{\xi}` is the location vector, and the scale matrix :math:`\bm{\Omega} = \mathbf{W} \bm{\Omega}_z \mathbf{W}`
-        is built from the scale vector :math:`\bm{\sigma}` (:math:`\mathbf{W} = \mathrm{diag} \left(\bm{\sigma}\right)`) and the correlation matrix :math:`\bm{\Omega}_z`.
+        where :math:`\boldsymbol{t}` is the characteristic function argument, :math:`\boldsymbol{\xi}` is the location vector, and the scale matrix :math:`\boldsymbol{\Omega} = \boldsymbol{W} \boldsymbol{\Omega}_z \boldsymbol{W}`
+        is built from the scale vector :math:`\boldsymbol{\sigma}` (:math:`\boldsymbol{W} = \mathrm{diag} \left(\boldsymbol{\sigma}\right)`) and the correlation matrix :math:`\boldsymbol{\Omega}_z`.
 
         """
 
@@ -548,18 +548,18 @@ class ArrayCovarianceModel():
 
         Note
         ----
-        The correlation matrix is already flattened to upper triangle of :math:`\bm{\Omega}_z` ``Omega_z``.
+        The correlation matrix is already flattened to upper triangle of :math:`\boldsymbol{\Omega}_z` ``Omega_z``.
 
 
         The characteristic function for a skew-normal distribution is given by
 
         .. math::
 
-            \varphi_\mathbf{s} \left(\mathbf{t} ; \bm{\xi}, \bm{\Omega}, \bm{\alpha}\right) = \exp \left[\mathrm{i} \mathbf{t}^T \bm{\xi} - \frac{1}{2} \mathbf{t}^T \bm{\Omega} \mathbf{t}\right] \left[1 + \mathrm{i} \mathrm{erfi} \left(\frac{\sqrt{2}}{2} \bm{\delta}^T \mathbf{W} \mathbf{t}\right)\right]
+            \varphi_\boldsymbol{s} \left(\boldsymbol{t} ; \boldsymbol{\xi}, \boldsymbol{\Omega}, \boldsymbol{\alpha}\right) = \exp \left[\mathrm{i} \boldsymbol{t}^T \boldsymbol{\xi} - \frac{1}{2} \boldsymbol{t}^T \boldsymbol{\Omega} \boldsymbol{t}\right] \left[1 + \mathrm{i} \mathrm{erfi} \left(\frac{\sqrt{2}}{2} \boldsymbol{\delta}^T \boldsymbol{W} \boldsymbol{t}\right)\right]
 
-        where :math:`\mathbf{t}` is the characteristic function argument, :math:`\bm{\xi}` is the location vector, the scale matrix :math:`\bm{\Omega} = \mathbf{W} \bm{\Omega} \mathbf{W}`
-        is built from the scale vector :math:`\bm{\sigma}` (:math:`\mathbf{W} = \mathrm{diag} \left(\bm{\sigma}\right)`) and the correlation matrix :math:`\bm{\Omega}_z`, and the skewness-direction vector
-        :math:`\bm{\delta} = \bm{\Omega_z} \bm{\alpha} / \sqrt{1 + \bm{\alpha}^T \bm{\Omega_z} \bm{\alpha}}` is built from the shape vector :math:`\bm{\alpha}`.    
+        where :math:`\boldsymbol{t}` is the characteristic function argument, :math:`\boldsymbol{\xi}` is the location vector, the scale matrix :math:`\boldsymbol{\Omega} = \boldsymbol{W} \boldsymbol{\Omega} \boldsymbol{W}`
+        is built from the scale vector :math:`\boldsymbol{\sigma}` (:math:`\boldsymbol{W} = \mathrm{diag} \left(\boldsymbol{\sigma}\right)`) and the correlation matrix :math:`\boldsymbol{\Omega}_z`, and the skewness-direction vector
+        :math:`\boldsymbol{\delta} = \boldsymbol{\Omega_z} \boldsymbol{\alpha} / \sqrt{1 + \boldsymbol{\alpha}^T \boldsymbol{\Omega_z} \boldsymbol{\alpha}}` is built from the shape vector :math:`\boldsymbol{\alpha}`.    
         
         """
 
@@ -659,13 +659,13 @@ class ArrayCovarianceModel():
 
         .. math::
 
-            \varphi_{\mathbf{s}} \left(\mathbf{t}; s\right) = 
+            \varphi_{\boldsymbol{s}} \left(\boldsymbol{t}; s\right) = 
             \begin{cases}
-                J_0 \left(s \left|\mathbf{t}\right|\right), & \text{Cylindrical-harmonic} \\
-                j_0 \left(s \left|\mathbf{t}\right|\right), & \text{Spherical-harmonic} 
+                J_0 \left(s \left|\boldsymbol{t}\right|\right), & \text{Cylindrical-harmonic} \\
+                j_0 \left(s \left|\boldsymbol{t}\right|\right), & \text{Spherical-harmonic} 
             \end{cases}
 
-        where :math:`\mathbf{t}` is the characteristic function argument, :math:`J_0` is the order-0 cylindrical Bessel function of the first kind and :math:`j_0` is the order-0 spherical Bessel function of the first kind,
+        where :math:`\boldsymbol{t}` is the characteristic function argument, :math:`J_0` is the order-0 cylindrical Bessel function of the first kind and :math:`j_0` is the order-0 spherical Bessel function of the first kind,
         and :math:`s` is the local apparent slowness (cylindrical-harmonic) or the absolute slowness (spherical-harmonic).
 
         """
@@ -741,9 +741,9 @@ class ArrayCovarianceModel():
         
         .. math::
 
-            \varphi_{\mathbf{s}} \left(\mathbf{t}, \phi; s, \mathbf{a}, \mathbf{b}\right) = \sum_{m=0}^{M} \mathrm{i}^m \epsilon_m C_m \left(\phi; a_m , b_m\right) J_m \left(s \left|\mathbf{t}\right|\right)
+            \varphi_{\boldsymbol{s}} \left(\boldsymbol{t}, \phi; s, \boldsymbol{a}, \boldsymbol{b}\right) = \sum_{m=0}^{M} \mathrm{i}^m \epsilon_m C_m \left(\phi; a_m , b_m\right) J_m \left(s \left|\boldsymbol{t}\right|\right)
 
-        where :math:`\mathbf{t}` is the characteristic function argument, :math:`\phi` is the azimuth (anticlockwise from X),
+        where :math:`\boldsymbol{t}` is the characteristic function argument, :math:`\phi` is the azimuth (anticlockwise from X),
         the harmonic basis is :math:`C_m = a_m \cos(m \phi) + b_m \sin(m \phi)`, and :math:`J_m` is the :math:`m`-order cylindrical Bessel function of the first kind.
             
         """    
@@ -835,9 +835,9 @@ class ArrayCovarianceModel():
 
         .. math::
         
-            \varphi_{\mathbf{s}} \left(\mathbf{t}, \phi, \theta; s, \mathbf{A}, \mathbf{B}\right) = \sum_{n=0}^{N} \sum_{m=0}^{n} \mathrm{i}^n C_{nm} \left(\phi; \mathbf{A}, \mathbf{B}\right) P_n^m \left(\cos \left(\theta\right)\right) j_n \left(s \left|\mathbf{t}\right|\right)
+            \varphi_{\boldsymbol{s}} \left(\boldsymbol{t}, \phi, \theta; s, \boldsymbol{A}, \boldsymbol{B}\right) = \sum_{n=0}^{N} \sum_{m=0}^{n} \mathrm{i}^n C_{nm} \left(\phi; \boldsymbol{A}, \boldsymbol{B}\right) P_n^m \left(\cos \left(\theta\right)\right) j_n \left(s \left|\boldsymbol{t}\right|\right)
 
-        where :math:`\mathbf{t}` is the characteristic function argument, :math:`\phi` is the azimuth (anticlockwise from X), :math:`\theta` is the polar angle (wrt. -Z),
+        where :math:`\boldsymbol{t}` is the characteristic function argument, :math:`\phi` is the azimuth (anticlockwise from X), :math:`\theta` is the polar angle (wrt. -Z),
         the cylindrical-harmonic basis is :math:`C_n^m = A_n^m \cos \left(m \phi\right) + B_n^m \sin \left(m \phi\right)`, :math:`P_n^m` is the associated Legendre polynomial of order :math:`m` and degree :math:`n`,
         and :math:`j_n` is the :math:`n`-order spherical Bessel function of the first kind.
 
