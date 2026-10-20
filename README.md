@@ -12,12 +12,14 @@ energy distribution, such as the direction of arrival, slowness and directional
 spread. It also quantifies how well the data constrain each component, and
 compare competing models through Bayesian evidence.
 
+Visit the [package website](https://claudia-elijas.github.io/topophone2/) for more information!
+
 >[!NOTE]
->We would like to remind the prospective users that this package is under active development to ensure the implemented methodology is accessible and easy to employ for a wider community. We welcome feedback, feature suggestions, and collaboration requests. Please feel free to contact the developers by email or use the GitHub Discussions, Issues, or Pull Requests to get in touch and contribute to the project. 
+>We would like to remind the prospective users that this package is under active development to ensure the implemented methodology is accessible and easy to employ for a wider community. We welcome feedback, feature suggestions, and collaboration requests. Please feel free to contact the developers by [email](mailto:jack.andrew.smith53@gmail.com) or use Issues<https://github.com/Claudia-Elijas/topophone2/issues>, or use [Issues](https://github.com/Claudia-Elijas/topophone2/issues) or [Pull Requests](https://github.com/Claudia-Elijas/topophone2/pulls) to get in touch and contribute to the project.
 
 ## Getting started 
 
-To install **topophone2** follow the steps below: 
+To install **topophone2**, follow the steps below, also described in the [installation guide](https://claudia-elijas.github.io/topophone2/setup.html).
 
 #### 1. Clone the repository
 
@@ -57,12 +59,12 @@ python -c "import topophone2.inversion; print('topophone2 is ready')"
 
 ## Examples
 
-You can find several examples at https://claudia-elijas.github.io/topophone2/examples/ 
+You can find several examples in the [examples gallery](https://claudia-elijas.github.io/topophone2/examples.html).
 
 
 ## Documentation
 
-The API documentation can be found at https://claudia-elijas.github.io/topophone2/ 
+The API documentation can be found in the [documentation](https://claudia-elijas.github.io/topophone2/documentation.html).
 
 
 ## How to cite
