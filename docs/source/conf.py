@@ -34,7 +34,7 @@ exclude_patterns = []
 autodoc_member_order = 'bysource'
 
 # Mock heavy/unavailable dependencies so autodoc can import topophone2.inversion
-autodoc_mock_imports = ['geopvi']
+autodoc_mock_imports = ['geopvi', 'harmonic']
 
 # Merge the class docstring (Attributes/Methods) with the __init__
 # docstring (Input) so constructor parameters are documented too.
@@ -85,7 +85,6 @@ nbsphinx_thumbnails = {
     'examples/example_3/example_3.1': '_static/thumbnails/example_3.1.png',
     'examples/example_3/example_3.2': '_static/thumbnails/example_3.2.png',
 }
-
 
 
 # -- Options for HTML output -------------------------------------------------
