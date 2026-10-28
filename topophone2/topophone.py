@@ -2,10 +2,9 @@
 .. container:: module-intro
 
     The ``topophone2.topophone`` module provides the :func:`decompose` function,
-    which performs the decomposition of an observed array-covariance matrix
-    into its constituent signal components
+    which performs the decomposition of the underlying wavefield using the observed array-covariance matrix
     using a variational inference approach.
-    The function takes in various parameters related to the observed data, receiver positions, signal types, and model configurations,
+    The function takes in various parameters related to the observed data, sensor positions, signal types, and model configurations,
     and saves the estimated model parameters and loss history.
 
 """

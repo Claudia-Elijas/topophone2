@@ -1,7 +1,7 @@
 Examples
 ========
 
-Here are some examples of how to use the topophone2 package:
+Here are some examples of how to use the Topophone2 package:
 
 
 
@@ -10,7 +10,7 @@ Here are some examples of how to use the topophone2 package:
 
 In this example, we demonstrate how to carry out probabilistic wavefield decomposition on a synthetic abyssal T-phase. 
 We use the posteriors to estimate information gain for an extra sensor and increased noise level. 
-We use the posterios to discriminate between a point-source and a distributed-source model.  
+We use the posteriors to discriminate between a point-source and a distributed-source model.  
 
 
 .. nbgallery::
@@ -25,9 +25,9 @@ We use the posterios to discriminate between a point-source and a distributed-so
 ---------------------
 
 In this example, we demonstrate how to carry out probabilistic wavefield decomposition on a thermospheric infrasound return of an explosion event. 
-We show how to create a sample covariance matrix from a time series. 
-We inverted for a skew-normal, environmental noise and sensor self-noise component. 
-We test the hypothesis that the signal is skewed back towards the source with respect to its bulk deviation. 
+We show how to create a sample-covariance matrix from a time series. 
+We invert for a skew-normally distributed signal, angular-harmonic noise, and sensor self-noise component. 
+We test the hypothesis that the signal is skewed back towards the source with respect to the deviation of the maximum energy direction. 
 
 .. nbgallery::
     :glob: 
@@ -40,8 +40,8 @@ The waveform data used in this example is available from the virtual Data Exploi
 3. Synthetic testing
 --------------------
 
-We show how to generate data for a synthetic wavefield.
-It also demonstrates how to populate and read the configuration file with the existing code functionality. 
+In this example, we show how to generate data for a synthetic wavefield.
+We also demonstrate how to populate and read the configuration file with the existing code functionality. 
 
 .. nbgallery::
     :glob: 

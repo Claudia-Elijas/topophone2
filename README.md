@@ -1,16 +1,15 @@
 # Topophone2
 
 **Topophone2** is a Python package for probabilistic wavefield decomposition
-using receiver arrays. Given the array covariance matrix (cross-spectrum)
-derived from recordings made by a set of receivers, it estimates
-the mixture of incoming wavefields that produced the recorded signal: inluding 
-plane waves, directionally distributed arrivals, propagating environental noise and sensor self-noise.
+using sensor arrays. Given the array covariance matrix (cross-spectrum), it estimates
+parameters of the mixture of incoming wavefield components that produced the recording:
+e.g., plane waves, directionally distributed arrivals, propagating environental noise and sensor self-noise.
 
-For every component, it estimates the full posterior probability distribution
-(not just a single best-fit value) of the parameters that define the signal's
+For each component, Topophone2 estimates the full posterior probability distribution
+(not just a single best-fit value) of the parameters that define its
 energy distribution, such as the direction of arrival, slowness and directional
-spread. It also quantifies how well the data constrain each component, and
-compare competing models through Bayesian evidence.
+spread. Topophone2 can also use these posteriors to calculate information gain and
+compare competeing models through the Bayes factor.
 
 Visit the [package website](https://claudia-elijas.github.io/topophone2/) for more information!
 
@@ -19,7 +18,7 @@ Visit the [package website](https://claudia-elijas.github.io/topophone2/) for mo
 
 ## Getting started 
 
-To install **topophone2**, follow the steps below, also described in the [installation guide](https://claudia-elijas.github.io/topophone2/setup.html).
+To install **Topophone2**, follow the steps below, also described in the [installation guide](https://claudia-elijas.github.io/topophone2/setup.html).
 
 #### 1. Clone the repository
 
@@ -60,7 +59,7 @@ The API documentation can be found in the [documentation](https://claudia-elijas
 
 ## How to cite
 
-If you use **topophone2** in your research, please cite the following paper:
+If you use **Topophone2** in your research, please cite the following paper:
 
 > Smith, J.-A., & Elijas Parra, C. (in prep.). Probabilistic wavefield
 > decomposition from array covariance.
@@ -78,7 +77,7 @@ If you use **topophone2** in your research, please cite the following paper:
 
 </details>
 
-**topophone2** is built on the following open-source packages, which should
+**Topophone2** is built on the following open-source packages, which should
 also be cited if used in your research:
 
 **GeoPVI**
@@ -105,29 +104,3 @@ also be cited if used in your research:
   doi     = {10.1093/gji/ggag138}
 }
 ```
-
-</details>
-
-**harmonic**
-
-> McEwen, J. D., Wallis, C. G. R., Price, M. A., & Docherty, M. M. (2021).
-> Machine learning assisted Bayesian model comparison: learnt harmonic mean
-> estimator. *arXiv preprint* arXiv:2111.12720.
-> [doi:10.48550/arXiv.2111.12720](https://doi.org/10.48550/arXiv.2111.12720)
-
-<details>
-<summary>BibTeX</summary>
-
-```bibtex
-@article{mcewen_harmonic_2021,
-  author  = {McEwen, J. D. and Wallis, C. G. R. and
-             Price, M. A. and Docherty, M. M.},
-  title   = {Machine learning assisted {Bayesian} model comparison:
-             learnt harmonic mean estimator},
-  journal = {arXiv preprint arXiv:2111.12720},
-  year    = {2021},
-  doi     = {10.48550/arXiv.2111.12720}
-}
-```
-
-</details>

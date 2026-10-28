@@ -3,7 +3,7 @@
 .. container:: module-intro 
 
     
-    The ``topophone2.inversion`` module provides functionality for inversion for incoherently distributed wavefield parameters.
+    The ``topophone2.inversion`` module provides functionality for inversion of wavefield parameters.
     It contains classes and functions to perform variational Bayesian inference by normalising flows and for posterior analysis.
 
 """

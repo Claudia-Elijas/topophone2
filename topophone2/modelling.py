@@ -2,12 +2,12 @@
 .. container:: module-intro
 
     The ``topophone2.modelling`` module provides functionality for array-covariance modelling. It contains the :class:`ArrayCovarianceModel` class to predict the array covariance 
-    for a given geometry and frequency vector recording any combination of energy distributions:
+    for a given array geometry recording a combination of wavefield components, e.g., with energies distributed across slowness:
 
-        - degenerate distribution (plane wave)
-        - normal distribution
-        - skew-normal distribution
-        - cyclindrical-/spherical-harmonic distribution.
+        - Degenerate distribution (plane wave)
+        - Normal distribution
+        - Skew-normal distribution
+        - Cylindrical-/spherical-harmonic distribution
 
 """
 
