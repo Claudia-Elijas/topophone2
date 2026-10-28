@@ -391,8 +391,424 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="inversion-module">
-<h1>Inversion module<a class="headerlink" href="#inversion-module" title="Link to this heading">#</a></h1>
+  <section id="module-topophone2.inversion">
+<span id="inversion-module"></span><h1>Inversion module<a class="headerlink" href="#module-topophone2.inversion" title="Link to this heading">#</a></h1>
+<div class="module-intro docutils container">
+<p>The <code class="docutils literal notranslate"><span class="pre">topophone2.inversion</span></code> module provides functionality for inversion of wavefield parameters.
+It contains classes and functions to perform variational Bayesian inference by normalising flows and for posterior analysis.</p>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="topophone2.inversion.Uniform">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">topophone2.inversion.</span></span><span class="sig-name descname"><span class="pre">Uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/inversion.html#Uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.inversion.Uniform" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to calculate log-prior for uniform distribution with lower and upper bounds.</p>
+<p class="rubric">Methods</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#topophone2.inversion.Uniform.log_prior" title="topophone2.inversion.Uniform.log_prior"><code class="xref py py-meth docutils literal notranslate"><span class="pre">log_prior()</span></code></a> : Calculate log-prior for uniform distribution</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Input<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lower</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Lower bounds for uniform distribution
+(parameter,)</p></li>
+<li><p><strong>upper</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Upper bounds for uniform distribution
+(parameter,)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>lower</strong> (<code class="docutils literal notranslate"><span class="pre">torch.Tensor</span></code>) – Lower bounds for uniform distribution
+(parameter,)</p></li>
+<li><p><strong>upper</strong> (<code class="docutils literal notranslate"><span class="pre">torch.Tensor</span></code>) – Upper bounds for uniform distribution
+(parameter,)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="topophone2.inversion.Uniform.log_prior">
+<span class="sig-name descname"><span class="pre">log_prior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/inversion.html#Uniform.log_prior"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.inversion.Uniform.log_prior" title="Link to this definition">#</a></dt>
+<dd><p>Calculate the log-prior for a uniform distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Input<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>m</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Model vector
+(model, parameter)</p>
+</dd>
+<dt class="field-even">Output<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>lnp_m</strong> (<code class="docutils literal notranslate"><span class="pre">torch.Tensor</span></code>) – Log-prior for uniform distribution
+(model,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="topophone2.inversion.Posterior">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">topophone2.inversion.</span></span><span class="sig-name descname"><span class="pre">Posterior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Gamma_obs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_obs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">array_covariance_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Gamma_obs_noise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_obs_noise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">361</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/inversion.html#Posterior"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.inversion.Posterior" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to calculate log-posterior for array-covariance inversion.</p>
+<p class="rubric">Methods</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#topophone2.inversion.Posterior.log_likelihood" title="topophone2.inversion.Posterior.log_likelihood"><code class="xref py py-meth docutils literal notranslate"><span class="pre">log_likelihood()</span></code></a> : Calculate log-likelihood of data given model.</p></li>
+<li><p><a class="reference internal" href="#topophone2.inversion.Posterior.log_posterior" title="topophone2.inversion.Posterior.log_posterior"><code class="xref py py-meth docutils literal notranslate"><span class="pre">log_posterior()</span></code></a> : Calculate log-posterior for model given data and prior.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Input<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Gamma_obs</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Sample-covariance matrix
+(frequency, receiver, receiver)</p></li>
+<li><p><strong>N_obs</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of independent samples used to estimate observed expectation</p></li>
+<li><p><strong>array_covariance_model</strong> (<code class="docutils literal notranslate"><span class="pre">Callable</span></code>) – Forward modeller (<code class="xref py py-class docutils literal notranslate"><span class="pre">ArrayCovarianceModel</span></code>)</p></li>
+<li><p><strong>prior</strong> (<code class="docutils literal notranslate"><span class="pre">Callable</span></code>) – Prior pdf (<a class="reference internal" href="#topophone2.inversion.Uniform" title="topophone2.inversion.Uniform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uniform</span></code></a>)</p></li>
+<li><p><strong>Gamma_obs_noise</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> (optional)) – Noise-only sample-covariance matrix
+(frequency, receiver, receiver)</p></li>
+<li><p><strong>N_obs_noise</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code> (optional)) – Number of independent samples used to estimate observed noise-only expectation</p></li>
+<li><p><strong>kappa</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code> (default <code class="docutils literal notranslate"><span class="pre">1e5</span></code>)) – Strength of the quadratic penalty on negative angular density for cylindrical-harmonic distribution</p></li>
+<li><p><strong>N_theta</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code> (default <code class="docutils literal notranslate"><span class="pre">361</span></code>)) – Number of azimuths at which positivity of the angular density is evaluated</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>N_obs</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Number of independent samples used to estimate observed expectation</p></li>
+<li><p><strong>N_obs_noise</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Number of independent samples used to estimate observed noise-only expectation</p></li>
+<li><p><strong>prior</strong> (<code class="docutils literal notranslate"><span class="pre">Callable</span></code>) – Prior distribution</p></li>
+<li><p><strong>forward</strong> (<code class="docutils literal notranslate"><span class="pre">Callable</span></code>) – Function to predict array covariance from model vector</p></li>
+<li><p><strong>kappa</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Strength of the angular-density positivity penalty</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="topophone2.inversion.Posterior.log_likelihood">
+<span class="sig-name descname"><span class="pre">log_likelihood</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/inversion.html#Posterior.log_likelihood"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.inversion.Posterior.log_likelihood" title="Link to this definition">#</a></dt>
+<dd><p>Calculate the log-likelihood of the sample-covariance matrix given a model vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Input<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Model vector
+(model, parameter)</p></li>
+<li><p><strong>grad</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code> (default: <code class="docutils literal notranslate"><span class="pre">True</span></code>)) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, calculate gradient of log-likelihood wrt. model parameters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Output<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>lnp_dm</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Log-likelihood of sample-covariance matrix given model vector
+(model,)</p></li>
+<li><p><strong>dlnp_dm</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Gradient of log-likelihood wrt. model parameters
+(model, parameter)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="topophone2.inversion.Posterior.log_posterior">
+<span class="sig-name descname"><span class="pre">log_posterior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/inversion.html#Posterior.log_posterior"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.inversion.Posterior.log_posterior" title="Link to this definition">#</a></dt>
+<dd><p>Calculate the log-posterior for a model vector given the sample-covariance matrix and prior distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Input<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>m</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Model vector
+(model, parameter)</p>
+</dd>
+<dt class="field-even">Output<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>lnp_md</strong> (<code class="docutils literal notranslate"><span class="pre">torch.Tensor</span></code>) – Log-posterior for model vector given observed array-covariance matrix and prior distribution
+(model,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="topophone2.inversion.LinearFlowsModel">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">topophone2.inversion.</span></span><span class="sig-name descname"><span class="pre">LinearFlowsModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N_param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_bounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ini_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Uniform'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/inversion.html#LinearFlowsModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.inversion.LinearFlowsModel" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to define a normalising flows model for variational inference.</p>
+<p class="rubric">Methods</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#topophone2.inversion.LinearFlowsModel.def_flow_model" title="topophone2.inversion.LinearFlowsModel.def_flow_model"><code class="xref py py-meth docutils literal notranslate"><span class="pre">def_flow_model()</span></code></a> : Define a normalising flows model for variational inference.</p></li>
+<li><p><a class="reference internal" href="#topophone2.inversion.LinearFlowsModel.get_flow_param" title="topophone2.inversion.LinearFlowsModel.get_flow_param"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_flow_param()</span></code></a> : Get the parameters of the normalising flows model.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Input<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N_param</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of model parameters</p></li>
+<li><p><strong>N_flow</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of normalising flows</p></li>
+<li><p><strong>prior_bounds</strong> (<code class="docutils literal notranslate"><span class="pre">tuple</span></code> (default: <code class="docutils literal notranslate"><span class="pre">None</span></code>)) – Lower and upper bounds for uniform prior distribution</p></li>
+<li><p><strong>mean_field</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code> (default: <code class="docutils literal notranslate"><span class="pre">False</span></code>)) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, use mean-field approximation for flows model</p></li>
+<li><p><strong>ini_dist</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code> (default: <code class="docutils literal notranslate"><span class="pre">&quot;Uniform&quot;</span></code>)) – Initial distribution for flows model. Options are <code class="docutils literal notranslate"><span class="pre">&quot;Uniform&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;Normal&quot;</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>N_param</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of model parameters</p></li>
+<li><p><strong>N_flow</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of normalising flows</p></li>
+<li><p><strong>prior_bounds</strong> (<code class="docutils literal notranslate"><span class="pre">tuple</span></code>) – Lower and upper bounds for uniform prior distribution</p></li>
+<li><p><strong>mean_field</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, use mean-field approximation for flows model</p></li>
+<li><p><strong>ini_dist</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – Initial distribution for flows model. Options are <code class="docutils literal notranslate"><span class="pre">&quot;Uniform&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;Normal&quot;</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="topophone2.inversion.LinearFlowsModel.def_flow_model">
+<span class="sig-name descname"><span class="pre">def_flow_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/inversion.html#LinearFlowsModel.def_flow_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.inversion.LinearFlowsModel.def_flow_model" title="Link to this definition">#</a></dt>
+<dd><p>Define a normalising flows model for variational inference.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="topophone2.inversion.LinearFlowsModel.get_flow_param">
+<span class="sig-name descname"><span class="pre">get_flow_param</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/inversion.html#LinearFlowsModel.get_flow_param"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.inversion.LinearFlowsModel.get_flow_param" title="Link to this definition">#</a></dt>
+<dd><p>Get the parameters of the normalising flows model for variational inference.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="topophone2.inversion.Inference">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">topophone2.inversion.</span></span><span class="sig-name descname"><span class="pre">Inference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flow_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posterior</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outpath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/inversion.html#Inference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.inversion.Inference" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class that performs variational inference using normalising flows.</p>
+<p class="rubric">Methods</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#topophone2.inversion.Inference.invert" title="topophone2.inversion.Inference.invert"><code class="xref py py-meth docutils literal notranslate"><span class="pre">invert()</span></code></a> : Optimise variational distribution to approximate posterior pdf</p></li>
+<li><p><a class="reference internal" href="#topophone2.inversion.Inference.save" title="topophone2.inversion.Inference.save"><code class="xref py py-meth docutils literal notranslate"><span class="pre">save()</span></code></a> : Save the results of the inversion</p></li>
+<li><p><a class="reference internal" href="#topophone2.inversion.Inference.load" title="topophone2.inversion.Inference.load"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load()</span></code></a> : Load the results of the inversion</p></li>
+<li><p><a class="reference internal" href="#topophone2.inversion.Inference.sample" title="topophone2.inversion.Inference.sample"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sample()</span></code></a> : Sample from the posterior distribution of model parameters</p></li>
+<li><p><a class="reference internal" href="#topophone2.inversion.Inference.unpack" title="topophone2.inversion.Inference.unpack"><code class="xref py py-meth docutils literal notranslate"><span class="pre">unpack()</span></code></a> : Unpack the model vector into its constituent parameters</p></li>
+<li><p><a class="reference internal" href="#topophone2.inversion.Inference.get_lnELBO" title="topophone2.inversion.Inference.get_lnELBO"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_lnELBO()</span></code></a> : Function to return logarithmic evidence lower bound</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Input<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>flow_model</strong> (<code class="docutils literal notranslate"><span class="pre">Callable</span></code>) – The normalising flows model to use for variational inference (<a class="reference internal" href="#topophone2.inversion.LinearFlowsModel" title="topophone2.inversion.LinearFlowsModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">LinearFlowsModel</span></code></a>)</p></li>
+<li><p><strong>posterior</strong> (<code class="docutils literal notranslate"><span class="pre">Callable</span></code>) – Posterior pdf calculator (<a class="reference internal" href="#topophone2.inversion.Posterior" title="topophone2.inversion.Posterior"><code class="xref py py-class docutils literal notranslate"><span class="pre">Posterior</span></code></a>)</p></li>
+<li><p><strong>learning_rate</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – The learning rate for the optimiser</p></li>
+<li><p><strong>outpath</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – The path to save the results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>flow_model</strong> (<code class="docutils literal notranslate"><span class="pre">Callable</span></code>) – The normalising flows model to use for variational inference</p></li>
+<li><p><strong>inversion</strong> (<code class="docutils literal notranslate"><span class="pre">Callable</span></code>) – The variational inference object that performs the inversion</p></li>
+<li><p><strong>optimiser</strong> (<code class="docutils literal notranslate"><span class="pre">torch.optim.Optimizer</span></code>) – The optimiser used for variational inference</p></li>
+<li><p><strong>learning_rate</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – The learning rate for the optimiser</p></li>
+<li><p><strong>loss_his</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code>) – The history of the loss function during the inversion</p></li>
+<li><p><strong>outpath</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – The path to save the results</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="topophone2.inversion.Inference.invert">
+<span class="sig-name descname"><span class="pre">invert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N_iterations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_montecarlo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_intermediate_result</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/inversion.html#Inference.invert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.inversion.Inference.invert" title="Link to this definition">#</a></dt>
+<dd><p>Optimise variational distribution to approximate posterior pdf.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Input<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N_iterations</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of iterations to run the inversion</p></li>
+<li><p><strong>N_montecarlo</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of samples to estimate ELBO and gradient estimate</p></li>
+<li><p><strong>N_out</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code> (default: <code class="docutils literal notranslate"><span class="pre">0</span></code>)) – Number of samples to output for intermediate results</p></li>
+<li><p><strong>save_intermediate_result</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code> (default: <code class="docutils literal notranslate"><span class="pre">False</span></code>)) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, save intermediate results during the inversion</p></li>
+<li><p><strong>verbose</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code> (default: <code class="docutils literal notranslate"><span class="pre">False</span></code>)) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, print progress during the inversion</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="topophone2.inversion.Inference.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/inversion.html#Inference.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.inversion.Inference.save" title="Link to this definition">#</a></dt>
+<dd><p>Save the current flow model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="topophone2.inversion.Inference.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/inversion.html#Inference.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.inversion.Inference.load" title="Link to this definition">#</a></dt>
+<dd><p>Load a checkpoint from a previous iteration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Input<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>iteration</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – The iteration number of the checkpoint to load</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="topophone2.inversion.Inference.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N_samples</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/inversion.html#Inference.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.inversion.Inference.sample" title="Link to this definition">#</a></dt>
+<dd><p>Sample current normalising flows model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Input<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>N_samples</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of samples to draw from the posterior distribution</p>
+</dd>
+<dt class="field-even">Output<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>samples</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Samples drawn from the posterior distribution
+(N_samples, parameter)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="topophone2.inversion.Inference.unpack">
+<span class="sig-name descname"><span class="pre">unpack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/inversion.html#Inference.unpack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.inversion.Inference.unpack" title="Link to this definition">#</a></dt>
+<dd><p>Unpack the model vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Input<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>m</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – The model vector to unpack.
+(model, parameter)</p>
+</dd>
+<dt class="field-even">Output<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>The unpacked model.</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="topophone2.inversion.Inference.get_lnELBO">
+<span class="sig-name descname"><span class="pre">get_lnELBO</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/inversion.html#Inference.get_lnELBO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.inversion.Inference.get_lnELBO" title="Link to this definition">#</a></dt>
+<dd><p>Return logarithmic evidence lower bound.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Output<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lnELBO</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Log-ELBO
+(iteration,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="topophone2.inversion.MarginalStats">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">topophone2.inversion.</span></span><span class="sig-name descname"><span class="pre">MarginalStats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lnp_dm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posterior</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_bounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/inversion.html#MarginalStats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.inversion.MarginalStats" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for posterior analysis.</p>
+<p class="rubric">Methods</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#topophone2.inversion.MarginalStats.calc_evidence" title="topophone2.inversion.MarginalStats.calc_evidence"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_evidence()</span></code></a> : Calculate evidence using the learnt harmonic mean estimator.</p></li>
+<li><p><a class="reference internal" href="#topophone2.inversion.MarginalStats.calc_information" title="topophone2.inversion.MarginalStats.calc_information"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_information()</span></code></a> : Calculate the information gain relative to a bounded uniform prior.</p></li>
+<li><p><a class="reference internal" href="#topophone2.inversion.MarginalStats.marginal_mean" title="topophone2.inversion.MarginalStats.marginal_mean"><code class="xref py py-meth docutils literal notranslate"><span class="pre">marginal_mean()</span></code></a> : Calculate the marginal means.</p></li>
+<li><p><a class="reference internal" href="#topophone2.inversion.MarginalStats.credible_interval" title="topophone2.inversion.MarginalStats.credible_interval"><code class="xref py py-meth docutils literal notranslate"><span class="pre">credible_interval()</span></code></a> : Calculate the credible interval.</p></li>
+<li><p><a class="reference internal" href="#topophone2.inversion.MarginalStats.probability_density" title="topophone2.inversion.MarginalStats.probability_density"><code class="xref py py-meth docutils literal notranslate"><span class="pre">probability_density()</span></code></a> : Calculate marginal probability density estimate.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Input<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m</strong> (<code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code>) – Ensemble of model samples distributed according to posterior pdf
+(sample, parameter)</p></li>
+<li><p><strong>lnp_dm</strong> (<code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code> (optional)) – Log-likelihood of model samples
+(sample,)</p></li>
+<li><p><strong>posterior</strong> (<code class="docutils literal notranslate"><span class="pre">Callable</span></code>) – Posterior pdf calculator (<a class="reference internal" href="#topophone2.inversion.Posterior" title="topophone2.inversion.Posterior"><code class="xref py py-class docutils literal notranslate"><span class="pre">Posterior</span></code></a>)</p></li>
+<li><p><strong>prior_bounds</strong> (<code class="docutils literal notranslate"><span class="pre">Tuple[np.ndarray,np.ndarray]</span></code>) – Lower and upper bounds of uniform prior
+(parameter,)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>m</strong> (<code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code>) – Ensemble of model samples distributed according to posterior pdf</p></li>
+<li><p><strong>lnp_dm</strong> (<code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code>) – Log-likelihood of model samples</p></li>
+<li><p><strong>Vi</strong> (<code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code>) – Length of each side of prior hyper-volume</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="topophone2.inversion.MarginalStats.calc_evidence">
+<span class="sig-name descname"><span class="pre">calc_evidence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nchains</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/inversion.html#MarginalStats.calc_evidence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.inversion.MarginalStats.calc_evidence" title="Link to this definition">#</a></dt>
+<dd><p>Calculate evidence using the learnt harmonic mean estimator [McEwan et al., 2021, ArXiv].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Input<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nchains</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code> (default <code class="docutils literal notranslate"><span class="pre">10</span></code>)) – Number of data sets to split model chain into</p></li>
+<li><p><strong>temperature</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code> (default <code class="docutils literal notranslate"><span class="pre">0.8</span></code>)) – Temperature of learnt model</p></li>
+</ul>
+</dd>
+<dt class="field-even">Output<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>lnp_d</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Log-evidence</p></li>
+<li><p><strong>lnp_d_err</strong> (<code class="docutils literal notranslate"><span class="pre">Tuple[float,float]</span></code>) – Error bounds on estimate</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="topophone2.inversion.MarginalStats.calc_information">
+<span class="sig-name descname"><span class="pre">calc_information</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/inversion.html#MarginalStats.calc_information"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.inversion.MarginalStats.calc_information" title="Link to this definition">#</a></dt>
+<dd><p>Calculate the information gain relative to a bounded uniform prior.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Input<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>idx</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code> (optional)) – List of indices in subset</p></li>
+<li><p><strong>thin</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code> (default <code class="docutils literal notranslate"><span class="pre">2</span></code>)) – Thin model samples for KDE estimation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Output<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>D</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Information gain [nats]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="topophone2.inversion.MarginalStats.marginal_mean">
+<span class="sig-name descname"><span class="pre">marginal_mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">harmonic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/inversion.html#MarginalStats.marginal_mean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.inversion.MarginalStats.marginal_mean" title="Link to this definition">#</a></dt>
+<dd><p>Calculate the marginal means.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Input<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>idx</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code>) – List of indices in subset</p></li>
+<li><p><strong>harmonic</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code> (default <code class="docutils literal notranslate"><span class="pre">False</span></code>)) – Perform harmonic averaging, rather than arithmetic</p></li>
+</ul>
+</dd>
+<dt class="field-even">Output<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>mean</strong> (<code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code>) – Marginal mean
+(parameter,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="topophone2.inversion.MarginalStats.credible_interval">
+<span class="sig-name descname"><span class="pre">credible_interval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inner_pc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">95.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/inversion.html#MarginalStats.credible_interval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.inversion.MarginalStats.credible_interval" title="Link to this definition">#</a></dt>
+<dd><p>Calculate the credible interval.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Input<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inner_pc</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code> (default <code class="docutils literal notranslate"><span class="pre">95.0</span></code>)) – Interval percentage [%]</p></li>
+<li><p><strong>idx</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code> (optional)) – List of indices in subset</p></li>
+</ul>
+</dd>
+<dt class="field-even">Output<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ci_lo</strong> (<code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code>) – Lower bound of credible interval
+(parameter,)</p></li>
+<li><p><strong>ci_hi</strong> (<code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code>) – Upper bound of credible interval
+(parameter,)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="topophone2.inversion.MarginalStats.probability_density">
+<span class="sig-name descname"><span class="pre">probability_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">npts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cumulative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topophone2/inversion.html#MarginalStats.probability_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#topophone2.inversion.MarginalStats.probability_density" title="Link to this definition">#</a></dt>
+<dd><p>Calculate marginal [(reverse) cumulative] probability density estimate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Input<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>i</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Model parameter index</p></li>
+<li><p><strong>npts</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code> (default <code class="docutils literal notranslate"><span class="pre">500</span></code>)) – Number of points in KDE vector</p></li>
+<li><p><strong>bounds</strong> (<code class="docutils literal notranslate"><span class="pre">Tuple[float,float]</span></code> (optional)) – Bounds of KDE vector</p></li>
+<li><p><strong>thin</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code> (optional)) – Thin model samples for KDE estimation</p></li>
+<li><p><strong>cumulative</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code> (optional)) – If specified, calculate cumulative distribution in <code class="docutils literal notranslate"><span class="pre">'forward'</span></code> or <code class="docutils literal notranslate"><span class="pre">'reverse'</span></code> direction</p></li>
+</ul>
+</dd>
+<dt class="field-even">Output<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>density</strong> (<code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code>) – Density function</p></li>
+<li><p><strong>vec</strong> (<code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code>) – Density function vector</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
@@ -433,6 +849,48 @@
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.inversion.Uniform"><code class="docutils literal notranslate"><span class="pre">Uniform</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.inversion.Uniform.log_prior"><code class="docutils literal notranslate"><span class="pre">Uniform.log_prior()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.inversion.Posterior"><code class="docutils literal notranslate"><span class="pre">Posterior</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.inversion.Posterior.log_likelihood"><code class="docutils literal notranslate"><span class="pre">Posterior.log_likelihood()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.inversion.Posterior.log_posterior"><code class="docutils literal notranslate"><span class="pre">Posterior.log_posterior()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.inversion.LinearFlowsModel"><code class="docutils literal notranslate"><span class="pre">LinearFlowsModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.inversion.LinearFlowsModel.def_flow_model"><code class="docutils literal notranslate"><span class="pre">LinearFlowsModel.def_flow_model()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.inversion.LinearFlowsModel.get_flow_param"><code class="docutils literal notranslate"><span class="pre">LinearFlowsModel.get_flow_param()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.inversion.Inference"><code class="docutils literal notranslate"><span class="pre">Inference</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.inversion.Inference.invert"><code class="docutils literal notranslate"><span class="pre">Inference.invert()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.inversion.Inference.save"><code class="docutils literal notranslate"><span class="pre">Inference.save()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.inversion.Inference.load"><code class="docutils literal notranslate"><span class="pre">Inference.load()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.inversion.Inference.sample"><code class="docutils literal notranslate"><span class="pre">Inference.sample()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.inversion.Inference.unpack"><code class="docutils literal notranslate"><span class="pre">Inference.unpack()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.inversion.Inference.get_lnELBO"><code class="docutils literal notranslate"><span class="pre">Inference.get_lnELBO()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.inversion.MarginalStats"><code class="docutils literal notranslate"><span class="pre">MarginalStats</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.inversion.MarginalStats.calc_evidence"><code class="docutils literal notranslate"><span class="pre">MarginalStats.calc_evidence()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.inversion.MarginalStats.calc_information"><code class="docutils literal notranslate"><span class="pre">MarginalStats.calc_information()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.inversion.MarginalStats.marginal_mean"><code class="docutils literal notranslate"><span class="pre">MarginalStats.marginal_mean()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.inversion.MarginalStats.credible_interval"><code class="docutils literal notranslate"><span class="pre">MarginalStats.credible_interval()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topophone2.inversion.MarginalStats.probability_density"><code class="docutils literal notranslate"><span class="pre">MarginalStats.probability_density()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
 

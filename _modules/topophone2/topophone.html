@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>topophone2.topophone &#8212; topophone2</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=7e27919d" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/topophone2/topophone';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/home.svg" class="logo__image only-light" alt="topophone2 home page"/>
+    <img src="../../_static/home.svg" class="logo__image only-dark pst-js-only" alt="topophone2 home page"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../setup.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../documentation.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../license.html">
+    License
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../setup.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../documentation.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../license.html">
+    License
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">topophone2.topophone</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for topophone2.topophone</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""</span>
+<span class="sd">.. container:: module-intro</span>
+
+<span class="sd">    The ``topophone2.topophone`` module provides the :func:`decompose` function,</span>
+<span class="sd">    which performs the decomposition of the underlying wavefield using the observed array-covariance matrix</span>
+<span class="sd">    using a variational inference approach.</span>
+<span class="sd">    The function takes in various parameters related to the observed data, sensor positions, signal types, and model configurations,</span>
+<span class="sd">    and saves the estimated model parameters and loss history.</span>
+
+<span class="sd">"""</span>
+
+<span class="c1">#________ IMPORT ________#</span>
+
+<span class="c1">#__ Import: Numerical __</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1">#__ Import: Topophone2 __</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">topophone2.modelling</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayCovarianceModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">topophone2.inversion</span><span class="w"> </span><span class="kn">import</span> <span class="n">Uniform</span><span class="p">,</span> <span class="n">Posterior</span><span class="p">,</span> <span class="n">LinearFlowsModel</span><span class="p">,</span> <span class="n">Inference</span>
+
+<span class="c1">#________ HELPER FUNCTION ________#</span>
+
+<span class="c1">#__ Function to run Topophone2 core functionality __</span>
+<div class="viewcode-block" id="decompose">
+<a class="viewcode-back" href="../../topophone2.topophone.html#topophone2.topophone.decompose">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">decompose</span><span class="p">(</span>
+    <span class="n">Gamma_obs</span>       <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">Gamma_obs_noise</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">N_obs</span>           <span class="p">:</span> <span class="nb">int</span>        <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">N_obs_noise</span>     <span class="p">:</span> <span class="nb">int</span>        <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">x</span>               <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">freq</span>            <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">sigs</span>            <span class="p">:</span> <span class="nb">list</span>       <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">weight_units</span>    <span class="p">:</span> <span class="nb">str</span>        <span class="o">=</span> <span class="s1">'dB'</span><span class="p">,</span>
+    <span class="n">custom_cf</span>       <span class="p">:</span> <span class="nb">dict</span>       <span class="o">=</span> <span class="p">{},</span>
+    <span class="n">prior_bounds</span>    <span class="p">:</span> <span class="nb">tuple</span>      <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">N_flow</span>          <span class="p">:</span> <span class="nb">int</span>        <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">mean_field</span>      <span class="p">:</span> <span class="nb">bool</span>       <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">ini_dist</span>        <span class="p">:</span> <span class="nb">str</span>        <span class="o">=</span> <span class="s1">'Uniform'</span><span class="p">,</span>
+    <span class="n">learning_rate</span>   <span class="p">:</span> <span class="nb">float</span>      <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">outpath</span>         <span class="p">:</span> <span class="nb">str</span>        <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">N_iterations</span>    <span class="p">:</span> <span class="nb">int</span>        <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">N_montecarlo</span>    <span class="p">:</span> <span class="nb">int</span>        <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">N_out</span>           <span class="p">:</span> <span class="nb">int</span>        <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">save_intermediate_result</span> <span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">verbose</span>         <span class="p">:</span> <span class="nb">bool</span>       <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">N_samples</span>       <span class="p">:</span> <span class="nb">int</span>        <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">calc_likelihood</span> <span class="p">:</span> <span class="nb">bool</span>       <span class="o">=</span> <span class="kc">False</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">'''</span>
+<span class="sd">    </span>
+<span class="sd">    Function to perform the decomposition of an observed array-covariance matrix into its constituent signal components using a variational inference approach.</span>
+<span class="sd">    </span>
+<span class="sd">    Input</span>
+<span class="sd">    -----</span>
+
+<span class="sd">    Gamma_obs : ``numpy.ndarray``</span>
+<span class="sd">        Observed array-covariance matrix</span>
+<span class="sd">        (frequency, receiver, receiver)</span>
+
+<span class="sd">    Gamma_obs_noise : ``numpy.ndarray`` (optional)</span>
+<span class="sd">        Observed noise-only array-covariance matrix</span>
+<span class="sd">        (frequency, receiver, receiver)</span>
+
+<span class="sd">    N_obs: ``int``</span>
+<span class="sd">        Degrees of freedom</span>
+
+<span class="sd">    N_obs_noise : ``int`` (optional)</span>
+<span class="sd">        Degrees of freedom (noise)</span>
+
+<span class="sd">    x : ``numpy.ndarray``</span>
+<span class="sd">        Receiver position [m]</span>
+<span class="sd">        (receiver, direction)</span>
+
+<span class="sd">    freq : ``numpy.ndarray``</span>
+<span class="sd">        Angular frequency vector [rad.s-1]</span>
+<span class="sd">        (frequency)</span>
+
+<span class="sd">    sigs : ``list``</span>
+<span class="sd">        List of signals</span>
+
+<span class="sd">    weight_units : ``str`` (default ``'dB'``)</span>
+<span class="sd">        Units of the signal weights in the model vector</span>
+<span class="sd">        ('dB' or 'linear')</span>
+
+<span class="sd">    custom_cf : ``dict`` (optional)</span>
+<span class="sd">        Custom characteristic functions keyed by signal name</span>
+
+<span class="sd">    prior_bounds : ``(numpy.ndarray,numpy.ndarray)``</span>
+<span class="sd">        Prior bounds</span>
+
+<span class="sd">    N_flow : ``int``</span>
+<span class="sd">        Number of normalising flows</span>
+
+<span class="sd">    mean_field : ``bool`` (default ``False``)</span>
+<span class="sd">        Use mean-field approximation</span>
+
+<span class="sd">    ini_dist : ``str`` (default ``'Uniform'``)</span>
+<span class="sd">        Initial distribution to transform</span>
+
+<span class="sd">    learning_rate : ``float``</span>
+<span class="sd">        Learning rate for the variational inference</span>
+
+<span class="sd">    outpath : ``str``</span>
+<span class="sd">        Output path for saving results</span>
+
+<span class="sd">    N_iterations : ``int``</span>
+<span class="sd">        Number of iterations to run optimiser</span>
+
+<span class="sd">    N_montecarlo : ``int``</span>
+<span class="sd">        Number of samples to estimate ELBO</span>
+
+<span class="sd">    N_out : ``int`` (default ``0``)</span>
+<span class="sd">        Number of print statements and/or intermediate saves</span>
+
+<span class="sd">    save_intermediate_result : ``bool`` (default ``False``)</span>
+<span class="sd">        Save intermediate results during iteration</span>
+
+<span class="sd">    verbose : ``bool`` (default ``False``)</span>
+<span class="sd">        Print progress statements</span>
+
+<span class="sd">    N_samples : ``int`` (optional)</span>
+<span class="sd">        Number of samples to draw from posterior solution</span>
+
+<span class="sd">    calc_likelihood : ``bool`` (default ``False``)</span>
+<span class="sd">        Calculate likelihood</span>
+<span class="sd">    '''</span>
+
+    <span class="c1">#__ Forward modeller __</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">Gamma_obs_noise</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="p">:</span> <span class="n">calc_noise_only</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>        <span class="n">calc_noise_only</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">array_covariance_model</span> <span class="o">=</span> <span class="n">ArrayCovarianceModel</span><span class="p">(</span>
+        <span class="n">x</span>               <span class="o">=</span> <span class="n">x</span><span class="p">,</span>
+        <span class="n">freq</span>            <span class="o">=</span> <span class="n">freq</span><span class="p">,</span>
+        <span class="n">sigs</span>            <span class="o">=</span> <span class="n">sigs</span><span class="p">,</span>
+        <span class="n">weight_units</span>    <span class="o">=</span> <span class="n">weight_units</span><span class="p">,</span>
+        <span class="n">calc_noise_only</span> <span class="o">=</span> <span class="n">calc_noise_only</span><span class="p">,</span>
+        <span class="n">custom_cf</span>       <span class="o">=</span> <span class="n">custom_cf</span>
+    <span class="p">)</span>
+
+    <span class="c1">#__ Uniform prior pdf __</span>
+    <span class="n">prior</span> <span class="o">=</span> <span class="n">Uniform</span><span class="p">(</span><span class="o">*</span><span class="n">prior_bounds</span><span class="p">)</span>
+
+    <span class="c1">#__ Posterior pdf __</span>
+    <span class="n">posterior</span> <span class="o">=</span> <span class="n">Posterior</span><span class="p">(</span>
+        <span class="n">Gamma_obs</span>             <span class="o">=</span> <span class="n">Gamma_obs</span><span class="p">,</span>
+        <span class="n">N_obs</span>                 <span class="o">=</span> <span class="n">N_obs</span><span class="p">,</span>
+        <span class="n">array_covariance_model</span> <span class="o">=</span> <span class="n">array_covariance_model</span><span class="p">,</span>
+        <span class="n">prior</span>                 <span class="o">=</span> <span class="n">prior</span><span class="p">,</span>
+        <span class="n">Gamma_obs_noise</span>       <span class="o">=</span> <span class="n">Gamma_obs_noise</span><span class="p">,</span>
+        <span class="n">N_obs_noise</span>           <span class="o">=</span> <span class="n">N_obs_noise</span>
+    <span class="p">)</span>
+
+    <span class="c1">#__ Normalising flow model __</span>
+    <span class="n">flow_model</span> <span class="o">=</span> <span class="n">LinearFlowsModel</span><span class="p">(</span>
+        <span class="n">N_param</span>      <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">prior_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+        <span class="n">prior_bounds</span> <span class="o">=</span> <span class="n">prior_bounds</span><span class="p">,</span>
+        <span class="n">N_flow</span>       <span class="o">=</span> <span class="n">N_flow</span><span class="p">,</span>
+        <span class="n">mean_field</span>   <span class="o">=</span> <span class="n">mean_field</span><span class="p">,</span>
+        <span class="n">ini_dist</span>     <span class="o">=</span> <span class="n">ini_dist</span>
+    <span class="p">)</span>
+
+    <span class="c1">#__ Set up inverse problem __</span>
+    <span class="n">inverse_problem</span> <span class="o">=</span> <span class="n">Inference</span><span class="p">(</span>
+        <span class="n">flow_model</span>    <span class="o">=</span> <span class="n">flow_model</span><span class="p">,</span>
+        <span class="n">posterior</span>     <span class="o">=</span> <span class="n">posterior</span><span class="p">,</span>
+        <span class="n">learning_rate</span> <span class="o">=</span> <span class="n">learning_rate</span><span class="p">,</span>
+        <span class="n">outpath</span>       <span class="o">=</span> <span class="n">outpath</span>
+    <span class="p">)</span>
+
+    <span class="c1">#__ Perform inversion __</span>
+    <span class="n">inverse_problem</span><span class="o">.</span><span class="n">invert</span><span class="p">(</span>
+        <span class="n">N_iterations</span> <span class="o">=</span> <span class="n">N_iterations</span><span class="p">,</span>
+        <span class="n">N_montecarlo</span> <span class="o">=</span> <span class="n">N_montecarlo</span><span class="p">,</span>
+        <span class="n">N_out</span>        <span class="o">=</span> <span class="n">N_out</span><span class="p">,</span>
+        <span class="n">save_intermediate_result</span> <span class="o">=</span> <span class="n">save_intermediate_result</span><span class="p">,</span>
+        <span class="n">verbose</span>      <span class="o">=</span> <span class="n">verbose</span>
+    <span class="p">)</span>
+
+    <span class="c1">#__ Save flow model __</span>
+    <span class="n">inverse_problem</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="c1">#__ Sample posterior __</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">N_samples</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">inverse_problem</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">N_samples</span><span class="o">=</span><span class="n">N_samples</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">outpath</span><span class="si">}</span><span class="s2">/model-samples_iteration-</span><span class="si">{</span><span class="n">N_iterations</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">.txt"</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+
+        <span class="c1">#__ Calculate likelihood __</span>
+        <span class="k">if</span> <span class="n">calc_likelihood</span><span class="p">:</span>
+            <span class="n">lnp_dm</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">posterior</span><span class="o">.</span><span class="n">log_likelihood</span><span class="p">(</span><span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">outpath</span><span class="si">}</span><span class="s2">/log-likelihood_iteration-</span><span class="si">{</span><span class="n">N_iterations</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">.txt"</span><span class="p">,</span> <span class="n">lnp_dm</span><span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, jack-andrew smith.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

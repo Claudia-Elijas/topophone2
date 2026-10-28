@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>topophone2.inversion &#8212; topophone2</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=7e27919d" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/topophone2/inversion';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/home.svg" class="logo__image only-light" alt="topophone2 home page"/>
+    <img src="../../_static/home.svg" class="logo__image only-dark pst-js-only" alt="topophone2 home page"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../setup.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../documentation.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../license.html">
+    License
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../setup.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../documentation.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../license.html">
+    License
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">topophone2.inversion</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for topophone2.inversion</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""</span>
+
+<span class="sd">.. container:: module-intro </span>
+
+<span class="sd">    </span>
+<span class="sd">    The ``topophone2.inversion`` module provides functionality for inversion of wavefield parameters.</span>
+<span class="sd">    It contains classes and functions to perform variational Bayesian inference by normalising flows and for posterior analysis.</span>
+
+<span class="sd">"""</span>
+
+<span class="c1">#________ IMPORT ________#</span>
+
+<span class="c1">#__ System __</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Callable</span>
+
+<span class="c1">#__ Numerical __</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.linalg</span><span class="w"> </span><span class="kn">import</span> <span class="n">cho_factor</span><span class="p">,</span> <span class="n">cho_solve</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">set_default_dtype</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+<span class="c1">#__ Statistics __</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">harmonic</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">hm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">gaussian_kde</span><span class="p">,</span> <span class="n">hmean</span>
+
+<span class="c1">#__ Inversion __</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">geopvi.nfvi.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">FlowsBasedDistribution</span><span class="p">,</span> <span class="n">VariationalInversion</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">geopvi.nfvi.flows</span><span class="w"> </span><span class="kn">import</span> <span class="n">Real2Constr</span><span class="p">,</span> <span class="n">Constr2Real</span><span class="p">,</span> <span class="n">Linear</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">geopvi.forward.swi.posterior</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForwardModel</span>
+
+<span class="c1">#________ PROBABILITY DENSITY FUNCTIONS ________#</span>
+
+<span class="c1">#__ Uniform prior __</span>
+<div class="viewcode-block" id="Uniform">
+<a class="viewcode-back" href="../../topophone2.inversion.html#topophone2.inversion.Uniform">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Uniform</span><span class="p">():</span>
+
+<span class="w">    </span><span class="sd">'''</span>
+
+<span class="sd">        Class to calculate log-prior for uniform distribution with lower and upper bounds.</span>
+
+<span class="sd">        Methods</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        - :meth:`log_prior` : Calculate log-prior for uniform distribution</span>
+
+<span class="sd">        Input</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        lower : ``numpy.ndarray``</span>
+<span class="sd">            Lower bounds for uniform distribution</span>
+<span class="sd">            (parameter,)</span>
+
+<span class="sd">        upper : ``numpy.ndarray``</span>
+<span class="sd">            Upper bounds for uniform distribution</span>
+<span class="sd">            (parameter,)</span>
+
+<span class="sd">        </span>
+<span class="sd">        Attributes</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lower : ``torch.Tensor``</span>
+<span class="sd">            Lower bounds for uniform distribution</span>
+<span class="sd">            (parameter,)</span>
+<span class="sd">        </span>
+<span class="sd">        upper : ``torch.Tensor``</span>
+<span class="sd">            Upper bounds for uniform distribution</span>
+<span class="sd">            (parameter,)</span>
+<span class="sd">            </span>
+<span class="sd">    '''</span>
+
+    <span class="c1">#__ Initialise class __</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">lower</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">upper</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="p">):</span>
+
+        <span class="c1">#__ Set prior bound arguments __</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">lower</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">upper</span><span class="p">)</span>
+
+    <span class="c1">#__ Calculate log-prior __</span>
+<div class="viewcode-block" id="Uniform.log_prior">
+<a class="viewcode-back" href="../../topophone2.inversion.html#topophone2.inversion.Uniform.log_prior">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">log_prior</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">m</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="p">):</span>
+
+<span class="w">        </span><span class="sd">'''</span>
+<span class="sd">        Calculate the log-prior for a uniform distribution.</span>
+
+<span class="sd">        Input</span>
+<span class="sd">        -----</span>
+<span class="sd">        m : ``numpy.ndarray``</span>
+<span class="sd">            Model vector</span>
+<span class="sd">            (model, parameter)</span>
+
+<span class="sd">        Output</span>
+<span class="sd">        ------ </span>
+<span class="sd">        lnp_m : ``torch.Tensor``</span>
+<span class="sd">            Log-prior for uniform distribution</span>
+<span class="sd">            (model,)</span>
+
+<span class="sd">        '''</span>
+
+        <span class="c1">#__ Calculate if model in bounds __</span>
+        <span class="n">in_bounds</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+            <span class="n">m</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span>
+            <span class="n">m</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span>
+        <span class="p">)</span>
+
+        <span class="c1">#__ Calculate log-prior __</span>
+        <span class="n">lnp_mi</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">in_bounds</span><span class="p">,</span>
+            <span class="o">-</span> <span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s1">'-inf'</span><span class="p">))</span>
+        <span class="p">)</span>
+        <span class="n">lnp_m</span>  <span class="o">=</span> <span class="n">lnp_mi</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1">#__ Return output __</span>
+        <span class="k">return</span> <span class="n">lnp_m</span></div>
+</div>
+
+
+<span class="c1">#__ Posterior distribution __</span>
+<div class="viewcode-block" id="Posterior">
+<a class="viewcode-back" href="../../topophone2.inversion.html#topophone2.inversion.Posterior">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Posterior</span><span class="p">():</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">'''</span>
+<span class="sd">    </span>
+<span class="sd">    Class to calculate log-posterior for array-covariance inversion.</span>
+
+<span class="sd">    Methods </span>
+<span class="sd">    -------</span>
+<span class="sd">    - :meth:`log_likelihood` : Calculate log-likelihood of data given model.</span>
+<span class="sd">    - :meth:`log_posterior` : Calculate log-posterior for model given data and prior. </span>
+
+<span class="sd">    Input</span>
+<span class="sd">    -----</span>
+<span class="sd">    Gamma_obs : ``numpy.ndarray``</span>
+<span class="sd">        Sample-covariance matrix</span>
+<span class="sd">        (frequency, receiver, receiver)</span>
+<span class="sd">    </span>
+<span class="sd">    N_obs : ``int``</span>
+<span class="sd">        Number of independent samples used to estimate observed expectation</span>
+
+<span class="sd">    array_covariance_model : ``Callable``</span>
+<span class="sd">        Forward modeller (:class:`ArrayCovarianceModel`)</span>
+
+<span class="sd">    prior : ``Callable``</span>
+<span class="sd">        Prior pdf (:class:`Uniform`)</span>
+
+<span class="sd">    Gamma_obs_noise : ``numpy.ndarray`` (optional)</span>
+<span class="sd">        Noise-only sample-covariance matrix</span>
+<span class="sd">        (frequency, receiver, receiver)</span>
+
+<span class="sd">    N_obs_noise : ``int`` (optional)</span>
+<span class="sd">        Number of independent samples used to estimate observed noise-only expectation</span>
+
+<span class="sd">    kappa : ``float`` (default ``1e5``)</span>
+<span class="sd">        Strength of the quadratic penalty on negative angular density for cylindrical-harmonic distribution</span>
+
+<span class="sd">    N_theta : ``int`` (default ``361``)</span>
+<span class="sd">        Number of azimuths at which positivity of the angular density is evaluated</span>
+
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    N_obs : ``float``</span>
+<span class="sd">        Number of independent samples used to estimate observed expectation</span>
+<span class="sd">    N_obs_noise : ``float``</span>
+<span class="sd">        Number of independent samples used to estimate observed noise-only expectation</span>
+<span class="sd">    prior : ``Callable``</span>
+<span class="sd">        Prior distribution</span>
+<span class="sd">    forward : ``Callable``</span>
+<span class="sd">        Function to predict array covariance from model vector</span>
+<span class="sd">    kappa : ``float``</span>
+<span class="sd">        Strength of the angular-density positivity penalty</span>
+<span class="sd">  </span>
+<span class="sd">    '''</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">Gamma_obs</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">N_obs</span>     <span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">array_covariance_model</span> <span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+        <span class="n">prior</span>     <span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+        <span class="n">Gamma_obs_noise</span> <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">N_obs_noise</span>     <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>        <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">kappa</span>           <span class="p">:</span> <span class="nb">float</span>                <span class="o">=</span> <span class="mf">1e5</span><span class="p">,</span>
+        <span class="n">N_theta</span>         <span class="p">:</span> <span class="nb">int</span>                  <span class="o">=</span> <span class="mi">361</span>
+    <span class="p">):</span>
+        
+
+        <span class="c1">#__ Throw error if noise-only not calculated but noise ACM specified here, or warning if specified but not provided __</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_invert_noise_only</span> <span class="o">=</span> <span class="p">(</span><span class="n">Gamma_obs_noise</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_invert_noise_only</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">array_covariance_model</span><span class="o">.</span><span class="n">_calc_noise_only</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'Noise data provided, must specify `calc_noise_only` in ArrayCovarianceModel.'</span><span class="p">)</span>
+
+        <span class="c1">#__ Store arguments as attributes __</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N_obs</span>       <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">N_obs</span><span class="p">)</span>            <span class="c1"># Number of independent samples used to estimate observed expectation</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_invert_noise_only</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">N_obs_noise</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">N_obs_noise</span><span class="p">)</span>  <span class="c1"># Number of independent samples used to estimate observed noise-only expectation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prior</span>       <span class="o">=</span> <span class="n">prior</span>                   <span class="c1"># Prior distribution</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kappa</span>       <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">kappa</span><span class="p">)</span>            <span class="c1"># Strength of positivity penalty</span>
+
+        <span class="c1">#__ Store required attributes from model __</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">forward</span>  <span class="o">=</span> <span class="n">array_covariance_model</span><span class="o">.</span><span class="n">forward</span>   <span class="c1"># Function to predict array covariance from model vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_iu0_rec</span> <span class="o">=</span> <span class="n">array_covariance_model</span><span class="o">.</span><span class="n">_iu0_rec</span>  <span class="c1"># Upper-triangle index set for unique receiver pairs (including diagonal)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_iu1_rec</span> <span class="o">=</span> <span class="n">array_covariance_model</span><span class="o">.</span><span class="n">_iu1_rec</span>  <span class="c1"># ^</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_N_rec</span>   <span class="o">=</span> <span class="n">array_covariance_model</span><span class="o">.</span><span class="n">N_rec</span>     <span class="c1"># Number of receivers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_N_freq</span>  <span class="o">=</span> <span class="n">array_covariance_model</span><span class="o">.</span><span class="n">N_freq</span>    <span class="c1"># Number of frequency bins</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calc_noise_only</span> <span class="o">=</span> <span class="n">array_covariance_model</span><span class="o">.</span><span class="n">_calc_noise_only</span>  <span class="c1"># Include an additional noise-only calculation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unpack</span>  <span class="o">=</span> <span class="n">array_covariance_model</span><span class="o">.</span><span class="n">_unpack</span>   <span class="c1"># Unpack model vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_expand</span>  <span class="o">=</span> <span class="n">array_covariance_model</span><span class="o">.</span><span class="n">expand</span>    <span class="c1"># Unflatten array-covariance</span>
+
+        <span class="c1">#__ Positivity checks for harmonic noise densities __</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_positivity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_positivity</span><span class="p">(</span><span class="n">array_covariance_model</span><span class="p">,</span> <span class="n">N_theta</span><span class="p">)</span>
+
+        <span class="c1">#__ Lower-triangle index set for unique receiver pairs (excluding diagonal) __</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_il0_rec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_il1_rec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tril_indices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_N_rec</span><span class="p">,</span> <span class="n">k</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1">#__ Check Hermitian symmetry of observation __</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">check_hermitian</span><span class="p">(</span><span class="n">Gamma_obs</span><span class="p">,</span> <span class="n">var_name</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">Gamma_obs</span><span class="p">,</span>
+                            <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">Gamma_obs</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">))):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s2"> is not Hermitian."</span><span class="p">)</span>
+        <span class="n">check_hermitian</span><span class="p">(</span><span class="n">Gamma_obs</span><span class="p">,</span> <span class="s1">'Gamma_obs'</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_invert_noise_only</span><span class="p">:</span> <span class="n">check_hermitian</span><span class="p">(</span><span class="n">Gamma_obs_noise</span><span class="p">,</span> <span class="s1">'Gamma_obs_noise'</span><span class="p">)</span>
+
+        <span class="c1">#__ Scaled Gamma_obs (A in Goodman [1963]) __</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_obs</span> <span class="o">*</span> <span class="n">Gamma_obs</span>  <span class="c1"># (frequency, receiver, receiver)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_invert_noise_only</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_A_noise</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_obs_noise</span> <span class="o">*</span> <span class="n">Gamma_obs_noise</span>
+
+        <span class="c1">#__ Cholesky factorisation of A __</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_L_A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_safe_cholesky</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_A</span><span class="p">,</span> <span class="s1">'Gamma_obs'</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_invert_noise_only</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_L_A_noise</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_safe_cholesky</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_A_noise</span><span class="p">,</span> <span class="s1">'Gamma_obs_noise'</span><span class="p">)</span>
+
+    <span class="c1">#__ Safe Cholesky decomposition __</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_safe_cholesky</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">var_name</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span> <span class="n">L_A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">LinAlgError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s2"> is not positive definite."</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
+        <span class="k">return</span> <span class="n">L_A</span>
+
+    <span class="c1">#__ Build positivity checks from the model's parameter layout __</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_positivity</span><span class="p">(</span><span class="n">acm</span><span class="p">,</span> <span class="n">N_theta</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Locate free cylindrical-harmonic coefficients in the model vector and build</span>
+<span class="sd">        the corresponding azimuthal basis. Fixed coefficients are validated once here.</span>
+
+<span class="sd">        Output</span>
+<span class="sd">        ------</span>
+<span class="sd">        terms : ``list`` of ``tuple``</span>
+<span class="sd">            (indices of [a_1..a_M, b_1..b_M] in model vector, basis ``torch.Tensor`` (2M, theta))</span>
+<span class="sd">        """</span>
+
+        <span class="c1">#__ Azimuth grid __</span>
+        <span class="n">theta</span>    <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">torch</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">N_theta</span><span class="p">)</span>
+        <span class="n">theta_np</span> <span class="o">=</span> <span class="n">theta</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+        <span class="c1">#__ Loop through signals, tracking position in model vector __</span>
+        <span class="n">terms</span><span class="p">,</span> <span class="n">idx</span> <span class="o">=</span> <span class="p">[],</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">sig</span> <span class="ow">in</span> <span class="n">acm</span><span class="o">.</span><span class="n">sigs</span><span class="p">:</span>
+
+            <span class="c1">#__ Weight __</span>
+            <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="c1">#__ Number of parameters (excluding weight) __</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sig</span> <span class="ow">in</span> <span class="n">acm</span><span class="o">.</span><span class="n">custom_cf</span><span class="p">):</span> <span class="n">n</span> <span class="o">=</span> <span class="n">acm</span><span class="o">.</span><span class="n">custom_cf</span><span class="p">[</span><span class="n">sig</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>                                               <span class="n">n</span> <span class="o">=</span> <span class="n">acm</span><span class="o">.</span><span class="n">_n_params</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
+
+            <span class="c1">#__ Cylindrical-harmonic noise __</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sig</span><span class="p">[</span><span class="s1">'sig'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'noise2D'</span><span class="p">):</span>
+
+                <span class="c1">#__ Free coefficients: record indices and basis __</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="p">((</span><span class="s1">'a'</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">'b'</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">)):</span>
+                    <span class="n">i0</span>     <span class="o">=</span> <span class="n">idx</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="s1">'s'</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>              <span class="c1"># Skip free slowness</span>
+                    <span class="n">M</span>      <span class="o">=</span> <span class="n">acm</span><span class="o">.</span><span class="n">_max_order_2D</span>
+                    <span class="n">orders</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">theta</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+                    <span class="n">basis</span>  <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">orders</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="n">theta</span><span class="p">),</span>
+                                        <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">orders</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="n">theta</span><span class="p">)])</span>  <span class="c1"># (2M, theta)</span>
+                    <span class="n">terms</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">i0</span><span class="p">,</span> <span class="n">i0</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">M</span><span class="p">)),</span> <span class="n">basis</span><span class="p">))</span>
+
+                <span class="c1">#__ Fixed coefficients: validate once __</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">a</span>      <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">sig</span><span class="p">[</span><span class="s1">'a'</span><span class="p">])</span> <span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">sig</span><span class="p">[</span><span class="s1">'b'</span><span class="p">])</span>
+                    <span class="n">orders</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="n">rho</span>    <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">[:,:</span><span class="mi">1</span><span class="p">]</span>
+                              <span class="o">+</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">a</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:]</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">orders</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="n">theta_np</span><span class="p">)</span>
+                              <span class="o">+</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">b</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:]</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">orders</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="n">theta_np</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">):</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Fixed noise2D coefficients give a negative azimuthal density."</span><span class="p">)</span>
+
+            <span class="c1">#__ Advance past signal parameters __</span>
+            <span class="n">idx</span> <span class="o">+=</span> <span class="n">n</span>
+
+        <span class="c1">#__ Return output __</span>
+        <span class="k">return</span> <span class="n">terms</span>
+
+    <span class="c1">#__ Calculate log-likelihood helper __</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_lnp_dm_and_grad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Gamma</span><span class="p">,</span> <span class="n">dGamma</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">N_obs</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="mf">1e3</span><span class="p">,</span> <span class="n">floor</span><span class="o">=-</span><span class="mf">1e10</span><span class="p">):</span>
+
+        <span class="c1">#__ Cholesky decomposition, flagging non-positive-definite models __</span>
+        <span class="n">N_model</span> <span class="o">=</span> <span class="n">Gamma</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">L</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">Gamma</span><span class="p">)</span>            <span class="c1"># Fast path: whole batch</span>
+            <span class="n">ok</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N_model</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">LinAlgError</span><span class="p">:</span>
+            <span class="n">L</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">Gamma</span><span class="p">)</span>
+            <span class="n">ok</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N_model</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_model</span><span class="p">):</span>                  <span class="c1"># Slow path: model by model</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">L</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">Gamma</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="n">ok</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">except</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">LinAlgError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+        <span class="c1">#__ Instantiate outputs __</span>
+        <span class="n">lnp_dm</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">N_model</span><span class="p">)</span>
+        <span class="n">dlnp_dm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_model</span><span class="p">,</span> <span class="n">dGamma</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span> <span class="k">if</span> <span class="n">grad</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="c1">#__ No valid models in batch __</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="n">lnp_dm</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">floor</span>
+            <span class="k">return</span> <span class="n">lnp_dm</span><span class="p">,</span> <span class="n">dlnp_dm</span>
+
+        <span class="c1">#__ Log-determinant of Gamma (valid models) __</span>
+        <span class="n">L_ok</span><span class="p">,</span> <span class="n">Gamma_ok</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="n">ok</span><span class="p">],</span> <span class="n">Gamma</span><span class="p">[</span><span class="n">ok</span><span class="p">]</span>
+        <span class="n">diag</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diagonal</span><span class="p">(</span><span class="n">L_ok</span><span class="p">,</span> <span class="n">axis1</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis2</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># (model, freq, receiver)</span>
+        <span class="n">logdet</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">diag</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>             <span class="c1"># (model, freq)</span>
+
+        <span class="c1">#__ Inverse of Gamma __</span>
+        <span class="n">Gamma_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">Gamma_ok</span><span class="p">)</span>  <span class="c1"># (model, freq, receiver, receiver)</span>
+
+        <span class="c1">#__ tr(Gamma^-1 A) __</span>
+        <span class="n">tr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Gamma_inv</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">A</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span><span class="o">...</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)))</span>  <span class="c1"># (model, freq)</span>
+
+        <span class="c1">#__ Sum over independent frequency bins __</span>
+        <span class="n">lnp_dm</span><span class="p">[</span><span class="n">ok</span><span class="p">]</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">-</span><span class="n">N_obs</span> <span class="o">*</span> <span class="n">logdet</span> <span class="o">-</span> <span class="n">tr</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># (model)</span>
+        <span class="n">lnp_dm</span><span class="p">[</span><span class="o">~</span><span class="n">ok</span><span class="p">]</span> <span class="o">=</span> <span class="n">lnp_dm</span><span class="p">[</span><span class="n">ok</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="n">margin</span>               <span class="c1"># Finite floor for invalid models</span>
+
+        <span class="c1">#__ Calculate gradient (model, parameter) __</span>
+        <span class="k">if</span> <span class="n">grad</span><span class="p">:</span>
+            <span class="n">B</span>  <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">-</span> <span class="n">N_obs</span> <span class="o">*</span> <span class="n">Gamma_ok</span>
+            <span class="n">G</span>  <span class="o">=</span> <span class="n">Gamma_inv</span> <span class="o">@</span> <span class="n">B</span> <span class="o">@</span> <span class="n">Gamma_inv</span>
+            <span class="n">dlnp_dm</span><span class="p">[</span><span class="n">ok</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">'mfij,mfjik-&gt;mk'</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">dGamma</span><span class="p">[</span><span class="n">ok</span><span class="p">],</span> <span class="n">optimize</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+        <span class="c1">#__ Return output __</span>
+        <span class="k">return</span> <span class="n">lnp_dm</span><span class="p">,</span> <span class="n">dlnp_dm</span>
+
+    <span class="c1">#__ Calculate log-likelihood __</span>
+<div class="viewcode-block" id="Posterior.log_likelihood">
+<a class="viewcode-back" href="../../topophone2.inversion.html#topophone2.inversion.Posterior.log_likelihood">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">log_likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+
+<span class="sd">        Calculate the log-likelihood of the sample-covariance matrix given a model vector.</span>
+
+<span class="sd">        Input</span>
+<span class="sd">        -----</span>
+<span class="sd">        m : ``numpy.ndarray``</span>
+<span class="sd">            Model vector</span>
+<span class="sd">            (model, parameter)</span>
+
+<span class="sd">        grad : ``bool`` (default: ``True``)</span>
+<span class="sd">            If ``True``, calculate gradient of log-likelihood wrt. model parameters</span>
+
+<span class="sd">        Output</span>
+<span class="sd">        ------</span>
+<span class="sd">        lnp_dm : ``numpy.ndarray``</span>
+<span class="sd">            Log-likelihood of sample-covariance matrix given model vector</span>
+<span class="sd">            (model,)</span>
+
+<span class="sd">        dlnp_dm : ``numpy.ndarray``</span>
+<span class="sd">            Gradient of log-likelihood wrt. model parameters</span>
+<span class="sd">            (model, parameter)</span>
+
+<span class="sd">        """</span>
+
+        <span class="c1">#__ Extract model shape (model, parameter) __</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="n">N_model</span><span class="p">,</span> <span class="n">N_param</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="c1">#__ Synthesise array-covariance matrix __</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_noise_only</span><span class="p">:</span> <span class="n">cov</span><span class="p">,</span> <span class="n">dcov</span><span class="p">,</span> <span class="n">cov_noise</span><span class="p">,</span> <span class="n">dcov_noise</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="n">grad</span><span class="p">)</span>  <span class="c1"># (model, frequency, receiver pair, [parameter])</span>
+        <span class="k">else</span><span class="p">:</span> <span class="n">cov</span><span class="p">,</span> <span class="n">dcov</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="n">grad</span><span class="p">)</span>  <span class="c1"># (model, frequency, receiver pair, [parameter])</span>
+        <span class="n">Gamma</span><span class="p">,</span> <span class="n">dGamma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expand</span><span class="p">(</span><span class="n">cov</span><span class="p">,</span> <span class="n">dcov</span> <span class="k">if</span> <span class="n">grad</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_invert_noise_only</span><span class="p">:</span> <span class="n">Gamma_noise</span><span class="p">,</span> <span class="n">dGamma_noise</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expand</span><span class="p">(</span><span class="n">cov_noise</span><span class="p">,</span> <span class="n">dcov_noise</span> <span class="k">if</span> <span class="n">grad</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1">#__ Calculate likelihood __</span>
+        <span class="n">lnp_dm</span><span class="p">,</span> <span class="n">dlnp_dm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lnp_dm_and_grad</span><span class="p">(</span><span class="n">Gamma</span><span class="p">,</span> <span class="n">dGamma</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_A</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_obs</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="s1">'Gamma'</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_invert_noise_only</span><span class="p">:</span>
+            <span class="n">lnp_dm_noise</span><span class="p">,</span> <span class="n">dlnp_dm_noise</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lnp_dm_and_grad</span><span class="p">(</span><span class="n">Gamma_noise</span><span class="p">,</span> <span class="n">dGamma_noise</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_A_noise</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_obs_noise</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="s1">'Gamma_noise'</span><span class="p">)</span>
+            <span class="n">lnp_dm</span> <span class="o">+=</span> <span class="n">lnp_dm_noise</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">dlnp_dm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span> <span class="n">dlnp_dm</span> <span class="o">+=</span> <span class="n">dlnp_dm_noise</span>
+
+        <span class="c1">#__ Return output __</span>
+        <span class="k">return</span> <span class="n">lnp_dm</span><span class="p">,</span> <span class="n">dlnp_dm</span></div>
+
+
+    <span class="c1">#__ Calculate positivity penalty __</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_log_constraint</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">m</span> <span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
+    <span class="p">):</span>
+
+<span class="w">        </span><span class="sa">r</span><span class="sd">'''</span>
+
+<span class="sd">        Function to calculate the log-penalty for negative azimuthal density of free</span>
+<span class="sd">        cylindrical-harmonic noise signals.</span>
+
+<span class="sd">        Input</span>
+<span class="sd">        -----</span>
+<span class="sd">        m : ``torch.Tensor``</span>
+<span class="sd">            Model vector</span>
+<span class="sd">            (model, parameter)</span>
+
+<span class="sd">        Output</span>
+<span class="sd">        ------</span>
+<span class="sd">        lnp_c : ``torch.Tensor``</span>
+<span class="sd">            Log-penalty (zero for valid densities)</span>
+<span class="sd">            (model,)</span>
+
+<span class="sd">        '''</span>
+
+        <span class="c1">#__ No penalty required __</span>
+        <span class="n">lnp_c</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kappa</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_positivity</span><span class="p">):</span> <span class="k">return</span> <span class="n">lnp_c</span>
+
+        <span class="c1">#__ Accumulate quadratic penalty on negative density __</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">basis</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_positivity</span><span class="p">:</span>
+            <span class="n">rho</span>   <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">m</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">idx</span><span class="p">]</span> <span class="o">@</span> <span class="n">basis</span>  <span class="c1"># 2*pi*rho(theta) (model, theta)</span>
+            <span class="n">lnp_c</span> <span class="o">=</span> <span class="n">lnp_c</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">kappa</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="o">-</span><span class="n">rho</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1">#__ Return output __</span>
+        <span class="k">return</span> <span class="n">lnp_c</span>
+
+    <span class="c1">#__ Calculate log-posterior __</span>
+<div class="viewcode-block" id="Posterior.log_posterior">
+<a class="viewcode-back" href="../../topophone2.inversion.html#topophone2.inversion.Posterior.log_posterior">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">log_posterior</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">m</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="p">):</span>
+
+<span class="w">        </span><span class="sa">r</span><span class="sd">'''</span>
+<span class="sd">        </span>
+<span class="sd">        Calculate the log-posterior for a model vector given the sample-covariance matrix and prior distribution.</span>
+
+<span class="sd">        Input</span>
+<span class="sd">        -----</span>
+<span class="sd">        m : ``numpy.ndarray``</span>
+<span class="sd">            Model vector</span>
+<span class="sd">            (model, parameter)</span>
+
+<span class="sd">        Output</span>
+<span class="sd">        ------</span>
+<span class="sd">        lnp_md : ``torch.Tensor``</span>
+<span class="sd">            Log-posterior for model vector given observed array-covariance matrix and prior distribution</span>
+<span class="sd">            (model,)</span>
+<span class="sd">        </span>
+<span class="sd">        '''</span>
+
+        <span class="c1">#__ Calculate log-likelihood __</span>
+        <span class="n">lnp_dm</span> <span class="o">=</span> <span class="n">ForwardModel</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_likelihood</span><span class="p">)</span>
+
+        <span class="c1">#__ Calculate log-prior __</span>
+        <span class="n">lnp_m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prior</span><span class="o">.</span><span class="n">log_prior</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+        <span class="c1">#__ Calculate positivity penalty (restricts prior support) __</span>
+        <span class="n">lnp_c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log_constraint</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+        <span class="c1">#__ Calculate log-posterior __</span>
+        <span class="n">lnp_md</span> <span class="o">=</span> <span class="n">lnp_m</span> <span class="o">+</span> <span class="n">lnp_dm</span> <span class="o">+</span> <span class="n">lnp_c</span>
+
+        <span class="c1">#__ Return output __</span>
+        <span class="k">return</span> <span class="n">lnp_md</span></div>
+</div>
+
+
+<span class="c1">#________ NORMALISING FLOWS MODEL ________#</span>
+
+<div class="viewcode-block" id="LinearFlowsModel">
+<a class="viewcode-back" href="../../topophone2.inversion.html#topophone2.inversion.LinearFlowsModel">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LinearFlowsModel</span><span class="p">():</span>
+
+<span class="w">    </span><span class="sd">''' </span>
+
+<span class="sd">    Class to define a normalising flows model for variational inference.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    - :meth:`def_flow_model` : Define a normalising flows model for variational inference.</span>
+<span class="sd">    - :meth:`get_flow_param` : Get the parameters of the normalising flows model.</span>
+
+<span class="sd">    Input </span>
+<span class="sd">    -----</span>
+<span class="sd">    N_param : ``int``</span>
+<span class="sd">        Number of model parameters</span>
+
+<span class="sd">    N_flow : ``int``</span>
+<span class="sd">        Number of normalising flows </span>
+
+<span class="sd">    prior_bounds : ``tuple`` (default: ``None``)</span>
+<span class="sd">        Lower and upper bounds for uniform prior distribution</span>
+
+<span class="sd">    mean_field : ``bool`` (default: ``False``)</span>
+<span class="sd">        If ``True``, use mean-field approximation for flows model</span>
+<span class="sd">    </span>
+<span class="sd">    ini_dist : ``str`` (default: ``"Uniform"``)</span>
+<span class="sd">        Initial distribution for flows model. Options are ``"Uniform"`` or ``"Normal"`` </span>
+
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    N_param : ``int``</span>
+<span class="sd">        Number of model parameters</span>
+<span class="sd">    N_flow : ``int``</span>
+<span class="sd">        Number of normalising flows</span>
+<span class="sd">    prior_bounds : ``tuple``</span>
+<span class="sd">        Lower and upper bounds for uniform prior distribution</span>
+<span class="sd">    mean_field : ``bool``</span>
+<span class="sd">        If ``True``, use mean-field approximation for flows model</span>
+<span class="sd">    ini_dist : ``str``</span>
+<span class="sd">        Initial distribution for flows model. Options are ``"Uniform"`` or ``"Normal"``</span>
+
+<span class="sd">    '''</span>
+
+    <span class="c1">#__ Initialise model __</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N_param</span><span class="p">,</span> <span class="n">N_flow</span><span class="p">,</span> <span class="n">prior_bounds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mean_field</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ini_dist</span><span class="o">=</span><span class="s2">"Uniform"</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N_param</span>      <span class="o">=</span> <span class="n">N_param</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prior_bounds</span> <span class="o">=</span> <span class="n">prior_bounds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N_flow</span>       <span class="o">=</span> <span class="n">N_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean_field</span>   <span class="o">=</span> <span class="n">mean_field</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ini_dist</span>     <span class="o">=</span> <span class="n">ini_dist</span>
+
+    <span class="c1">#__ Flows model __</span>
+<div class="viewcode-block" id="LinearFlowsModel.def_flow_model">
+<a class="viewcode-back" href="../../topophone2.inversion.html#topophone2.inversion.LinearFlowsModel.def_flow_model">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">def_flow_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<span class="w">        </span><span class="sd">'''</span>
+<span class="sd">        Define a normalising flows model for variational inference.</span>
+<span class="sd">        '''</span>
+
+        <span class="c1">#__ Initialise flow __</span>
+        <span class="n">flow_type</span> <span class="o">=</span> <span class="s2">"Linear"</span>
+        <span class="n">flow</span>  <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">flow_type</span><span class="p">)</span>
+        <span class="n">param</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1">#__ Select kernel __</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean_field</span><span class="p">:</span> 
+            <span class="n">kernel</span> <span class="o">=</span> <span class="s2">"diagonal"</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">kernel</span> <span class="o">=</span> <span class="s2">"fullrank"</span>
+
+        <span class="c1">#__ Create flow model __</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">N_param</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_param</span><span class="p">))</span>
+        <span class="n">flows</span> <span class="o">=</span> <span class="p">[</span><span class="n">flow</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">N_param</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="n">kernel</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="n">param</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N_flow</span><span class="p">)]</span>
+
+        <span class="c1">#__ Add transforms between real and constrained spaces __</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ini_dist</span> <span class="o">==</span> <span class="s2">"Uniform"</span><span class="p">):</span>
+            <span class="n">flows</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Constr2Real</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">N_param</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">flows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Real2Constr</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">N_param</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prior_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">upper</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prior_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+        <span class="c1">#__ Create flows model __</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">variational</span> <span class="o">=</span> <span class="n">FlowsBasedDistribution</span><span class="p">(</span><span class="n">flows</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ini_dist</span><span class="p">)</span>
+
+        <span class="c1">#__ Return output __</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+    <span class="c1">#__ Get flow parameters __</span>
+<div class="viewcode-block" id="LinearFlowsModel.get_flow_param">
+<a class="viewcode-back" href="../../topophone2.inversion.html#topophone2.inversion.LinearFlowsModel.get_flow_param">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_flow_param</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">'''</span>
+<span class="sd">        Get the parameters of the normalising flows model for variational inference.</span>
+<span class="sd">        '''</span>
+        <span class="n">flow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variational</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">mus</span> <span class="o">=</span> <span class="n">flow</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="n">sigmas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">flow</span><span class="o">.</span><span class="n">diag</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">flow</span><span class="o">.</span><span class="n">non_diag</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">mus</span><span class="p">,</span> <span class="n">sigmas</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">non_diag</span> <span class="o">=</span> <span class="n">flow</span><span class="o">.</span><span class="n">non_diag</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">mus</span><span class="p">,</span> <span class="n">sigmas</span><span class="p">,</span> <span class="n">non_diag</span><span class="p">])</span></div>
+</div>
+
+
+<span class="c1">#________ INVERSION CLASS ________#</span>
+
+<span class="c1">#__ Inversion __</span>
+<div class="viewcode-block" id="Inference">
+<a class="viewcode-back" href="../../topophone2.inversion.html#topophone2.inversion.Inference">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Inference</span><span class="p">():</span> 
+
+<span class="w">    </span><span class="sd">'''</span>
+
+<span class="sd">    Class that performs variational inference using normalising flows.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    - :meth:`invert` : Optimise variational distribution to approximate posterior pdf</span>
+<span class="sd">    - :meth:`save` : Save the results of the inversion</span>
+<span class="sd">    - :meth:`load` : Load the results of the inversion</span>
+<span class="sd">    - :meth:`sample` : Sample from the posterior distribution of model parameters</span>
+<span class="sd">    - :meth:`unpack` : Unpack the model vector into its constituent parameters</span>
+<span class="sd">    - :meth:`get_lnELBO` : Function to return logarithmic evidence lower bound</span>
+
+<span class="sd">    Input</span>
+<span class="sd">    -----</span>
+<span class="sd">    flow_model : ``Callable``</span>
+<span class="sd">        The normalising flows model to use for variational inference (:class:`LinearFlowsModel`)</span>
+
+<span class="sd">    posterior : ``Callable``</span>
+<span class="sd">        Posterior pdf calculator (:class:`Posterior`)</span>
+
+<span class="sd">    learning_rate : ``float``</span>
+<span class="sd">        The learning rate for the optimiser</span>
+
+<span class="sd">    outpath : ``str``</span>
+<span class="sd">        The path to save the results</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    flow_model : ``Callable``</span>
+<span class="sd">        The normalising flows model to use for variational inference</span>
+<span class="sd">    inversion : ``Callable``</span>
+<span class="sd">        The variational inference object that performs the inversion</span>
+<span class="sd">    optimiser : ``torch.optim.Optimizer``</span>
+<span class="sd">        The optimiser used for variational inference</span>
+<span class="sd">    learning_rate : ``float``</span>
+<span class="sd">        The learning rate for the optimiser</span>
+<span class="sd">    loss_his : ``list``</span>
+<span class="sd">        The history of the loss function during the inversion</span>
+<span class="sd">    outpath : ``str``</span>
+<span class="sd">        The path to save the results</span>
+<span class="sd">    </span>
+<span class="sd">    '''</span>
+
+    <span class="c1">#__ Initialise class __</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flow_model</span><span class="p">,</span> <span class="n">posterior</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">,</span> <span class="n">outpath</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flow_model</span> <span class="o">=</span> <span class="n">flow_model</span><span class="o">.</span><span class="n">def_flow_model</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inversion</span> <span class="o">=</span> <span class="n">VariationalInversion</span><span class="p">(</span><span class="n">variationalDistribution</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_model</span><span class="o">.</span><span class="n">variational</span><span class="p">,</span> <span class="n">log_posterior</span><span class="o">=</span><span class="n">posterior</span><span class="o">.</span><span class="n">log_posterior</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimiser</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_model</span><span class="o">.</span><span class="n">variational</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss_his</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">outpath</span> <span class="o">=</span> <span class="n">learning_rate</span><span class="p">,</span> <span class="p">[],</span> <span class="n">outpath</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unpack</span> <span class="o">=</span> <span class="n">posterior</span><span class="o">.</span><span class="n">_unpack</span>
+
+        <span class="c1">## WARN IF ONLY USING SINGLE POINT SOURCE AS LIKELIHOOD ILL-DEFINED</span>
+
+    <span class="c1">#__ Perform inversion __</span>
+<div class="viewcode-block" id="Inference.invert">
+<a class="viewcode-back" href="../../topophone2.inversion.html#topophone2.inversion.Inference.invert">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">invert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N_iterations</span><span class="p">,</span> <span class="n">N_montecarlo</span><span class="p">,</span> <span class="n">N_out</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">save_intermediate_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+<span class="w">        </span><span class="sd">'''</span>
+<span class="sd">        Optimise variational distribution to approximate posterior pdf.</span>
+
+<span class="sd">        Input</span>
+<span class="sd">        -----</span>
+<span class="sd">        N_iterations : ``int``</span>
+<span class="sd">            Number of iterations to run the inversion</span>
+
+<span class="sd">        N_montecarlo : ``int``</span>
+<span class="sd">            Number of samples to estimate ELBO and gradient estimate</span>
+
+<span class="sd">        N_out : ``int`` (default: ``0``)</span>
+<span class="sd">            Number of samples to output for intermediate results</span>
+
+<span class="sd">        save_intermediate_result : ``bool`` (default: ``False``)</span>
+<span class="sd">            If ``True``, save intermediate results during the inversion</span>
+
+<span class="sd">        verbose : ``bool`` (default: ``False``)</span>
+<span class="sd">            If ``True``, print progress during the inversion</span>
+<span class="sd">        '''</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">N_out</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">N_out</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">save_intermediate_result</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss_his</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inversion</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="n">optimizer</span> <span class="o">=</span> <span class="s1">'torch.optim.Adam'</span><span class="p">,</span>
+            <span class="n">lr</span>        <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span><span class="p">,</span>
+            <span class="n">n_iter</span>    <span class="o">=</span> <span class="n">N_iterations</span><span class="p">,</span>
+            <span class="n">nsample</span>   <span class="o">=</span> <span class="n">N_montecarlo</span><span class="p">,</span>
+            <span class="n">n_out</span>     <span class="o">=</span> <span class="n">N_out</span><span class="p">,</span>
+            <span class="n">verbose</span>   <span class="o">=</span> <span class="n">verbose</span><span class="p">,</span>
+            <span class="n">save_intermediate_result</span> <span class="o">=</span> <span class="n">save_intermediate_result</span><span class="p">,</span>
+            <span class="n">outpath</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">outpath</span>
+        <span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+    <span class="c1">#__ Save flows __</span>
+<div class="viewcode-block" id="Inference.save">
+<a class="viewcode-back" href="../../topophone2.inversion.html#topophone2.inversion.Inference.save">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">'''</span>
+<span class="sd">        Save the current flow model.</span>
+<span class="sd">        '''</span>
+        <span class="n">iteration</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loss_his</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flow_model</span><span class="o">.</span><span class="n">variational</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="n">param</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_model</span><span class="o">.</span><span class="n">get_flow_param</span><span class="p">()</span>
+        <span class="n">param_fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">outpath</span><span class="si">}</span><span class="s2">/parameter_iteration-</span><span class="si">{</span><span class="n">iteration</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">.npy"</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">param_fname</span><span class="p">,</span> <span class="n">param</span><span class="p">)</span>
+        <span class="n">loss_fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">outpath</span><span class="si">}</span><span class="s2">/loss_iteration-</span><span class="si">{</span><span class="n">iteration</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">.txt"</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">loss_fname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss_his</span><span class="p">)</span>
+        <span class="n">model_fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">outpath</span><span class="si">}</span><span class="s2">/model_iteration-</span><span class="si">{</span><span class="n">iteration</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">.pt"</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s1">'iteration'</span><span class="p">:</span><span class="n">iteration</span><span class="p">,</span>
+                <span class="s1">'model_state_dict'</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_model</span><span class="o">.</span><span class="n">variational</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+                <span class="s1">'loss'</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">loss_his</span>
+            <span class="p">},</span> <span class="n">model_fname</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+    <span class="c1">#__ Load checkpoint __</span>
+<div class="viewcode-block" id="Inference.load">
+<a class="viewcode-back" href="../../topophone2.inversion.html#topophone2.inversion.Inference.load">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iteration</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">'''</span>
+<span class="sd">        Load a checkpoint from a previous iteration.</span>
+
+<span class="sd">        Input</span>
+<span class="sd">        -----</span>
+<span class="sd">        iteration : ``int``</span>
+<span class="sd">            The iteration number of the checkpoint to load</span>
+<span class="sd">        '''</span>
+        <span class="n">model_fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">outpath</span><span class="si">}</span><span class="s2">/model_iteration-</span><span class="si">{</span><span class="n">iteration</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">.pt"</span>
+        <span class="n">checkpoint</span>  <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model_fname</span><span class="p">,</span> <span class="n">weights_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flow_model</span><span class="o">.</span><span class="n">variational</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="s1">'model_state_dict'</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+    <span class="c1">#__ Sample posterior __</span>
+<div class="viewcode-block" id="Inference.sample">
+<a class="viewcode-back" href="../../topophone2.inversion.html#topophone2.inversion.Inference.sample">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N_samples</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">'''</span>
+<span class="sd">        Sample current normalising flows model.</span>
+
+<span class="sd">        Input</span>
+<span class="sd">        -----</span>
+<span class="sd">        N_samples : ``int``</span>
+<span class="sd">            Number of samples to draw from the posterior distribution</span>
+
+<span class="sd">        Output</span>
+<span class="sd">        ------</span>
+<span class="sd">        samples : ``numpy.ndarray``</span>
+<span class="sd">            Samples drawn from the posterior distribution</span>
+<span class="sd">            (N_samples, parameter)</span>
+<span class="sd">        '''</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flow_model</span><span class="o">.</span><span class="n">variational</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_model</span><span class="o">.</span><span class="n">variational</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">N_samples</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">samples</span> <span class="o">=</span> <span class="n">samples</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">samples</span></div>
+
+
+    <span class="c1">#__ Unpack model vector __</span>
+<div class="viewcode-block" id="Inference.unpack">
+<a class="viewcode-back" href="../../topophone2.inversion.html#topophone2.inversion.Inference.unpack">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">unpack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">'''</span>
+<span class="sd">        Unpack the model vector.</span>
+
+<span class="sd">        Input</span>
+<span class="sd">        -----</span>
+<span class="sd">        m : ``numpy.ndarray``</span>
+<span class="sd">            The model vector to unpack.</span>
+<span class="sd">            (model, parameter)</span>
+
+<span class="sd">        Output</span>
+<span class="sd">        ------</span>
+<span class="sd">        The unpacked model.</span>
+<span class="sd">        '''</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unpack</span><span class="p">(</span><span class="n">m</span><span class="p">)</span></div>
+
+
+    <span class="c1">#__ Return ELBO __</span>
+<div class="viewcode-block" id="Inference.get_lnELBO">
+<a class="viewcode-back" href="../../topophone2.inversion.html#topophone2.inversion.Inference.get_lnELBO">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_lnELBO</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">'''</span>
+<span class="sd">        Return logarithmic evidence lower bound.</span>
+
+<span class="sd">        Output</span>
+<span class="sd">        ------</span>
+<span class="sd">        lnELBO : ``numpy.ndarray``</span>
+<span class="sd">            Log-ELBO</span>
+<span class="sd">            (iteration,)</span>
+<span class="sd">        '''</span>
+
+        <span class="c1">#__ Extract log-ELBO __</span>
+        <span class="n">lnELBO</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loss_his</span><span class="p">)</span>
+
+        <span class="c1">#__ Return output __</span>
+        <span class="k">return</span> <span class="n">lnELBO</span></div>
+</div>
+
+
+<span class="c1">#________ POST-PROCESSING ________#</span>
+
+<span class="c1">#__ Class for marginal statistics __</span>
+<div class="viewcode-block" id="MarginalStats">
+<a class="viewcode-back" href="../../topophone2.inversion.html#topophone2.inversion.MarginalStats">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MarginalStats</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">'''</span>
+<span class="sd">    </span>
+<span class="sd">    Class for posterior analysis.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    - :meth:`calc_evidence` : Calculate evidence using the learnt harmonic mean estimator.</span>
+<span class="sd">    - :meth:`calc_information` : Calculate the information gain relative to a bounded uniform prior.</span>
+<span class="sd">    - :meth:`marginal_mean` : Calculate the marginal means.</span>
+<span class="sd">    - :meth:`credible_interval` : Calculate the credible interval.</span>
+<span class="sd">    - :meth:`probability_density` : Calculate marginal probability density estimate.</span>
+
+<span class="sd">    Input</span>
+<span class="sd">    -----</span>
+<span class="sd">    m : ``np.ndarray``</span>
+<span class="sd">        Ensemble of model samples distributed according to posterior pdf</span>
+<span class="sd">        (sample, parameter)</span>
+
+<span class="sd">    lnp_dm : ``np.ndarray`` (optional)</span>
+<span class="sd">        Log-likelihood of model samples</span>
+<span class="sd">        (sample,)</span>
+
+<span class="sd">    posterior : ``Callable``</span>
+<span class="sd">        Posterior pdf calculator (:class:`Posterior`)</span>
+
+<span class="sd">    prior_bounds : ``Tuple[np.ndarray,np.ndarray]``</span>
+<span class="sd">        Lower and upper bounds of uniform prior</span>
+<span class="sd">        (parameter,)</span>
+
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    m : ``np.ndarray``</span>
+<span class="sd">        Ensemble of model samples distributed according to posterior pdf</span>
+<span class="sd">    lnp_dm : ``np.ndarray``</span>
+<span class="sd">        Log-likelihood of model samples</span>
+<span class="sd">    Vi : ``np.ndarray``</span>
+<span class="sd">        Length of each side of prior hyper-volume</span>
+
+<span class="sd">    '''</span>
+
+    <span class="c1">#__ Initialise class __</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">lnp_dm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">posterior</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prior_bounds</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span>   <span class="o">=</span> <span class="n">m</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">lnp_dm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lnp_dm</span> <span class="o">=</span> <span class="n">lnp_dm</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">posterior</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lnp_dm</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">posterior</span><span class="o">.</span><span class="n">log_likelihood</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lnp_dm</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">prior_bounds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Vi</span> <span class="o">=</span> <span class="n">prior_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">prior_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Vi</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1">#__ Calculate evidence __</span>
+<div class="viewcode-block" id="MarginalStats.calc_evidence">
+<a class="viewcode-back" href="../../topophone2.inversion.html#topophone2.inversion.MarginalStats.calc_evidence">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calc_evidence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nchains</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.8</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">'''</span>
+<span class="sd">        Calculate evidence using the learnt harmonic mean estimator [McEwan et al., 2021, ArXiv].</span>
+<span class="sd">        </span>
+<span class="sd">        Input</span>
+<span class="sd">        -----</span>
+<span class="sd">        nchains : ``int`` (default ``10``)</span>
+<span class="sd">            Number of data sets to split model chain into</span>
+
+<span class="sd">        temperature : ``float`` (default ``0.8``)</span>
+<span class="sd">            Temperature of learnt model</span>
+
+<span class="sd">        Output</span>
+<span class="sd">        ------</span>
+<span class="sd">        lnp_d : ``float``</span>
+<span class="sd">            Log-evidence</span>
+
+<span class="sd">        lnp_d_err : ``Tuple[float,float]``</span>
+<span class="sd">            Error bounds on estimate</span>
+<span class="sd">        '''</span>
+
+        <span class="c1">#__ Reshape model vector __</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>                <span class="c1"># Number of parameters</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nchains</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>  <span class="c1"># (chain, sample, parameter)</span>
+
+        <span class="c1">#__ Calculate log-posterior __</span>
+        <span class="n">lnV</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Vi</span><span class="p">))</span>                <span class="c1"># Log-hypervolume</span>
+        <span class="n">lnp_md</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lnp_dm</span> <span class="o">-</span> <span class="n">lnV</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nchains</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># (chain, sample)</span>
+
+        <span class="c1">#__ Instantiate Chains class __</span>
+        <span class="n">chains</span> <span class="o">=</span> <span class="n">hm</span><span class="o">.</span><span class="n">Chains</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">chains</span><span class="o">.</span><span class="n">add_chains_3d</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">lnp_md</span><span class="p">)</span>
+
+        <span class="c1">#__ Split into training and inference chains __</span>
+        <span class="n">chains_train</span><span class="p">,</span> <span class="n">chains_infer</span> <span class="o">=</span> <span class="n">hm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">split_data</span><span class="p">(</span><span class="n">chains</span><span class="p">,</span> <span class="n">training_proportion</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+        <span class="c1">#__ Train ML model __</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">hm</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">RQSplineModel</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">chains_train</span><span class="o">.</span><span class="n">samples</span><span class="p">)</span>
+
+        <span class="c1">#__ Instantiate Evidence class __</span>
+        <span class="n">ev</span> <span class="o">=</span> <span class="n">hm</span><span class="o">.</span><span class="n">Evidence</span><span class="p">(</span><span class="n">chains_infer</span><span class="o">.</span><span class="n">nchains</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+        <span class="n">ev</span><span class="o">.</span><span class="n">add_chains</span><span class="p">(</span><span class="n">chains_infer</span><span class="p">)</span>
+        
+        <span class="c1">#__ Compute evidence __</span>
+        <span class="n">lnp_d</span><span class="p">,</span> <span class="n">_</span>  <span class="o">=</span> <span class="n">ev</span><span class="o">.</span><span class="n">compute_ln_evidence</span><span class="p">()</span>
+        <span class="n">err_neg</span><span class="p">,</span> <span class="n">err_pos</span> <span class="o">=</span> <span class="n">ev</span><span class="o">.</span><span class="n">compute_ln_inv_evidence_errors</span><span class="p">()</span>
+        <span class="n">lnp_d_err</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">err_pos</span><span class="p">,</span> <span class="o">-</span><span class="n">err_neg</span><span class="p">)</span>
+
+        <span class="c1">#__ Return output __</span>
+        <span class="k">return</span> <span class="n">lnp_d</span><span class="p">,</span> <span class="n">lnp_d_err</span></div>
+
+
+    <span class="c1">#__ Fit Gaussian KDE __</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_gaussian_kde</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">thin</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">'''</span>
+<span class="sd">        Fit a Gaussian KDE to a subset of the model parameters.</span>
+
+<span class="sd">        Input</span>
+<span class="sd">        -----</span>
+<span class="sd">        idx : ``list``</span>
+<span class="sd">            List of indices in subset</span>
+
+<span class="sd">        thin : ``int`` (optional)</span>
+<span class="sd">            Thin model samples for KDE estimation</span>
+
+<span class="sd">        Output</span>
+<span class="sd">        ------</span>
+<span class="sd">        KDE, model slices</span>
+<span class="sd">        '''</span>
+
+        <span class="c1">#__ Thin model selection __</span>
+        <span class="n">m_s</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">[:,</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">m_fit</span> <span class="o">=</span> <span class="n">m_s</span><span class="p">[:,::</span><span class="n">thin</span><span class="p">]</span>
+
+        <span class="c1">#__ Fit KDE __</span>
+        <span class="n">kde</span> <span class="o">=</span> <span class="n">gaussian_kde</span><span class="p">(</span><span class="n">m_fit</span><span class="p">)</span>
+
+        <span class="c1">#__ Return output __</span>
+        <span class="k">return</span> <span class="n">kde</span><span class="p">,</span> <span class="n">m_s</span>
+
+    <span class="c1">#__ Calculate information gain __</span>
+<div class="viewcode-block" id="MarginalStats.calc_information">
+<a class="viewcode-back" href="../../topophone2.inversion.html#topophone2.inversion.MarginalStats.calc_information">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calc_information</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">thin</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">'''</span>
+<span class="sd">        Calculate the information gain relative to a bounded uniform prior.</span>
+
+<span class="sd">        Input</span>
+<span class="sd">        -----</span>
+<span class="sd">        idx : ``list`` (optional)</span>
+<span class="sd">            List of indices in subset</span>
+
+<span class="sd">        thin : ``int`` (default ``2``)</span>
+<span class="sd">            Thin model samples for KDE estimation</span>
+
+<span class="sd">        Output</span>
+<span class="sd">        ------</span>
+<span class="sd">        D : ``float``</span>
+<span class="sd">            Information gain [nats]</span>
+<span class="sd">        '''</span>
+
+        <span class="c1">#__ Full model parameter set __</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">idx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+
+            <span class="c1">#__ Calculate evidence __</span>
+            <span class="n">lnp_d</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_evidence</span><span class="p">()</span>
+
+            <span class="c1">#__ Calculate information gain __</span>
+            <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lnp_dm</span><span class="p">)</span> <span class="o">-</span> <span class="n">lnp_d</span>
+
+        <span class="c1">#__ Partial model parameter set __</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="c1">#__ Calculate sub-hypervolume __</span>
+            <span class="n">lnVs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Vi</span><span class="p">[</span><span class="n">idx</span><span class="p">]))</span>
+
+            <span class="c1">#__ Fit KDE __</span>
+            <span class="n">kde</span><span class="p">,</span> <span class="n">m_s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gaussian_kde</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">thin</span><span class="p">)</span>
+
+            <span class="c1">#__ Calculate information gain __</span>
+            <span class="n">D</span> <span class="o">=</span> <span class="n">lnVs</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">kde</span><span class="o">.</span><span class="n">logpdf</span><span class="p">(</span><span class="n">m_s</span><span class="p">[:,</span><span class="mi">1</span><span class="p">::</span><span class="n">thin</span><span class="p">]))</span>
+
+        <span class="c1">#__ Return output __</span>
+        <span class="k">return</span> <span class="n">D</span></div>
+
+
+    <span class="c1">#__ Calculate mean __</span>
+<div class="viewcode-block" id="MarginalStats.marginal_mean">
+<a class="viewcode-back" href="../../topophone2.inversion.html#topophone2.inversion.MarginalStats.marginal_mean">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">marginal_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">harmonic</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">'''</span>
+<span class="sd">        Calculate the marginal means.</span>
+
+<span class="sd">        Input</span>
+<span class="sd">        -----</span>
+<span class="sd">        idx : ``list``</span>
+<span class="sd">            List of indices in subset</span>
+
+<span class="sd">        harmonic : ``bool`` (default ``False``)</span>
+<span class="sd">            Perform harmonic averaging, rather than arithmetic</span>
+
+<span class="sd">        Output</span>
+<span class="sd">        ------</span>
+<span class="sd">        mean : ``np.ndarray``</span>
+<span class="sd">            Marginal mean</span>
+<span class="sd">            (parameter,)</span>
+<span class="sd">        '''</span>
+
+        <span class="c1">#__ Subset models __</span>
+        <span class="n">m_s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">[:,</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="c1">#__ Calculate mean __</span>
+        <span class="k">if</span> <span class="n">harmonic</span><span class="p">:</span> <span class="n">mean</span> <span class="o">=</span> <span class="n">hmean</span><span class="p">(</span><span class="n">m_s</span><span class="p">,</span>   <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>        <span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">m_s</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1">#__ Return output __</span>
+        <span class="k">return</span> <span class="n">mean</span></div>
+
+
+    <span class="c1">#__ Calculate credible intervals __</span>
+<div class="viewcode-block" id="MarginalStats.credible_interval">
+<a class="viewcode-back" href="../../topophone2.inversion.html#topophone2.inversion.MarginalStats.credible_interval">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">credible_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inner_pc</span><span class="o">=</span><span class="mf">95.</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">'''</span>
+<span class="sd">        Calculate the credible interval.</span>
+
+<span class="sd">        Input</span>
+<span class="sd">        -----</span>
+<span class="sd">        inner_pc : ``float`` (default ``95.0``)</span>
+<span class="sd">            Interval percentage [%]</span>
+
+<span class="sd">        idx : ``list`` (optional)</span>
+<span class="sd">            List of indices in subset</span>
+
+<span class="sd">        Output</span>
+<span class="sd">        ------</span>
+<span class="sd">        ci_lo : ``np.ndarray``</span>
+<span class="sd">            Lower bound of credible interval</span>
+<span class="sd">            (parameter,)</span>
+
+<span class="sd">        ci_hi : ``np.ndarray``</span>
+<span class="sd">            Upper bound of credible interval</span>
+<span class="sd">            (parameter,)</span>
+<span class="sd">        '''</span>
+
+        <span class="c1">#__ Subset models __</span>
+        <span class="n">m_s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">[:,</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="k">if</span> <span class="n">idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="c1">#__ Calculate percentile bounds __</span>
+        <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mi">100</span><span class="o">-</span><span class="n">inner_pc</span><span class="p">),</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mi">100</span><span class="o">+</span><span class="n">inner_pc</span><span class="p">)</span>
+
+        <span class="c1">#__ Compute percentiles __</span>
+        <span class="n">ci</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">m_s</span><span class="p">,</span> <span class="p">[</span><span class="n">lo</span><span class="p">,</span><span class="n">hi</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">ci_lo</span><span class="p">,</span> <span class="n">ci_hi</span> <span class="o">=</span> <span class="n">ci</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ci</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1">#__ Return output __</span>
+        <span class="k">return</span> <span class="n">ci_lo</span><span class="p">,</span> <span class="n">ci_hi</span></div>
+
+
+    <span class="c1">#__ Estimate probability density function __</span>
+<div class="viewcode-block" id="MarginalStats.probability_density">
+<a class="viewcode-back" href="../../topophone2.inversion.html#topophone2.inversion.MarginalStats.probability_density">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">probability_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">npts</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">thin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cumulative</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">'''</span>
+<span class="sd">        Calculate marginal [(reverse) cumulative] probability density estimate.</span>
+
+<span class="sd">        Input</span>
+<span class="sd">        -----</span>
+<span class="sd">        i : ``int``</span>
+<span class="sd">            Model parameter index</span>
+
+<span class="sd">        npts : ``int`` (default ``500``)</span>
+<span class="sd">            Number of points in KDE vector</span>
+
+<span class="sd">        bounds : ``Tuple[float,float]`` (optional)</span>
+<span class="sd">            Bounds of KDE vector</span>
+
+<span class="sd">        thin : ``int`` (optional)</span>
+<span class="sd">            Thin model samples for KDE estimation</span>
+
+<span class="sd">        cumulative : ``str`` (optional)</span>
+<span class="sd">            If specified, calculate cumulative distribution in ``'forward'`` or ``'reverse'`` direction</span>
+<span class="sd">        </span>
+<span class="sd">        Output</span>
+<span class="sd">        ------</span>
+<span class="sd">        density : ``np.ndarray``</span>
+<span class="sd">            Density function</span>
+
+<span class="sd">        vec : ``np.ndarray``</span>
+<span class="sd">            Density function vector</span>
+<span class="sd">        '''</span>
+
+        <span class="c1">#__ Fit KDE __</span>
+        <span class="n">kde</span><span class="p">,</span> <span class="n">m_s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gaussian_kde</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">thin</span><span class="p">)</span>
+
+        <span class="c1">#__ Calculate vector __</span>
+        <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">bounds</span> <span class="k">if</span> <span class="n">bounds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="n">m_s</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">m_s</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+        <span class="n">vec</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">,</span> <span class="n">npts</span><span class="p">)</span>
+
+        <span class="c1">#__ Calculate density function __</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">cumulative</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">density</span> <span class="o">=</span> <span class="n">kde</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">cumulative</span> <span class="o">==</span> <span class="s1">'forward'</span><span class="p">):</span>
+            <span class="n">density</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">kde</span><span class="o">.</span><span class="n">integrate_box_1d</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">vec_i</span><span class="p">)</span> <span class="k">for</span> <span class="n">vec_i</span> <span class="ow">in</span> <span class="n">vec</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">cumulative</span> <span class="o">==</span> <span class="s1">'reverse'</span><span class="p">):</span>
+            <span class="n">density</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">kde</span><span class="o">.</span><span class="n">integrate_box_1d</span><span class="p">(</span><span class="n">vec_i</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>  <span class="k">for</span> <span class="n">vec_i</span> <span class="ow">in</span> <span class="n">vec</span><span class="p">])</span>
+
+        <span class="c1">#__ Return output __</span>
+        <span class="k">return</span> <span class="n">density</span><span class="p">,</span> <span class="n">vec</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, jack-andrew smith.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
