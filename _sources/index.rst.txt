@@ -21,17 +21,17 @@ Topophone2
 
 .. container:: lead
 
-   ``topophone2`` is a Python package for probabilistic wavefield decomposition
-   using receiver arrays. Given the array covariance matrix (cross-spectrum)
-   derived from recordings made by a set of receivers, it estimates
-   the mixture of incoming wavefields that produced the recorded signal: inluding 
-   plane waves, directionally distributed arrivals, propagating environental noise and sensor self-noise.
+   ``Topophone2`` is a Python package for probabilistic wavefield decomposition
+   using sensor arrays. Given the array covariance matrix (cross-spectrum), it estimates
+   parameters of the mixture of incoming wavefield components that produced the recording:
+   e.g., plane waves, directionally distributed arrivals, propagating environental noise and 
+   sensor self-noise.
 
-   For every component, it estimates the full posterior probability distribution
-   (not just a single best-fit value) of the parameters that define the signal's
+   For each component, Topophone2 estimates the full posterior probability distribution
+   (not just a single best-fit value) of the parameters that define its
    energy distribution, such as the direction of arrival, slowness and directional
-   spread. It also quantifies how well the data constrain each component, and
-   compare competing models through Bayesian evidence.
+   spread. Topophone2 can also use these posteriors to calculate information gain and
+   compare competeing models through the Bayes factor.
 
 .. container:: topophone-banner
 
@@ -46,31 +46,29 @@ Topophone2
 The problem
 -----------
 
-Arrays of receivers (e.g., seismometers, hydrophones or microbarometers) often record several
-wavefields at once in the real world. Coherent signals from distinct sources overlap and energy
-is spread over a range of directions. Many array-processing methods assume
-(a) a far-field point source and (b) incoherent noise. In practice, however,
-(a) the energy is often distributed over a range of directions, and
-(b) ambient environmental noise propagates coherently across the array. Distributed wavefields
-cause a loss of coherence between sensors, which can bias the results of
-conventional methods. Nevertheless, a parametrisation of the energy
-distribution over slowness can be obtained from the inter-sensor covariance,
-given an analytical model of this coherence loss, such as a plane wave or a
-normal or angular-harmonic distribution. This is a nonlinear, non-unique and often
-ill-conditioned inverse problem, therefor linearised asymptotic uncertainty estimates
-are often biased. These estimates are important for loction and monitoring decisions.
-Therefore, a nonlinear probabilistic approach is needed to properly quantify the uncertainty
-in the inferred parameters.
+Arrays of sensors (e.g., seismometers, hydrophones or microbarometers) often record several
+wavefields simultaneously in the real world. Coherently propagating signals from distinct 
+primary and secondarysources overlap and energy is spread over a range of directions.
+Many array-processing methods assume (a) a far-field point source and (b) incoherent noise.
+In practice, however, (a) the energy is often distributed over a range of directions of arrival, and
+(b) ambient environmental wavefields propagate coherently across the array. Distributed wavefields
+cause a loss of coherence between sensors, conventionally seen as a nuisance.
+However, inter-sensor coherence loss carries information about the underlying wavefield structure, hence
+the array covariance matrix can be used to infer properties of parameterised wavefield components, e.g., plane
+waves, directionally distributed arrivals, propagating environmental noise and sensor self-noise.
+This is a nonlinear, non-unique and often ill-conditioned inverse problem. Therefore, a nonlinear 
+probabilistic approach is needed to properly quantify the uncertainty
+in the inferred parameters: this is important for location and monitoring decisions.
 
-``topophone2`` therefore provides a probabilistic framework for decomposing the
-array covariance into a mixture of parameterised signal components and for
-quantifying the uncertainty in the inferred parameters.
+``Topophone2`` uses the array covariance to decompompose the underlying wavefield into its
+constituent parts within a probabilistic framework, estimating the full posterior probability
+distributions of their parameters.
 
 
 The approach
 ------------
 
-``topophone2`` treats decomposition as a Bayesian inverse problem, in three steps:
+``Topophone2`` treats decomposition as a Bayesian inverse problem, in three steps:
 
 .. container:: home-grid steps
 
@@ -79,10 +77,10 @@ The approach
       .. rubric:: 1. Forward model
 
       :class:`~topophone2.modelling.ArrayCovarianceModel` predicts the array
-      covariance for a given receiver geometry and frequency band, as a
-      superposition of parameterised, incoherently distributed energy sources.
-      Each source type is described analytically by its characteristic
-      function.
+      covariance for a superposition of parameterised, incoherently-distributed
+      directional energy distributions given the array geometry and frequency band.
+      The array covariance is a sum of the characteristic functions of each component, weighted
+      by their total energies.
 
    .. container:: home-card
 
@@ -99,7 +97,7 @@ The approach
       `GeoPVI <https://github.com/XuebinZhaoZXB/GeoPVI>`_) learn an
       approximation to the posterior. Samples drawn from it can be summarised
       using marginal statistics such as means, credible intervals and information gain.
-      Bayes factor can be used to compare different models.
+      The Bayes factor can be used to compare different models.
 
 The whole workflow runs from a single call to
 :func:`topophone2.topophone.decompose`.
@@ -114,42 +112,42 @@ Functionality
 
       .. rubric:: Applications
 
-      ``topophone2`` works with any array of receivers whose array-covariance matrix
-      can be estimated. Typical uses include:
+      ``Topophone2`` works with any array of sensors recording scalar wavefields
+      distributed incoherently according to an analytical distribution with a known
+      characteristic function. Typical uses include:
 
-      - direction-of-arrival estimation, with uncertainties;
-      - estimating signal-to-noise ratios;
-      - characterising directional spreading of energy, such as scattered or
-        multipath arrivals;
-      - quantifying the directionality of ambient noise fields;
-      - comparing competing source models through Bayesian evidence.
+      - Direction-of-arrival estimation, with uncertainties
+      - Estimating signal-to-noise ratios
+      - Characterising the directional spread of energy from distributed primary or secondary sources
+      - Quantifying the directionality of ambient enviromental wavefields
+      - Comparing competing source models through Bayesian evidence 
 
    .. container:: home-card
 
       .. rubric:: Features
 
-      - Analytical array-covariance forward models for point sources (plane
-        waves), normally and skew-normally distributed energy in slowness,
-        isotropic noise (2D or 3D), anisotropic noise fields expanded in
-        cylindrical or spherical harmonics, and user-defined characteristic
-        functions.
+      - Analytical array-covariance forward models for degenerate (plane wave),
+        normally and skew-normally distributed energy in slowness,
+        (an)isotropic angular-harmonic fields (2D or 3D),
+        and user-defined characteristic functions.
       - Exact gradients of the forward model, for efficient gradient-based
         optimisation.
       - Probabilistic inversion by normalising-flow variational inference, with
         optional mean-field approximation.
-      - Optional joint inversion with a noise-only covariance to constrain
-        environmental noise and sensor self-noise.
+      - Optional joint inversion with noise-only data to constrain noise components.
       - Posterior analysis tools: marginal densities, credible intervals,
         information content and evidence (via `harmonic <https://github.com/astro-informatics/harmonic>`_).
-      - Utilities for signal processing (FFT, windowing, Slepian tapers, sample
-        covariance estimation, beamforming) and for reading and writing input
-        data and configuration files.
+      - Some utilities for reading and writing input
+        data and configuration files and for signal processing (FFT, windowing, Slepian tapers,
+        sample-covariance estimation, beamforming).
 
 
 Quick start
 -----------
 
-After :doc:`installing <setup>` the package, a decomposition looks like this:
+After :doc:`installing <setup>` the package, decompose an array covariance matrix with a single call to
+:func:`topophone2.topophone.decompose` and :func:`topophone2.utils.read.read_txt` to read the input data. 
+
 
 .. code-block:: python
 
@@ -188,7 +186,7 @@ Where to go next:
 How to cite
 -----------
 
-If you use ``topophone2`` in your research, please cite the following paper:
+If you use ``Topophone2`` in your research, please cite the following paper:
 
 .. container:: cite-card cite-main
 
@@ -213,7 +211,7 @@ If you use ``topophone2`` in your research, please cite the following paper:
 
       </details>
 
-``topophone2`` is built on the following open-source packages, which should
+``Topophone2`` is built on the following open-source packages, which should
 also be cited if used in your research:
 
 .. container:: cite-grid
