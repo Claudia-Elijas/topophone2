@@ -14,8 +14,10 @@ docs/_build/
 # files related to paper figures
 docs/source/examples/data/figures/
 docs/source/examples/figs_JASA-EL.ipynb
-docs/source/examples/data/SYNTHETICS.npz
+docs/source/examples/data/eg1/SYNTHETICS.npz
 docs/source/examples/data/eg2/IS37_hukkakero_2016-08-19.npz
+docs/source/examples/example_1/example_1.1_extra-noise.ipynb
+docs/source/examples/example_1/example_1.1_extra-receiver.ipynb
 
 # editors / OS
 .vscode/
