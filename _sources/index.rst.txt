@@ -250,35 +250,6 @@ also be cited if used in your research:
 
          </details>
 
-   .. container:: cite-card
-
-      .. rubric:: harmonic
-
-      McEwen, J. D., Wallis, C. G. R., Price, M. A., & Docherty, M. M. (2021).
-      Machine learning assisted Bayesian model comparison: learnt harmonic
-      mean estimator. *arXiv preprint* arXiv:2111.12720.
-      `doi:10.48550/arXiv.2111.12720 <https://doi.org/10.48550/arXiv.2111.12720>`_
-
-      .. raw:: html
-
-         <details><summary>BibTeX</summary>
-
-      .. code-block:: bibtex
-
-         @article{mcewen_harmonic_2021,
-           author  = {McEwen, J. D. and Wallis, C. G. R. and
-                      Price, M. A. and Docherty, M. M.},
-           title   = {Machine learning assisted {Bayesian} model comparison:
-                      learnt harmonic mean estimator},
-           journal = {arXiv preprint arXiv:2111.12720},
-           year    = {2021},
-           doi     = {10.48550/arXiv.2111.12720}
-         }
-
-      .. raw:: html
-
-         </details>
-
 
 
 Project information
